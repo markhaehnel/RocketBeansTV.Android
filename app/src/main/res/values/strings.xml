@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Rocket Beans TV</string>
+    <string name="twitchInstalled">Vergewissere dich, dass die Twitch App installiert ist.</string>
+</resources>
