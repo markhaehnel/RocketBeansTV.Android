@@ -1,7 +1,19 @@
-.gradle
+<<<<<<< HEAD
+*.apk
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+.gradle/
+build/
+/*/build/
+local.properties
+proguard/
+*.log
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
-/build
 /captures
+>>>>>>> 24200e7d908aad159db10e72ab17c55633a5db68
