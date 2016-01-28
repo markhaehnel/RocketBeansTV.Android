@@ -1,7 +1,11 @@
 #Rocket Beans TV for Fire TV
-This app saves the minute-long search for the TV Stream in the Twitch App.
-It opens the Rocket Beans TV live stream directly on the Fire TV in the official Twitch App.
+Watch Rocket Beans TV straight from your Fire TV in brilliant 1080p (Full HD).
 
-Official Twitch app required!
+Built with [ExoMedia](https://github.com/brianwernick/ExoMedia) and [Http Request](https://github.com/kevinsawicki/http-request).
+
+##Download
+* [**Amazon Appstore (*recommended*)**](http://www.amazon.de/dp/B018429HN6)
+* [GitHub](https://github.com/EZTEQ/rbtv-firetv/releases/latest)
+
 
 This app is unofficial and is not affiliated with Rocket BEANS Entertainment GmbH.
