@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Rocket Beans TV</string>
+    <string name="error_accessToken">Ups, da ist etwas schief gelaufen. Hat Twitch etwa Probleme?\n\nVersuch es später erneut.</string>
 </resources>
