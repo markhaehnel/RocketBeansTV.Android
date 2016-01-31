@@ -2,7 +2,6 @@ package de.markhaehnel.rbtv.rocketbeanstv;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;

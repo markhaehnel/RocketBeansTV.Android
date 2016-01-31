@@ -10,15 +10,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.EMVideoView;
-import com.devbrackets.android.exomedia.listener.ExoPlayerListener;
-import com.google.android.exoplayer.ExoPlayer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +23,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
 
     AudioManager am;
@@ -46,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         if (isOnline()) {
             emVideoView.setOnPreparedListener(this);
             emVideoView.setOnErrorListener(this);
+            emVideoView.setOnInfoListener(this);
 
             am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             mbr = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
@@ -85,6 +83,16 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+                togglePlayState();
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public void onPrepared(MediaPlayer mp) {
         EMVideoView emVideoView = (EMVideoView)findViewById(R.id.exomediaplayer);
         emVideoView.start();
@@ -101,6 +109,30 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         emVideoView.start();
         super.onResume();
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        showMessage(R.string.error_unknown);
+        return true;
+    }
+
+    @Override
+    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        ProgressBar pb = (ProgressBar)findViewById(R.id.progressBar);
+
+        switch (what) {
+            case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+                pb.setVisibility(View.VISIBLE);
+                break;
+            case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+                pb.setVisibility(View.INVISIBLE);
+                break;
+            default:
+                pb.setVisibility(View.INVISIBLE);
+                break;
+        }
+        return false;
     }
 
     public void togglePlayState() {
@@ -164,12 +196,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             }
         }
     };
-
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        showMessage(R.string.error_unknown);
-        return true;
-    }
 }
 
 
