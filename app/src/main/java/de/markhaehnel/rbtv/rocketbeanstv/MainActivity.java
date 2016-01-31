@@ -10,18 +10,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.EMVideoView;
+import com.devbrackets.android.exomedia.listener.ExoPlayerListener;
+import com.google.android.exoplayer.ExoPlayer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener {
+public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
 
 
     AudioManager am;
@@ -38,38 +43,41 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         setContentView(R.layout.activity_main);
         emVideoView = (EMVideoView)findViewById(R.id.exomediaplayer);
 
-        emVideoView.setOnPreparedListener(this);
+        if (isOnline()) {
+            emVideoView.setOnPreparedListener(this);
+            emVideoView.setOnErrorListener(this);
 
-        am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        mbr = new ComponentName(getPackageName(),
-                MediaButtonReceiver.class.getName());
+            am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mbr = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
 
-        int result = am.requestAudioFocus(focusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+            int result = am.requestAudioFocus(focusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            am.registerMediaButtonEventReceiver(mbr);
-            try {
-                JSONObject json = new GetAccesToken().execute(this).get();
-                if (json.length() != 0) {
-                    String token = json.getString("token");
-                    String sig = json.getString("sig");
-                    String url = "http://usher.twitch.tv/api/channel/hls/rocketbeanstv.m3u8?player=twitchweb&token=" + token + "&sig=" + sig + "&allow_audio_only=true&allow_source=true&type=any&p=" + Math.round(Math.random()*10000);
-                    Uri theUri = Uri.parse(url);
-                    emVideoView.setVideoURI(Uri.parse(url));
-                } else {
+            if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                am.registerMediaButtonEventReceiver(mbr);
+                try {
+                    JSONObject json = new GetAccesToken().execute(this).get();
+                    if (json.length() != 0) {
+                        String token = json.getString("token");
+                        String sig = json.getString("sig");
+                        String url = "http://usher.twitch.tv/api/channel/hls/rocketbeanstv.m3u8?player=twitchweb&token=" + token + "&sig=" + sig + "&allow_audio_only=true&allow_source=true&type=any&p=" + Math.round(Math.random() * 10000);
+                        Uri theUri = Uri.parse(url);
+                        emVideoView.setVideoURI(Uri.parse(url));
+                    } else {
+                        showMessage(R.string.error_accessToken);
+                    }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                     showMessage(R.string.error_accessToken);
                 }
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                showMessage(R.string.error_accessToken);
             }
+        } else {
+            showMessage(R.string.error_noInternet);
         }
-
     }
 
     public static MainActivity getInstance() {
@@ -107,12 +115,35 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     private void showMessage(int resourceId) {
-        //Toast.makeText(getApplicationContext(), resourceId, Toast.LENGTH_LONG).show();
-        AlertDialog ad = new AlertDialog.Builder(this).create();
+        AlertDialog.Builder ad = new AlertDialog.Builder(this);
         ad.setCancelable(false);
         ad.setMessage(getString(resourceId));
         ad.setTitle("Fehler");
-        ad.show();
+        ad.setNeutralButton("Okay", new AlertDialog.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        ad.create().show();
+    }
+
+    public boolean isOnline() {
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     AudioManager.OnAudioFocusChangeListener focusListener = new AudioManager.OnAudioFocusChangeListener() {
@@ -133,6 +164,12 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             }
         }
     };
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        showMessage(R.string.error_unknown);
+        return true;
+    }
 }
 
 
