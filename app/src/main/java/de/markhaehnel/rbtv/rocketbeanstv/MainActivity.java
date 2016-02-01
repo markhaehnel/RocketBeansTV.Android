@@ -4,6 +4,7 @@ package de.markhaehnel.rbtv.rocketbeanstv;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -12,13 +13,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 import com.devbrackets.android.exomedia.EMVideoView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -29,6 +36,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     AudioManager am;
     ComponentName mbr;
     EMVideoView emVideoView;
+    boolean showGetterIsRunning = false;
+
+    AlphaAnimation fadeIn;
+    AlphaAnimation fadeOut;
+    AlphaAnimation fadeOutShow;
 
     public static MainActivity ins;
 
@@ -48,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             mbr = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
 
+            setupAnimations();
+
             int result = am.requestAudioFocus(focusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
             if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
@@ -57,11 +71,15 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                     if (json.length() != 0) {
                         String token = json.getString("token");
                         String sig = json.getString("sig");
-                        String url = "http://usher.twitch.tv/api/channel/hls/rocketbeanstv.m3u8?player=twitchweb&token=" + token + "&sig=" + sig + "&allow_audio_only=true&allow_source=true&type=any&p=" + Math.round(Math.random() * 10000);
-                        Uri theUri = Uri.parse(url);
-                        emVideoView.setVideoURI(Uri.parse(url));
+                        if (token.length() != 0 && sig.length() != 0) {
+                            String url = "http://usher.twitch.tv/api/channel/hls/rocketbeanstv.m3u8?player=twitchweb&token=" + token + "&sig=" + sig + "&allow_audio_only=true&allow_source=true&type=any&p=" + Math.round(Math.random() * 10000);
+                            Uri theUri = Uri.parse(url);
+                            emVideoView.setVideoURI(Uri.parse(url));
+                        } else {
+                            showMessage(R.string.error_twitchError);
+                        }
                     } else {
-                        showMessage(R.string.error_accessToken);
+                        showMessage(R.string.error_twitchError);
                     }
 
                 } catch (InterruptedException e) {
@@ -70,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    showMessage(R.string.error_accessToken);
+                    showMessage(R.string.error_twitchError);
                 }
             }
         } else {
@@ -122,14 +140,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ProgressBar pb = (ProgressBar)findViewById(R.id.progressBar);
 
         switch (what) {
-            case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-                pb.setVisibility(View.VISIBLE);
-                break;
-            case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+            case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+                pb.startAnimation(fadeOut);
                 pb.setVisibility(View.INVISIBLE);
-                break;
-            default:
-                pb.setVisibility(View.INVISIBLE);
+                if (!showGetterIsRunning) new GetCurrentShow().execute();
                 break;
         }
         return false;
@@ -139,11 +153,25 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ImageView pauseView = (ImageView)findViewById(R.id.pauseImage);
         if (emVideoView.isPlaying()) {
             emVideoView.pause();
+            pauseView.startAnimation(fadeIn);
             pauseView.setVisibility(View.VISIBLE);
         } else {
             emVideoView.start();
+            pauseView.startAnimation(fadeOut);
             pauseView.setVisibility(View.INVISIBLE);
         };
+    }
+
+    private void setupAnimations() {
+        fadeIn = new AlphaAnimation(0.0f, 1.0f);
+        fadeIn.setDuration(500);
+
+        fadeOut = new AlphaAnimation(1.0f, 0.0f);
+        fadeOut.setDuration(500);
+
+        fadeOutShow = new AlphaAnimation(1.0f, 0.0f);
+        fadeOutShow.setStartOffset(8000);
+        fadeOutShow.setDuration(500);
     }
 
     private void showMessage(int resourceId) {
@@ -176,6 +204,18 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
 
         return false;
+    }
+
+    public void showCurrentShow(String showTitle) {
+        TableLayout containerCurrentShow = (TableLayout)findViewById(R.id.containerCurrentShow);
+        TextView textCurrentShow = (TextView)findViewById(R.id.textCurrentShow);
+        textCurrentShow.setText(showTitle);
+
+        AnimationSet animation = new AnimationSet(true);
+        animation.addAnimation(fadeIn);
+        animation.addAnimation(fadeOutShow);
+
+        containerCurrentShow.setAnimation(animation);
     }
 
     AudioManager.OnAudioFocusChangeListener focusListener = new AudioManager.OnAudioFocusChangeListener() {

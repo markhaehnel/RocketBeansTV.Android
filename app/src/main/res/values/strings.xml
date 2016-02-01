@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Rocket Beans TV</string>
-    <string name="error_accessToken">Ups, da ist etwas schief gelaufen. Hat Twitch etwa Probleme?\n\nVersuch es später erneut.</string>
+    <string name="error_twitchError">Ups, da ist etwas schief gelaufen. Hat Twitch etwa Probleme?\n\nVersuch es später erneut.</string>
     <string name="error_noInternet">Anscheinend hast du keine Verbindung zum Internet.\nDadurch kann leider keine Verbindung zum Stream aufgebaut werden.</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreteten.\n\nBitte versuche es später erneut.</string>
 </resources>

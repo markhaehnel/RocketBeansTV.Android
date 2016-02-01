@@ -22,10 +22,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/pauseImage"
             android:layout_gravity="center"
-            android:src="@drawable/exomedia_ic_pause_black"
-            android:minHeight="128dp"
-            android:minWidth="128dp"
-            android:background="#b2ffffff"
+            android:src="@drawable/exomedia_ic_pause_white"
+            android:background="#de000000"
             android:visibility="invisible"
             android:contentDescription="Pause" />
 
@@ -34,6 +32,54 @@
             android:layout_height="wrap_content"
             android:id="@+id/progressBar"
             android:layout_gravity="center" />
+
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:background="#de000000"
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="32dp"
+            android:id="@+id/containerCurrentShow"
+            android:visibility="invisible">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Aktuelle Sendung"
+                    android:id="@+id/textView"
+                    android:layout_column="2"
+                    android:textAlignment="textEnd"
+                    android:textColor="#b2ffffff"
+                    android:textStyle="italic" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/app_name"
+                    android:id="@+id/textCurrentShow"
+                    android:autoText="true"
+                    android:textColor="#b2ffffff"
+                    android:visibility="visible"
+                    android:layout_column="2" />
+            </TableRow>
+
+        </TableLayout>
 
     </FrameLayout>
 

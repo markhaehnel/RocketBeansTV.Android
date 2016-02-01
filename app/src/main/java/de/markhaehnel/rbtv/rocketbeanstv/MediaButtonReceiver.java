@@ -16,9 +16,6 @@ public class MediaButtonReceiver extends BroadcastReceiver {
                     case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                         MainActivity.getInstance().togglePlayState();
                         break;
-                    case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-                        //Should go back to live after paused
-                        break;
                 }
             }
         }
