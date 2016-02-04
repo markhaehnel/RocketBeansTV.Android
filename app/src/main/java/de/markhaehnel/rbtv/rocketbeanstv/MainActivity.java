@@ -106,6 +106,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             case KeyEvent.KEYCODE_DPAD_CENTER:
                 togglePlayState();
                 return true;
+            case KeyEvent.KEYCODE_BACK:
+            case KeyEvent.KEYCODE_HOME:
+                System.exit(0);
+                return true;
         }
         return false;
     }
@@ -143,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
                 pb.startAnimation(fadeOut);
                 pb.setVisibility(View.INVISIBLE);
+
                 if (!showGetterIsRunning) new GetCurrentShow().execute();
                 break;
         }
@@ -182,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ad.setNeutralButton("Okay", new AlertDialog.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                System.exit(0);
             }
         });
         ad.create().show();
@@ -226,8 +231,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                     break;
 
                 case AudioManager.AUDIOFOCUS_LOSS:
-                    emVideoView.stopPlayback();
                     am.unregisterMediaButtonEventReceiver(mbr);
+                    System.exit(0);
                     break;
 
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
