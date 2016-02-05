@@ -1,6 +1,5 @@
 package de.markhaehnel.rbtv.rocketbeanstv;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
