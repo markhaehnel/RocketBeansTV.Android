@@ -1,86 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:EMVideoView="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context=".MainActivity">
+    android:layout_height="fill_parent">
 
+    <com.devbrackets.android.exomedia.EMVideoView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/exomediaplayer"
+        EMVideoView:defaultControlsEnabled="false" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pauseImage"
+        android:layout_gravity="center"
+        android:src="@drawable/exomedia_ic_pause_white"
+        android:background="#de000000"
+        android:visibility="invisible"
+        android:contentDescription="Pauses" />
 
-        <com.devbrackets.android.exomedia.EMVideoView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/exomediaplayer"
-            EMVideoView:defaultControlsEnabled="false" />
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/pauseImage"
-            android:layout_gravity="center"
-            android:src="@drawable/exomedia_ic_pause_white"
-            android:background="#de000000"
-            android:visibility="invisible"
-            android:contentDescription="Pause" />
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:background="#de000000"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="32dp"
+        android:id="@+id/containerCurrentShow"
+        android:visibility="invisible">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:layout_gravity="center" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|top"
-            android:background="#de000000"
-            android:paddingLeft="16dp"
-            android:paddingTop="8dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="8dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="32dp"
-            android:id="@+id/containerCurrentShow"
-            android:visibility="invisible">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/currentShow"
+                android:layout_column="2"
+                android:textAlignment="textEnd"
+                android:textColor="#b2ffffff"
+                android:textStyle="italic" />
+        </TableRow>
 
-            <TableRow
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/app_name"
+                android:id="@+id/textCurrentShow"
+                android:textColor="#b2ffffff"
+                android:visibility="visible"
+                android:layout_column="2" />
+        </TableRow>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Aktuelle Sendung"
-                    android:id="@+id/textView"
-                    android:layout_column="2"
-                    android:textAlignment="textEnd"
-                    android:textColor="#b2ffffff"
-                    android:textStyle="italic" />
-            </TableRow>
+    </TableLayout>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+</FrameLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/app_name"
-                    android:id="@+id/textCurrentShow"
-                    android:autoText="true"
-                    android:textColor="#b2ffffff"
-                    android:visibility="visible"
-                    android:layout_column="2" />
-            </TableRow>
-
-        </TableLayout>
-
-    </FrameLayout>
-
-</RelativeLayout>

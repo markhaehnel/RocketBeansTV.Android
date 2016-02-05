@@ -5,7 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GetCurrentShow extends AsyncTask<Void, String, String> {
-    String lastVisibleShow = "";
     protected String doInBackground(Void... voids) {
         while (true) {
             try {
@@ -26,8 +25,7 @@ public class GetCurrentShow extends AsyncTask<Void, String, String> {
     protected void onProgressUpdate(String... strings) {
         String currentShow = strings[0];
         if (currentShow.length() != 0) {
-            lastVisibleShow = currentShow;
-            MainActivity.getInstance().showCurrentShow(currentShow);
+            MainActivity.getInstance().setCurrentShow(currentShow);
         }
     }
 }

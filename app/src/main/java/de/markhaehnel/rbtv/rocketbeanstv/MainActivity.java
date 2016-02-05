@@ -29,17 +29,18 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
+    private AudioManager audioManager;
+    private ComponentName mediaButtonReceiver;
+    private EMVideoView videoView;
 
-    AudioManager am;
-    ComponentName mbr;
-    EMVideoView emVideoView;
     boolean showGetterIsRunning = false;
+    String currentShow = "Keine Informationen";
 
     AlphaAnimation fadeIn;
     AlphaAnimation fadeOut;
     AlphaAnimation fadeOutShow;
 
-    public static MainActivity ins;
+    private static MainActivity ins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,54 +48,26 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ins = this;
 
         setContentView(R.layout.activity_main);
-        emVideoView = (EMVideoView)findViewById(R.id.exomediaplayer);
+        videoView = (EMVideoView)findViewById(R.id.exomediaplayer);
 
         if (isOnline()) {
-            emVideoView.setOnPreparedListener(this);
-            emVideoView.setOnErrorListener(this);
-            emVideoView.setOnInfoListener(this);
 
-            am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            mbr = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
+            setupListeners();
+
+            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mediaButtonReceiver = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
 
             setupAnimations();
 
-            int result = am.requestAudioFocus(focusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+            int result = audioManager.requestAudioFocus(focusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
             if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                am.registerMediaButtonEventReceiver(mbr);
-                try {
-                    JSONObject json = new GetAccesToken().execute(this).get();
-                    if (json.length() != 0) {
-                        String token = json.getString("token");
-                        String sig = json.getString("sig");
-                        if (token.length() != 0 && sig.length() != 0) {
-                            String url = "http://usher.twitch.tv/api/channel/hls/rocketbeanstv.m3u8?player=twitchweb&token=" + token + "&sig=" + sig + "&allow_audio_only=true&allow_source=true&type=any&p=" + Math.round(Math.random() * 10000);
-                            Uri theUri = Uri.parse(url);
-                            emVideoView.setVideoURI(Uri.parse(url));
-                        } else {
-                            showMessage(R.string.error_twitchError);
-                        }
-                    } else {
-                        showMessage(R.string.error_twitchError);
-                    }
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    showMessage(R.string.error_twitchError);
-                }
+                audioManager.registerMediaButtonEventReceiver(mediaButtonReceiver);
+                preparePlayer();
             }
         } else {
             showMessage(R.string.error_noInternet);
         }
-    }
-
-    public static MainActivity getInstance() {
-        return ins;
     }
 
     @Override
@@ -107,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             case KeyEvent.KEYCODE_HOME:
                 System.exit(0);
                 return true;
+            case KeyEvent.KEYCODE_MENU:
+                this.showCurrentShow();
+                return true;
         }
         return false;
     }
@@ -115,19 +91,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     public void onPrepared(MediaPlayer mp) {
         EMVideoView emVideoView = (EMVideoView)findViewById(R.id.exomediaplayer);
         emVideoView.start();
-    }
-
-    @Override
-    public void onPause() {
-        emVideoView.pause();
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-
-        emVideoView.start();
-        super.onResume();
     }
 
     @Override
@@ -148,20 +111,56 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 if (!showGetterIsRunning) new GetCurrentShow().execute();
                 break;
         }
+
         return false;
     }
 
-    public void togglePlayState() {
+    @Override
+    protected void onPause() {
+        videoView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        videoView.start();
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        System.exit(0);
+        super.onStop();
+    }
+
+    protected static MainActivity getInstance() {
+        return ins;
+    }
+
+    protected void setCurrentShow(String showName) {
+        if (!showName.equals(currentShow)) {
+            currentShow = showName;
+            showCurrentShow();
+        }
+    }
+
+    protected void togglePlayState() {
         ImageView pauseView = (ImageView)findViewById(R.id.pauseImage);
-        if (emVideoView.isPlaying()) {
-            emVideoView.pause();
+        if (videoView.isPlaying()) {
+            videoView.pause();
             pauseView.startAnimation(fadeIn);
             pauseView.setVisibility(View.VISIBLE);
         } else {
-            emVideoView.start();
+            videoView.start();
             pauseView.startAnimation(fadeOut);
             pauseView.setVisibility(View.INVISIBLE);
-        };
+        }
+    }
+
+    private void setupListeners() {
+        videoView.setOnPreparedListener(this);
+        videoView.setOnErrorListener(this);
+        videoView.setOnInfoListener(this);
     }
 
     private void setupAnimations() {
@@ -174,6 +173,30 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         fadeOutShow = new AlphaAnimation(1.0f, 0.0f);
         fadeOutShow.setStartOffset(8000);
         fadeOutShow.setDuration(500);
+    }
+
+    private void preparePlayer() {
+        try {
+            JSONObject json = new GetAccesToken().execute(this).get();
+            if (json.length() != 0) {
+                String token = json.getString("token");
+                String sig = json.getString("sig");
+                if (token.length() != 0 && sig.length() != 0) {
+                    String url = "http://usher.twitch.tv/api/channel/hls/rocketbeanstv.m3u8?player=twitchweb&token=" + token + "&sig=" + sig + "&allow_audio_only=true&allow_source=true&type=any&p=" + Math.round(Math.random() * 10000);
+                    videoView.setVideoURI(Uri.parse(url));
+                } else {
+                    showMessage(R.string.error_twitchError);
+                }
+            } else {
+                showMessage(R.string.error_twitchError);
+            }
+
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            showMessage(R.string.error_twitchError);
+        }
     }
 
     private void showMessage(int resourceId) {
@@ -190,8 +213,19 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ad.create().show();
     }
 
-    public boolean isOnline() {
+    private void showCurrentShow() {
+        TableLayout containerCurrentShow = (TableLayout)findViewById(R.id.containerCurrentShow);
+        TextView textCurrentShow = (TextView)findViewById(R.id.textCurrentShow);
+        textCurrentShow.setText(currentShow);
 
+        AnimationSet animation = new AnimationSet(true);
+        animation.addAnimation(fadeIn);
+        animation.addAnimation(fadeOutShow);
+
+        containerCurrentShow.startAnimation(animation);
+    }
+
+    private boolean isOnline() {
         Runtime runtime = Runtime.getRuntime();
         try {
 
@@ -199,41 +233,27 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             int     exitValue = ipProcess.waitFor();
             return (exitValue == 0);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
         return false;
     }
 
-    public void showCurrentShow(String showTitle) {
-        TableLayout containerCurrentShow = (TableLayout)findViewById(R.id.containerCurrentShow);
-        TextView textCurrentShow = (TextView)findViewById(R.id.textCurrentShow);
-        textCurrentShow.setText(showTitle);
-
-        AnimationSet animation = new AnimationSet(true);
-        animation.addAnimation(fadeIn);
-        animation.addAnimation(fadeOutShow);
-
-        containerCurrentShow.setAnimation(animation);
-    }
-
     AudioManager.OnAudioFocusChangeListener focusListener = new AudioManager.OnAudioFocusChangeListener() {
         public void onAudioFocusChange(int focus) {
             switch (focus) {
                 case AudioManager.AUDIOFOCUS_GAIN:
-                    emVideoView.start();
+                    videoView.start();
                     break;
 
                 case AudioManager.AUDIOFOCUS_LOSS:
-                    am.unregisterMediaButtonEventReceiver(mbr);
+                    audioManager.unregisterMediaButtonEventReceiver(mediaButtonReceiver);
                     System.exit(0);
                     break;
 
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    emVideoView.pause();
+                    videoView.pause();
                     break;
             }
         }

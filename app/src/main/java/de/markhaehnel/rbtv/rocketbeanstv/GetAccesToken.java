@@ -11,8 +11,7 @@ public class GetAccesToken extends AsyncTask<Context, Void, JSONObject> {
 
         try {
             String response = HttpRequest.get("http://api.twitch.tv/api/channels/rocketbeanstv/access_token").body();
-            JSONObject json = new JSONObject(response);
-            return json;
+            return new JSONObject(response);
         } catch (JSONException e) {
             e.printStackTrace();
             return new JSONObject();
