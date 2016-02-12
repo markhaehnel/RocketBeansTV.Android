@@ -89,8 +89,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        EMVideoView emVideoView = (EMVideoView)findViewById(R.id.exomediaplayer);
-        emVideoView.start();
+        videoView.start();
     }
 
     @Override
