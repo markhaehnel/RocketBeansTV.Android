@@ -9,12 +9,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.devbrackets.android.exomedia.EMVideoView;
