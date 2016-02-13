@@ -9,5 +9,8 @@ Built with [ExoMedia](https://github.com/brianwernick/ExoMedia) and [Http Reques
 [![Amazon Appstore](https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/res/images/amazon-underground-app-us-white.png)](http://www.amazon.de/dp/B018429HN6)
 or from the [GitHub releases](https://github.com/EZTEQ/rbtv-firetv/releases/latest)
 
+##Usage
+ - Play/Pause - self-explanatory
+ - Menu button - See the currently running show.
 
 This app is unofficial and is not affiliated with Rocket BEANS Entertainment GmbH.
