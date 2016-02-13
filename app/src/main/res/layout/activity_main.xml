@@ -18,7 +18,7 @@
         android:id="@+id/pauseImage"
         android:layout_gravity="center"
         android:src="@drawable/exomedia_ic_pause_white"
-        android:background="#de000000"
+        android:background="@color/overlayBackground"
         android:visibility="invisible"
         android:contentDescription="Pauses" />
 
@@ -26,13 +26,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="visible" />
 
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
-        android:background="#de000000"
+        android:background="@color/overlayBackground"
         android:paddingLeft="16dp"
         android:paddingTop="8dp"
         android:paddingRight="16dp"
@@ -44,7 +45,8 @@
 
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -54,25 +56,51 @@
                 android:layout_column="2"
                 android:textAlignment="textEnd"
                 android:textColor="#b2ffffff"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                android:layout_gravity="right" />
         </TableRow>
 
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/app_name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text=""
                 android:id="@+id/textCurrentShow"
                 android:textColor="#b2ffffff"
                 android:visibility="visible"
+                android:layout_gravity="right"
+                android:textAlignment="textEnd"
                 android:layout_column="2" />
         </TableRow>
 
     </TableLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/info_newVersionAvailable"
+        android:id="@+id/textNewVersionAvailable"
+        android:textColor="#b2ffffff"
+        android:visibility="invisible"
+        android:layout_gravity="left|bottom"
+        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="32dp"
+        android:background="@color/overlayBackground"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:drawableLeft="@android:drawable/ic_menu_info_details"
+        android:singleLine="false"
+        android:phoneNumber="false"
+        android:password="false"
+        android:gravity="center" />
 
 </FrameLayout>
 

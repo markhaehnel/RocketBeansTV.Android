@@ -14,6 +14,7 @@ import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.devbrackets.android.exomedia.EMVideoView;
@@ -31,10 +32,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     boolean showGetterIsRunning = false;
     String currentShow = "Keine Informationen";
 
-    AlphaAnimation fadeIn;
-    AlphaAnimation fadeOut;
-    AlphaAnimation fadeOutShow;
-
     private static MainActivity ins;
 
     @Override
@@ -48,9 +45,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         if (isOnline()) {
 
             setupListeners();
-            setupAnimations();
             MediaSessionHandler.setupMediaSession(this);
             preparePlayer();
+
+            new GetLatestVersionTask().execute(this);
 
         } else {
             showMessage(R.string.error_noInternet);
@@ -91,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         switch (what) {
             case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                pb.startAnimation(fadeOut);
                 pb.setVisibility(View.INVISIBLE);
 
                 if (!showGetterIsRunning) new GetCurrentShowTask().execute();
@@ -134,11 +131,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ImageView pauseView = (ImageView)findViewById(R.id.pauseImage);
         if (videoView.isPlaying()) {
             videoView.pause();
-            pauseView.startAnimation(fadeIn);
+            pauseView.startAnimation(AnimationBuilder.getFadeInAnimation());
             pauseView.setVisibility(View.VISIBLE);
         } else {
             videoView.start();
-            pauseView.startAnimation(fadeOut);
+            pauseView.startAnimation(AnimationBuilder.getFadeOutAnimation());
             pauseView.setVisibility(View.INVISIBLE);
         }
     }
@@ -147,18 +144,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         videoView.setOnPreparedListener(this);
         videoView.setOnErrorListener(this);
         videoView.setOnInfoListener(this);
-    }
-
-    private void setupAnimations() {
-        fadeIn = new AlphaAnimation(0.0f, 1.0f);
-        fadeIn.setDuration(500);
-
-        fadeOut = new AlphaAnimation(1.0f, 0.0f);
-        fadeOut.setDuration(500);
-
-        fadeOutShow = new AlphaAnimation(1.0f, 0.0f);
-        fadeOutShow.setStartOffset(8000);
-        fadeOutShow.setDuration(500);
     }
 
     private void preparePlayer() {
@@ -205,8 +190,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         textCurrentShow.setText(currentShow);
 
         AnimationSet animation = new AnimationSet(true);
-        animation.addAnimation(fadeIn);
-        animation.addAnimation(fadeOutShow);
+        animation.addAnimation(AnimationBuilder.getFadeInAnimation());
+        animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
 
         containerCurrentShow.startAnimation(animation);
     }
@@ -224,6 +209,16 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
 
         return false;
+    }
+
+    protected void showNewVersionAvailable() {
+        TextView textNewVersionAvailable = (TextView)findViewById(R.id.textNewVersionAvailable);
+
+        AnimationSet animation = new AnimationSet(true);
+        animation.addAnimation(AnimationBuilder.getFadeInAnimation());
+        animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
+
+        textNewVersionAvailable.startAnimation(animation);
     }
 }
 
