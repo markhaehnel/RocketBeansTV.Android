@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GetCurrentShow extends AsyncTask<Void, String, String> {
+public class GetCurrentShowTask extends AsyncTask<Void, String, String> {
     protected String doInBackground(Void... voids) {
         while (true) {
             try {

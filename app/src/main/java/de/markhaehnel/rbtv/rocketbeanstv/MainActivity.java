@@ -1,10 +1,7 @@
 
 package de.markhaehnel.rbtv.rocketbeanstv;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,8 +26,6 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
-    private AudioManager audioManager;
-    private ComponentName mediaButtonReceiver;
     private EMVideoView videoView;
 
     boolean showGetterIsRunning = false;
@@ -53,18 +48,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         if (isOnline()) {
 
             setupListeners();
-
-            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            mediaButtonReceiver = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
-
             setupAnimations();
+            MediaSessionHandler.setupMediaSession(this);
+            preparePlayer();
 
-            int result = audioManager.requestAudioFocus(focusListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-
-            if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                audioManager.registerMediaButtonEventReceiver(mediaButtonReceiver);
-                preparePlayer();
-            }
         } else {
             showMessage(R.string.error_noInternet);
         }
@@ -107,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 pb.startAnimation(fadeOut);
                 pb.setVisibility(View.INVISIBLE);
 
-                if (!showGetterIsRunning) new GetCurrentShow().execute();
+                if (!showGetterIsRunning) new GetCurrentShowTask().execute();
                 break;
         }
 
@@ -176,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     private void preparePlayer() {
         try {
-            JSONObject json = new GetAccesToken().execute(this).get();
+            JSONObject json = new GetAccesTokenTask().execute(this).get();
             if (json.length() != 0) {
                 String token = json.getString("token");
                 String sig = json.getString("sig");
@@ -238,25 +225,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         return false;
     }
-
-    AudioManager.OnAudioFocusChangeListener focusListener = new AudioManager.OnAudioFocusChangeListener() {
-        public void onAudioFocusChange(int focus) {
-            switch (focus) {
-                case AudioManager.AUDIOFOCUS_GAIN:
-                    videoView.start();
-                    break;
-
-                case AudioManager.AUDIOFOCUS_LOSS:
-                    audioManager.unregisterMediaButtonEventReceiver(mediaButtonReceiver);
-                    System.exit(0);
-                    break;
-
-                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                    videoView.pause();
-                    break;
-            }
-        }
-    };
 }
 
 

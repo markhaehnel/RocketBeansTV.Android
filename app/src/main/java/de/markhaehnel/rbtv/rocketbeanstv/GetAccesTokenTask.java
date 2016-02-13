@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GetAccesToken extends AsyncTask<Context, Void, JSONObject> {
+public class GetAccesTokenTask extends AsyncTask<Context, Void, JSONObject> {
     protected JSONObject doInBackground(Context... contexts) {
 
         try {
