@@ -22,4 +22,10 @@ public class AnimationBuilder {
         anim.setDuration(500);
         return anim;
     }
+
+    public static Animation getTransparentFadeInAnimation() {
+        AlphaAnimation anim = new AlphaAnimation(0.0f, 0.85f);
+        anim.setDuration(500);
+        return anim;
+    }
 }

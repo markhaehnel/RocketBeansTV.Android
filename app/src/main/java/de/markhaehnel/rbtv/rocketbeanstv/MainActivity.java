@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationSet;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
@@ -48,9 +49,18 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
             new GetLatestVersionTask().execute(this);
 
+            setupChat();
+
         } else {
             showMessage(R.string.error_noInternet);
         }
+    }
+
+    private void setupChat() {
+        WebView chat = (WebView)findViewById(R.id.webViewChat);
+        chat.setAlpha(0.85f);
+        chat.getSettings().setJavaScriptEnabled(true);
+        chat.loadUrl("http://ezteq.github.io/rbtv-firetv/");
     }
 
     @Override
@@ -58,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_CENTER:
                 togglePlayState();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                toggleChat();
                 return true;
             case KeyEvent.KEYCODE_BACK:
             case KeyEvent.KEYCODE_HOME:
@@ -135,6 +148,17 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             videoView.start();
             pauseView.startAnimation(AnimationBuilder.getFadeOutAnimation());
             pauseView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void toggleChat() {
+        WebView chat = (WebView)findViewById(R.id.webViewChat);
+        if (chat.getVisibility() == View.VISIBLE) {
+            chat.setVisibility(View.INVISIBLE);
+            chat.setAnimation(AnimationBuilder.getFadeOutAnimation());
+        } else {
+            chat.setVisibility(View.VISIBLE);
+            chat.setAnimation(AnimationBuilder.getTransparentFadeInAnimation());
         }
     }
 
