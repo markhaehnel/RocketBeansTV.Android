@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             MediaSessionHandler.setupMediaSession(this);
             preparePlayer();
 
-            new GetLatestVersionTask().execute(this);
+            new GetLatestVersionTask().execute();
 
             setupChat();
 

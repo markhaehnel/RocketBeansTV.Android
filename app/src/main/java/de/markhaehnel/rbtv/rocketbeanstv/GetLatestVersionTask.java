@@ -6,8 +6,8 @@ import android.os.AsyncTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GetLatestVersionTask extends AsyncTask<Context, Void, JSONObject> {
-    protected JSONObject doInBackground(Context... contexts) {
+public class GetLatestVersionTask extends AsyncTask<Void, Void, JSONObject> {
+    protected JSONObject doInBackground(Void... voids) {
 
         try {
             String response = HttpRequest.get("https://api.github.com/repos/ezteq/rbtv-firetv/releases/latest").body();
