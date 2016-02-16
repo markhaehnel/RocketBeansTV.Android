@@ -109,6 +109,15 @@
         android:singleLine="false"
         android:gravity="center" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="left|center_vertical"
+        android:id="@+id/containerSchedule"
+        android:background="@color/overlayBackground"
+        android:visibility="invisible"></LinearLayout>
+
 </FrameLayout>
 
 

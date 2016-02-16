@@ -2,43 +2,82 @@ package de.markhaehnel.rbtv.rocketbeanstv;
 
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class GetScheduleTask extends AsyncTask<Void, String, String> {
-    protected String doInBackground(Void... voids) {
-        String key = "";
-        String secret = "";
-        String id = "00000000-0000-0000-0000-000000000000";
-        String created = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ").format(new Date());
-        created = created.substring(0, created.length()-2) + ":" + created.substring(created.length()-2, created.length());
+public class GetScheduleTask extends AsyncTask<Void, String, ArrayList<ScheduleShow>> {
+    protected ArrayList<ScheduleShow> doInBackground(Void... voids) {
 
-        String nonce = id + created + getRandomString(10);
+        final String key = "";
+        final String secret = "";
+        final String id = "00000000-0000-0000-0000-000000000000";
 
-        String sha1 = SHA1(nonce + created + secret);
+        try {
+            String created = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ").format(new Date());
+            created = created.substring(0, created.length()-2) + ":" + created.substring(created.length()-2, created.length());
 
-        String url = "https://api.rocketmgmt.de/schedule";
+            String nonce = id + created + getRandomString(10);
 
-        Map<String, String> headers = new HashMap<String, String>();
-        headers.put("Accept", "application/json");
-        headers.put("Authorization", "WSSE profile=\"UsernameToken\"");
-        headers.put("X-WSSE", "UsernameToken Username=\"" + key + "\", PasswordDigest=\"" + HttpRequest.Base64.encode(sha1) + "\", Nonce=\"" + HttpRequest.Base64.encode(nonce) + "\", Created=\"" + created + "\"");
+            String sha1 = SHA1(nonce + created + secret);
 
-        HttpRequest response = HttpRequest.get(url).headers(headers);
-        String result = response.body();
-        int code = response.code();
+            String url = "https://api.rocketmgmt.de/schedule";
 
-        return "";
+            Map<String, String> headers = new HashMap<String, String>();
+            headers.put("Accept", "application/json");
+            headers.put("Authorization", "WSSE profile=\"UsernameToken\"");
+            headers.put("X-WSSE", "UsernameToken Username=\"" + key + "\", PasswordDigest=\"" + HttpRequest.Base64.encode(sha1) + "\", Nonce=\"" + HttpRequest.Base64.encode(nonce) + "\", Created=\"" + created + "\"");
+
+            HttpRequest response = HttpRequest.get(url).headers(headers);
+
+            if (response.code() == 200) {
+                JSONObject result = new JSONObject(response.body());
+                return getNextShows(result, 6);
+            }
+
+            return new ArrayList<ScheduleShow>();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ArrayList<ScheduleShow>();
+        }
     }
 
-    protected void onProgressUpdate(String... strings) {
+    protected void onPostExecute(ArrayList<ScheduleShow> shows) {
+        MainActivity.getInstance().showSchedule(shows);
+    }
 
+    private ArrayList<ScheduleShow> getNextShows(JSONObject result, int howMuch) {
+        try {
+            JSONArray json = result.getJSONArray("schedule");
+            ArrayList<ScheduleShow> shows = new ArrayList<ScheduleShow>();
+            for (int i = 0; i < howMuch-1; i++) {
+                JSONObject s = json.getJSONObject(i);
+                shows.add(new ScheduleShow(
+                                s.getString("title"),
+                                s.getString("topic"),
+                                s.getString("show"),
+                                s.getString("timeStart"),
+                                s.getString("timeEnd"),
+                                s.getInt("length"),
+                                s.getString("type")
+                ));
+            }
+            return shows;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<ScheduleShow>();
     }
 
     private String getRandomString(int length) {

@@ -28,4 +28,12 @@ public class AnimationBuilder {
         anim.setDuration(500);
         return anim;
     }
+
+    public static Animation createDelayedFadeInAnimation(int offset) {
+        AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setStartOffset(offset);
+        anim.setDuration(500);
+        anim.setFillAfter(true);
+        return anim;
+    }
 }

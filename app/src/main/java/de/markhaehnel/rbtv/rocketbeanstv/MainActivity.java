@@ -1,17 +1,22 @@
 
 package de.markhaehnel.rbtv.rocketbeanstv;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -22,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
@@ -47,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             MediaSessionHandler.setupMediaSession(this);
             preparePlayer();
 
-            new GetLatestVersionTask().execute();
+            new GetLatestVersionTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             setupChat();
 
@@ -72,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 toggleChat();
                 return true;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                toggleSchedule();
+                return true;
             case KeyEvent.KEYCODE_BACK:
             case KeyEvent.KEYCODE_HOME:
                 System.exit(0);
@@ -81,6 +91,18 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 return true;
         }
         return false;
+    }
+
+    private void toggleSchedule() {
+        LinearLayout schedule = (LinearLayout)findViewById(R.id.containerSchedule);
+        if (schedule.getVisibility() == View.INVISIBLE) {
+            new GetScheduleTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            schedule.setAnimation(AnimationBuilder.getFadeInAnimation());
+            schedule.setVisibility(View.VISIBLE);
+        } else {
+            schedule.setVisibility(View.INVISIBLE);
+            schedule.removeAllViews();
+        }
     }
 
     @Override
@@ -102,7 +124,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
                 pb.setVisibility(View.INVISIBLE);
 
-                if (!showGetterIsRunning) new GetCurrentShowTask().execute();
+                if (!showGetterIsRunning) {
+                    new GetCurrentShowTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    showGetterIsRunning = true;
+                }
                 break;
         }
 
@@ -241,6 +266,36 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
 
         textNewVersionAvailable.startAnimation(animation);
+    }
+
+    public void showSchedule(ArrayList<ScheduleShow> shows) {
+        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.containerSchedule);
+        insertPoint.removeAllViews();
+
+        int animMulitplier = 250;
+        int animVisibility = 10000;
+
+        for (int i = 0; i < shows.size(); i++) {
+            View v = vi.inflate(R.layout.component_scheduleitem, null);
+
+            TextView timeStart = (TextView)v.findViewById(R.id.textTimeStart);
+            timeStart.setText(shows.get(i).getTimeStart());
+
+            TextView type = (TextView)v.findViewById(R.id.textType);
+            type.setText(shows.get(i).getType());
+
+            TextView title = (TextView)v.findViewById(R.id.textTitle);
+            title.setText(shows.get(i).getTitle());
+
+            TextView topic = (TextView)v.findViewById(R.id.textTopic);
+            topic.setText(shows.get(i).getTopic());
+
+            v.startAnimation(AnimationBuilder.createDelayedFadeInAnimation(i * animMulitplier));
+
+            insertPoint.addView(v, -1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
     }
 }
 
