@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     private void setupChat() {
         WebView chat = (WebView)findViewById(R.id.webViewChat);
-        chat.setAlpha(0.85f);
+        chat.setAlpha(0.75f);
         chat.getSettings().setJavaScriptEnabled(true);
         chat.loadUrl("http://ezteq.github.io/rbtv-firetv/");
     }
