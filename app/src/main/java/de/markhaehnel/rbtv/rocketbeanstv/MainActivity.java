@@ -27,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     private EMVideoView videoView;
 
     boolean showGetterIsRunning = false;
-    String currentShow = "Keine Informationen";
+    ChannelInfo channelInfo = new ChannelInfo("Keine Informationen", "");
 
     private static MainActivity ins;
 
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 System.exit(0);
                 return true;
             case KeyEvent.KEYCODE_MENU:
-                this.showCurrentShow();
+                this.showInfoOverlay();
                 return true;
         }
         return false;
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 pb.setVisibility(View.INVISIBLE);
 
                 if (!showGetterIsRunning) {
-                    new GetCurrentShowTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    new GetChannelInfoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     showGetterIsRunning = true;
                 }
                 break;
@@ -156,10 +155,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         return ins;
     }
 
-    protected void setCurrentShow(String showName) {
-        if (!showName.equals(currentShow)) {
-            currentShow = showName;
-            showCurrentShow();
+    protected void setInfoOverlay(ChannelInfo info) {
+        if (!info.currentShow.equals(channelInfo.currentShow)) {
+            channelInfo = info;
+            showInfoOverlay();
         }
     }
 
@@ -231,10 +230,12 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ad.create().show();
     }
 
-    private void showCurrentShow() {
+    private void showInfoOverlay() {
         TableLayout containerCurrentShow = (TableLayout)findViewById(R.id.containerCurrentShow);
         TextView textCurrentShow = (TextView)findViewById(R.id.textCurrentShow);
-        textCurrentShow.setText(currentShow);
+        textCurrentShow.setText(channelInfo.currentShow);
+        TextView textViewerCount = (TextView)findViewById(R.id.textViewerCount);
+        textViewerCount.setText(channelInfo.viewerCount);
 
         AnimationSet animation = new AnimationSet(true);
         animation.addAnimation(AnimationBuilder.getFadeInAnimation());
