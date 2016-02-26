@@ -16,4 +16,5 @@ proguard/
 /.idea/libraries
 .DS_Store
 /captures
+/app/*.apk
 >>>>>>> 24200e7d908aad159db10e72ab17c55633a5db68

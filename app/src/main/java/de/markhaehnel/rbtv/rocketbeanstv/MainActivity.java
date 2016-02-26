@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     private EMVideoView videoView;
 
     boolean showGetterIsRunning = false;
-    ChannelInfo channelInfo = new ChannelInfo("Keine Informationen", "");
+    ChannelInfo channelInfo = new ChannelInfo("Keine Informationen", "-");
 
     private static MainActivity ins;
 
@@ -276,7 +276,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         insertPoint.removeAllViews();
 
         int animMulitplier = 250;
-        int animVisibility = 10000;
 
         for (int i = 0; i < shows.size(); i++) {
             View v = vi.inflate(R.layout.component_scheduleitem, null);
