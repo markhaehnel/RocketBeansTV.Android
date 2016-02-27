@@ -26,6 +26,14 @@ public class AnimationBuilder {
     public static Animation getTransparentFadeInAnimation() {
         AlphaAnimation anim = new AlphaAnimation(0.0f, 0.75f);
         anim.setDuration(500);
+        anim.setFillAfter(true);
+        return anim;
+    }
+
+    public static Animation getTransparentFadeOutAnimation() {
+        AlphaAnimation anim = new AlphaAnimation(0.75f, 0.0f);
+        anim.setDuration(500);
+        anim.setFillAfter(true);
         return anim;
     }
 
