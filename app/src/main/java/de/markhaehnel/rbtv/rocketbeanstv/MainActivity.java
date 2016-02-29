@@ -179,10 +179,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         WebView chat = (WebView)findViewById(R.id.webViewChat);
         if (chat.getVisibility() == View.VISIBLE) {
             chat.setVisibility(View.INVISIBLE);
-            chat.setAnimation(AnimationBuilder.getTransparentFadeOutAnimation());
+            chat.setAnimation(AnimationBuilder.getFadeOutAnimation());
         } else {
             chat.setVisibility(View.VISIBLE);
-            chat.setAnimation(AnimationBuilder.getTransparentFadeInAnimation());
+            chat.setAnimation(AnimationBuilder.getFadeInAnimation());
         }
     }
 

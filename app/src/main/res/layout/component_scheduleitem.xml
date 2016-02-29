@@ -45,5 +45,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="with a special guest"
-        android:id="@+id/textTopic" />
+        android:id="@+id/textTopic"
+        android:ellipsize="end"
+        android:maxEms="18"
+        android:singleLine="true" />
 </LinearLayout>
