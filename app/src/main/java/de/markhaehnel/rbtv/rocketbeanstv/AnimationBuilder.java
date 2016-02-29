@@ -23,18 +23,6 @@ public class AnimationBuilder {
         return anim;
     }
 
-    public static Animation getTransparentFadeInAnimation() {
-        AlphaAnimation anim = new AlphaAnimation(0.0f, 0.75f);
-        anim.setDuration(500);
-        return anim;
-    }
-
-    public static Animation getTransparentFadeOutAnimation() {
-        AlphaAnimation anim = new AlphaAnimation(0.75f, 0.0f);
-        anim.setDuration(500);
-        return anim;
-    }
-
     public static Animation createDelayedFadeInAnimation(int offset) {
         AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setStartOffset(offset);
