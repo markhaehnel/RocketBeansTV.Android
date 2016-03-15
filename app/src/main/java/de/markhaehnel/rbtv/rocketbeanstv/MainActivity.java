@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationSet;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -36,6 +38,14 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     boolean showGetterIsRunning = false;
     ChannelInfo channelInfo = new ChannelInfo("Keine Informationen", "-");
+
+    enum ChatState {
+        Hidden,
+        Overlay,
+        Fixed
+    }
+
+    ChatState chatState = ChatState.Hidden;
 
     private static MainActivity ins;
 
@@ -176,14 +186,33 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     private void toggleChat() {
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(videoView.getLayoutParams());
         WebView chat = (WebView)findViewById(R.id.webViewChat);
-        if (chat.getVisibility() == View.VISIBLE) {
+
+        switch (chatState) {
+            case Hidden:
+                //to fixed
+                int dpiMargin = 300 * Math.round(this.getResources().getDisplayMetrics().density);
+                lp.setMargins(0, 0, dpiMargin, 0);
+                chat.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black));
+                chat.setVisibility(View.VISIBLE);
+                chatState = ChatState.Fixed;
+                break;
+            case Fixed:
+                //to overlay
+                chat.setBackgroundColor(ContextCompat.getColor(this, R.color.overlayBackground));
+                chat.setVisibility(View.VISIBLE);
+                chatState = ChatState.Overlay;
+                break;
+            case Overlay:
+            //to hidden
+            lp.setMargins(0, 0, 0, 0);
             chat.setVisibility(View.INVISIBLE);
-            chat.setAnimation(AnimationBuilder.getFadeOutAnimation());
-        } else {
-            chat.setVisibility(View.VISIBLE);
-            chat.setAnimation(AnimationBuilder.getFadeInAnimation());
+            chatState = ChatState.Hidden;
+            break;
         }
+
+        videoView.setLayoutParams(lp);
     }
 
     private void setupListeners() {

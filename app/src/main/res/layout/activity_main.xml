@@ -5,7 +5,8 @@
     xmlns:EMVideoView="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="@android:color/black">
 
     <com.devbrackets.android.exomedia.EMVideoView
         android:layout_width="fill_parent"
@@ -19,7 +20,7 @@
         android:id="@+id/webViewChat"
         android:visibility="invisible"
         android:layout_gravity="end"
-        android:background="@color/overlayBackground" />
+        android:background="@android:color/black" />
 
     <ImageView
         android:layout_width="wrap_content"
