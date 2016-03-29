@@ -169,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         if (!info.currentShow.equals(channelInfo.currentShow)) {
             channelInfo = info;
             showInfoOverlay();
+        } else {
+            channelInfo = info;
         }
     }
 
@@ -260,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     private void showInfoOverlay() {
-        TableLayout containerCurrentShow = (TableLayout)findViewById(R.id.containerCurrentShow);
+        LinearLayout containerCurrentShow = (LinearLayout)findViewById(R.id.containerCurrentShow);
         TextView textCurrentShow = (TextView)findViewById(R.id.textCurrentShow);
         textCurrentShow.setText(channelInfo.currentShow);
         TextView textViewerCount = (TextView)findViewById(R.id.textViewerCount);
