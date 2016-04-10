@@ -3,10 +3,12 @@ package de.markhaehnel.rbtv.rocketbeanstv;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,17 +22,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.devbrackets.android.exomedia.EMVideoView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
@@ -45,7 +42,16 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         Fixed
     }
 
+    enum Quality {
+        Chunked,
+        High,
+        Medium,
+        Low,
+        Mobile
+    }
+
     ChatState chatState = ChatState.Hidden;
+    Quality currentQuality;
 
     private static MainActivity ins;
 
@@ -95,11 +101,40 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             case KeyEvent.KEYCODE_HOME:
                 System.exit(0);
                 return true;
+            case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                toggleInfoOverlay(false);
+                return true;
             case KeyEvent.KEYCODE_MENU:
-                this.showInfoOverlay();
+                changeStreamQuality();
                 return true;
         }
         return false;
+    }
+
+    private void changeStreamQuality() {
+        CharSequence options[] = new CharSequence[] {"Quelle", "Hoch", "Mittel", "Niedrig", "Mobil"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.menuTitle_chooseQuality));
+
+        builder.setSingleChoiceItems(options, currentQuality.ordinal(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ProgressBar pb = (ProgressBar)findViewById(R.id.progressBar);
+                pb.setVisibility(View.VISIBLE);
+                new PlayStreamTask().execute(Quality.values()[which]);
+                currentQuality = Quality.values()[which];
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.getInstance());
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("quality", currentQuality.ordinal());
+                editor.commit();
+
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     private void toggleSchedule() {
@@ -167,11 +202,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     protected void setInfoOverlay(ChannelInfo info) {
         if (!info.currentShow.equals(channelInfo.currentShow)) {
-            channelInfo = info;
-            showInfoOverlay();
-        } else {
-            channelInfo = info;
+            toggleInfoOverlay(true);
         }
+        channelInfo = info;
+        setInfoOverlayInformation();
     }
 
     protected void togglePlayState() {
@@ -224,30 +258,22 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     private void preparePlayer() {
-        try {
-            JSONObject json = new GetAccesTokenTask().execute(this).get();
-            if (json.length() != 0) {
-                String token = json.getString("token");
-                String sig = json.getString("sig");
-                if (token.length() != 0 && sig.length() != 0) {
-                    String url = "http://usher.twitch.tv/api/channel/hls/rocketbeanstv.m3u8?player=twitchweb&token=" + token + "&sig=" + sig + "&allow_audio_only=true&allow_source=true&type=any&p=" + Math.round(Math.random() * 10000);
-                    videoView.setVideoURI(Uri.parse(url));
-                } else {
-                    showMessage(R.string.error_twitchError);
-                }
-            } else {
-                showMessage(R.string.error_twitchError);
-            }
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        currentQuality = Quality.values()[prefs.getInt("quality", Quality.Chunked.ordinal())];
+        new PlayStreamTask().execute(currentQuality);
+    }
 
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            showMessage(R.string.error_twitchError);
+    public void playURL(String url) {
+        if (url != null && url.length() > 0) {
+            videoView.stopPlayback();
+            videoView.seekTo(0);
+            videoView.setVideoURI(Uri.parse(url));
+        } else {
+            showMessage(R.string.error_unknown);
         }
     }
 
-    private void showMessage(int resourceId) {
+    public void showMessage(int resourceId) {
         AlertDialog.Builder ad = new AlertDialog.Builder(this);
         ad.setCancelable(false);
         ad.setMessage(getString(resourceId));
@@ -261,8 +287,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ad.create().show();
     }
 
-    private void showInfoOverlay() {
-        LinearLayout containerCurrentShow = (LinearLayout)findViewById(R.id.containerCurrentShow);
+    private void setInfoOverlayInformation() {
         TextView textCurrentShow = (TextView)findViewById(R.id.textCurrentShow);
         textCurrentShow.setText(channelInfo.currentShow);
         TextView textViewerCount = (TextView)findViewById(R.id.textViewerCount);
@@ -271,8 +296,24 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         AnimationSet animation = new AnimationSet(true);
         animation.addAnimation(AnimationBuilder.getFadeInAnimation());
         animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
+    }
 
-        containerCurrentShow.startAnimation(animation);
+    private void toggleInfoOverlay(boolean autoHide) {
+        LinearLayout infoOverlay = (LinearLayout)findViewById(R.id.containerCurrentShow);
+        if (infoOverlay.getVisibility() == View.INVISIBLE) {
+            if (autoHide) {
+                AnimationSet animation = new AnimationSet(true);
+                animation.addAnimation(AnimationBuilder.getFadeInAnimation());
+                animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
+                infoOverlay.startAnimation(animation);
+            } else {
+                infoOverlay.setAnimation(AnimationBuilder.getFadeInAnimation());
+                infoOverlay.setVisibility(View.VISIBLE);
+            }
+        } else {
+            infoOverlay.setAnimation(AnimationBuilder.getFadeOutAnimation());
+            infoOverlay.setVisibility(View.INVISIBLE);
+        }
     }
 
     private boolean isOnline() {
@@ -284,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             return (exitValue == 0);
 
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            showMessage(R.string.error_noInternet);
         }
 
         return false;

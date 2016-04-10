@@ -5,4 +5,5 @@
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreteten.\n\nBitte versuche es später erneut.</string>
     <string name="currentShow">Aktuelle Sendung</string>
     <string name="info_newVersionAvailable">Es ist eine Aktualisierung für Rocket Beans TV verfügbar!</string>
+    <string name="menuTitle_chooseQuality">Qualität auswählen</string>
 </resources>
