@@ -1,6 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,14 +55,18 @@ public class GetScheduleTask extends AsyncTask<Void, String, ArrayList<ScheduleS
     }
 
     protected void onPostExecute(ArrayList<ScheduleShow> shows) {
-        MainActivity.getInstance().showSchedule(shows);
+        if (shows.size() > 0) {
+            MainActivity.getInstance().showSchedule(shows);
+        } else {
+            Toast.makeText(MainActivity.getInstance(), R.string.error_getSchedule, Toast.LENGTH_LONG).show();
+        }
     }
 
     private ArrayList<ScheduleShow> getNextShows(JSONObject result, int count) {
         try {
             JSONArray json = result.getJSONArray("schedule");
             ArrayList<ScheduleShow> shows = new ArrayList<ScheduleShow>();
-            int howMuch  = (count > json.length()) ? count : json.length();
+            int howMuch  = (count < json.length()) ? count : json.length();
             for (int i = 0; i < howMuch-1; i++) {
                 JSONObject s = json.getJSONObject(i);
                 shows.add(new ScheduleShow(

@@ -142,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         if (schedule.getVisibility() == View.INVISIBLE) {
             new GetScheduleTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             schedule.setAnimation(AnimationBuilder.getFadeInAnimation());
-            schedule.setVisibility(View.VISIBLE);
         } else {
             schedule.setVisibility(View.INVISIBLE);
             schedule.removeAllViews();
@@ -346,6 +345,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         ViewGroup insertPoint = (ViewGroup) findViewById(R.id.containerSchedule);
         insertPoint.removeAllViews();
+        insertPoint.setVisibility(View.VISIBLE);
 
         int animMulitplier = 250;
 
