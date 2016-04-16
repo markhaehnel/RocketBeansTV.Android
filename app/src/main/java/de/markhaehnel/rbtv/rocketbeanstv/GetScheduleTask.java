@@ -57,10 +57,11 @@ public class GetScheduleTask extends AsyncTask<Void, String, ArrayList<ScheduleS
         MainActivity.getInstance().showSchedule(shows);
     }
 
-    private ArrayList<ScheduleShow> getNextShows(JSONObject result, int howMuch) {
+    private ArrayList<ScheduleShow> getNextShows(JSONObject result, int count) {
         try {
             JSONArray json = result.getJSONArray("schedule");
             ArrayList<ScheduleShow> shows = new ArrayList<ScheduleShow>();
+            int howMuch  = (count > json.length()) ? count : json.length();
             for (int i = 0; i < howMuch-1; i++) {
                 JSONObject s = json.getJSONObject(i);
                 shows.add(new ScheduleShow(
