@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             MediaSessionHandler.setupMediaSession(this);
             preparePlayer();
 
-            new GetLatestVersionTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
             setupChat();
 
         } else {
@@ -328,16 +326,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
 
         return false;
-    }
-
-    protected void showNewVersionAvailable() {
-        TextView textNewVersionAvailable = (TextView)findViewById(R.id.textNewVersionAvailable);
-
-        AnimationSet animation = new AnimationSet(true);
-        animation.addAnimation(AnimationBuilder.getFadeInAnimation());
-        animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
-
-        textNewVersionAvailable.startAnimation(animation);
     }
 
     public void showSchedule(ArrayList<ScheduleShow> shows) {
