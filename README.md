@@ -11,8 +11,9 @@ or from the [GitHub releases](https://github.com/EZTEQ/rbtv-firetv/releases/late
 
 ##Usage
  - Play/Pause - self-explanatory
- - Menu button - See the currently running show.
+ - DPad up/down - Toggle currently running show.
  - DPad right - Toggle chat (Fixed, Overlay, Hidden)
  - DPad left - Toggle schedule
+ - Menu button - Select stream quality
 
 This app is unofficial and is not affiliated with Rocket BEANS Entertainment GmbH.
