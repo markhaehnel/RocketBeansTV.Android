@@ -8,3 +8,7 @@ test:
     - ./gradlew assembleRelease
   post:
     - cp -r app/build/outputs/apk/*.apk $CIRCLE_ARTIFACTS
+    
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/c49b94a47eea91f52650
