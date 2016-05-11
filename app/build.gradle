@@ -7,8 +7,8 @@ android {
         applicationId "de.markhaehnel.rbtv.rocketbeanstv"
         minSdkVersion 22
         targetSdkVersion 23
-        versionCode 19
-        versionName "3.4"
+        versionCode 20
+        versionName "3.4.1"
     }
     buildTypes {
         release {
