@@ -2,6 +2,7 @@
 *.ap_
 *.dex
 *.class
+*.iml
 bin/
 gen/
 .gradle/
@@ -17,3 +18,4 @@ proguard/
 /captures
 /app/*.apk
 .idea/
+/app/app.iml
