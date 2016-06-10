@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import com.devbrackets.android.exomedia.EMVideoView;
 
-import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
@@ -63,17 +63,30 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         setContentView(R.layout.activity_main);
         videoView = (EMVideoView)findViewById(R.id.exomediaplayer);
 
-        if (isOnline()) {
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                try {
+                    InetAddress inetAddress = InetAddress.getByName("google.com");
+                    return !inetAddress.equals("");
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+            @Override
+            protected void onPostExecute(Boolean hasInternet) {
+                super.onPostExecute(hasInternet);
 
-            setupListeners();
-            MediaSessionHandler.setupMediaSession(this);
-            preparePlayer();
-
-            setupChat();
-
-        } else {
-            showMessage(R.string.error_noInternet);
-        }
+                if (hasInternet) {
+                    setupListeners();
+                    MediaSessionHandler.setupMediaSession(MainActivity.this);
+                    preparePlayer();
+                    setupChat();
+                } else {
+                    showMessage(R.string.error_noInternet);
+                }
+            }
+        }.execute();
     }
 
     private void setupChat() {
@@ -296,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     private void toggleInfoOverlay(boolean autoHide) {
-        LinearLayout infoOverlay = (LinearLayout)findViewById(R.id.containerCurrentShow);
+        LinearLayout infoOverlay = (LinearLayout) findViewById(R.id.containerCurrentShow);
         if (infoOverlay.getVisibility() == View.INVISIBLE) {
             if (autoHide) {
                 AnimationSet animation = new AnimationSet(true);
@@ -311,21 +324,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             infoOverlay.setAnimation(AnimationBuilder.getFadeOutAnimation());
             infoOverlay.setVisibility(View.INVISIBLE);
         }
-    }
-
-    private boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-
-        } catch (IOException | InterruptedException e) {
-            showMessage(R.string.error_noInternet);
-        }
-
-        return false;
     }
 
     public void showSchedule(ArrayList<ScheduleShow> shows) {
