@@ -5,7 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.markhaehnel.rbtv.rocketbeanstv.ChannelInfo;
-import de.markhaehnel.rbtv.rocketbeanstv.HttpRequest;
 import de.markhaehnel.rbtv.rocketbeanstv.MainActivity;
 
 public class GetChannelInfoTask extends AsyncTask<Void, ChannelInfo, String> {
@@ -13,10 +12,13 @@ public class GetChannelInfoTask extends AsyncTask<Void, ChannelInfo, String> {
         while (true) {
             try {
                 try {
-                    String response = HttpRequest.get("https://api.twitch.tv/kraken/streams/rocketbeanstv").body();
-                    JSONObject json = new JSONObject(response).getJSONObject("stream");
-                    JSONObject channel = json.getJSONObject("channel");
-                    publishProgress(new ChannelInfo(channel.getString("status"), json.getString("viewers") + " Zuschauer"));
+                    String data = NetworkHelper.getContentFromUrl("https://api.twitch.tv/kraken/streams/rocketbeanstv");
+
+                    if (data != null && !data.isEmpty()) {
+                        JSONObject json = new JSONObject(data).getJSONObject("stream");
+                        JSONObject channel = json.getJSONObject("channel");
+                        publishProgress(new ChannelInfo(channel.getString("status"), json.getString("viewers") + " Zuschauer"));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

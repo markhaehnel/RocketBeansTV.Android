@@ -1,4 +1,4 @@
-package de.markhaehnel.rbtv.rocketbeanstv;
+package de.markhaehnel.rbtv.rocketbeanstv.utility;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

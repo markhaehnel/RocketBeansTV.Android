@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import de.markhaehnel.rbtv.rocketbeanstv.HttpRequest;
 import de.markhaehnel.rbtv.rocketbeanstv.MainActivity;
 import de.markhaehnel.rbtv.rocketbeanstv.R;
 import de.markhaehnel.rbtv.rocketbeanstv.utility.Enums.Quality;
@@ -32,9 +31,10 @@ public class PlayStreamTask extends AsyncTask<Quality, Void, String> {
 
         String streamUrl = null;
 
-        String response = HttpRequest.get("http://api.twitch.tv/api/channels/rocketbeanstv/access_token").body();
         try {
-            JSONObject json = new JSONObject(response);
+            String data = NetworkHelper.getContentFromUrl("http://api.twitch.tv/api/channels/rocketbeanstv/access_token");
+
+            JSONObject json = new JSONObject(data);
 
             if (json != null && json.length() != 0) {
                 String token = json.getString("token");
