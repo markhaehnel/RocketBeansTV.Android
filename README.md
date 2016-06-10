@@ -3,7 +3,7 @@
 
 Watch Rocket Beans TV straight from your Fire TV in brilliant 1080p (Full HD).
 
-Built with [ExoMedia](https://github.com/brianwernick/ExoMedia) and [Http Request](https://github.com/kevinsawicki/http-request).
+Built with [ExoMedia](https://github.com/brianwernick/ExoMedia).
 
 ##Download
 [![Amazon Appstore](https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/res/images/amazon-underground-app-us-white.png)](http://www.amazon.de/dp/B018429HN6)
