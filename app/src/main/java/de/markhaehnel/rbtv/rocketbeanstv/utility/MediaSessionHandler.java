@@ -1,4 +1,4 @@
-package de.markhaehnel.rbtv.rocketbeanstv;
+package de.markhaehnel.rbtv.rocketbeanstv.utility;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,9 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.KeyEvent;
 
-class MediaSessionHandler {
+import de.markhaehnel.rbtv.rocketbeanstv.MainActivity;
+
+public class MediaSessionHandler {
 
     private static MediaSessionCompat mediaSession;
     private static PlaybackStateCompat playbackState;

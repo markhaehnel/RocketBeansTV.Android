@@ -1,7 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv;
 
 public class ChannelInfo {
-    ChannelInfo(String i_currentShow, String i_viewerCount) {
+    public ChannelInfo(String i_currentShow, String i_viewerCount) {
         currentShow = i_currentShow;
         viewerCount = i_viewerCount;
     }

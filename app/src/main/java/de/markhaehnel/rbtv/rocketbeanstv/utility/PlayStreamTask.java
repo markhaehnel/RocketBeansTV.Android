@@ -1,4 +1,4 @@
-package de.markhaehnel.rbtv.rocketbeanstv;
+package de.markhaehnel.rbtv.rocketbeanstv.utility;
 
 import android.os.AsyncTask;
 
@@ -12,7 +12,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import de.markhaehnel.rbtv.rocketbeanstv.MainActivity.Quality;
+import de.markhaehnel.rbtv.rocketbeanstv.HttpRequest;
+import de.markhaehnel.rbtv.rocketbeanstv.MainActivity;
+import de.markhaehnel.rbtv.rocketbeanstv.R;
+import de.markhaehnel.rbtv.rocketbeanstv.utility.Enums.Quality;
 
 public class PlayStreamTask extends AsyncTask<Quality, Void, String> {
     protected String doInBackground(Quality... qualities) {

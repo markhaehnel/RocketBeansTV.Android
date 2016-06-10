@@ -26,8 +26,10 @@ import android.widget.TextView;
 
 import com.devbrackets.android.exomedia.EMVideoView;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
+
+import de.markhaehnel.rbtv.rocketbeanstv.utility.*;
+import de.markhaehnel.rbtv.rocketbeanstv.utility.Enums.*;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
@@ -35,20 +37,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     boolean showGetterIsRunning = false;
     ChannelInfo channelInfo = new ChannelInfo("Keine Informationen", "-");
-
-    enum ChatState {
-        Hidden,
-        Overlay,
-        Fixed
-    }
-
-    enum Quality {
-        Chunked,
-        High,
-        Medium,
-        Low,
-        Mobile
-    }
 
     ChatState chatState = ChatState.Hidden;
     Quality currentQuality;
@@ -66,12 +54,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... params) {
-                try {
-                    InetAddress inetAddress = InetAddress.getByName("google.com");
-                    return !inetAddress.equals("");
-                } catch (Exception e) {
-                    return false;
-                }
+                return NetworkHelper.hasInternet();
             }
             @Override
             protected void onPostExecute(Boolean hasInternet) {
@@ -206,11 +189,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         super.onStop();
     }
 
-    protected static MainActivity getInstance() {
+    public static MainActivity getInstance() {
         return ins;
     }
 
-    protected void setInfoOverlay(ChannelInfo info) {
+    public void setInfoOverlay(ChannelInfo info) {
         if (!info.currentShow.equals(channelInfo.currentShow)) {
             toggleInfoOverlay(true);
         }
@@ -218,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         setInfoOverlayInformation();
     }
 
-    protected void togglePlayState() {
+    public void togglePlayState() {
         ImageView pauseView = (ImageView)findViewById(R.id.pauseImage);
         if (videoView.isPlaying()) {
             videoView.pause();
