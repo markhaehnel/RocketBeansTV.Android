@@ -1,4 +1,4 @@
-package de.markhaehnel.rbtv.rocketbeanstv;
+package de.markhaehnel.rbtv.rocketbeanstv.utility;
 
 public class ChannelInfo {
     public ChannelInfo(String i_currentShow, String i_viewerCount) {

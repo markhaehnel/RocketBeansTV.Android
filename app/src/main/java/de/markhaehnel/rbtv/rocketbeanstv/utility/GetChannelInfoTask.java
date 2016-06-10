@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.markhaehnel.rbtv.rocketbeanstv.ChannelInfo;
 import de.markhaehnel.rbtv.rocketbeanstv.MainActivity;
 
 public class GetChannelInfoTask extends AsyncTask<Void, ChannelInfo, String> {
