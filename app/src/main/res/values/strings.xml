@@ -6,5 +6,5 @@
     <string name="currentShow">Aktuelle Sendung</string>
     <string name="info_newVersionAvailable">Es ist eine Aktualisierung für Rocket Beans TV verfügbar!</string>
     <string name="menuTitle_chooseQuality">Qualität auswählen</string>
-    <string name="error_getSchedule">Fehler beim Abrufen des Sendeplans.</string>
+    <string name="error_getSchedule">Fehler beim Abrufen des Sendeplans.\nMeist hilft ein Neustart deines Fire TVs.</string>
 </resources>
