@@ -36,27 +36,22 @@ public class PlayStreamTask extends AsyncTask<Quality, Void, String> {
 
             JSONObject json = new JSONObject(data);
 
-            if (json != null && json.length() != 0) {
+            if (json.length() != 0) {
                 String token = json.getString("token");
                 String sig = json.getString("sig");
 
                 if (token.length() != 0 && sig.length() != 0) {
 
                     String playlistUrl = "http://usher.twitch.tv/api/channel/hls/rocketbeanstv.m3u8?player=twitchweb&token=" + token + "&sig=" + sig + "&allow_audio_only=true&allow_source=true&type=any&p=" + Math.round(Math.random() * 10000);
-                    InputStream is = new URL(playlistUrl).openStream();
 
-                    try {
+                    try (InputStream is = new URL(playlistUrl).openStream()) {
                         BufferedReader in = new BufferedReader(new InputStreamReader(is));
-                        if (is != null) {
-                            String line = "";
-                            while ((line = in.readLine()) != null) {
-                                 if (line.contains("VIDEO=\"" + qualityString + "\"")) {
-                                    return in.readLine();
-                                }
+                        String line = "";
+                        while ((line = in.readLine()) != null) {
+                            if (line.contains("VIDEO=\"" + qualityString + "\"")) {
+                                return in.readLine();
                             }
                         }
-                    } finally {
-                        is.close();
                     }
 
 
@@ -67,11 +62,7 @@ public class PlayStreamTask extends AsyncTask<Quality, Void, String> {
                 MainActivity.getInstance().showMessage(R.string.error_twitchError);
             }
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
 

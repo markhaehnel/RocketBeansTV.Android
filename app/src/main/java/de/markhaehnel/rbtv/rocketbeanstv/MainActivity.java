@@ -33,13 +33,13 @@ import de.markhaehnel.rbtv.rocketbeanstv.utility.Enums.*;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
-    private EMVideoView videoView;
+    private EMVideoView mVideoView;
 
-    boolean showGetterIsRunning = false;
-    ChannelInfo channelInfo = new ChannelInfo("Keine Informationen", "-");
+    private boolean mShowGetterIsRunning = false;
+    private ChannelInfo mChannelInfo = new ChannelInfo("Keine Informationen", "-");
 
-    ChatState chatState = ChatState.Hidden;
-    Quality currentQuality;
+    private ChatState mChatState = ChatState.Hidden;
+    private Quality mCurrentQuality;
 
     private static MainActivity ins;
 
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         ins = this;
 
         setContentView(R.layout.activity_main);
-        videoView = (EMVideoView)findViewById(R.id.exomediaplayer);
+        mVideoView = (EMVideoView)findViewById(R.id.exomediaplayer);
 
         new AsyncTask<Void, Void, Boolean>() {
             @Override
@@ -74,9 +74,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     private void setupChat() {
         WebView chat = (WebView)findViewById(R.id.webViewChat);
-        chat.setAlpha(0.75f);
-        chat.getSettings().setJavaScriptEnabled(true);
-        chat.loadUrl("https://ezteq.github.io/rbtv-firetv/");
+        if (chat != null) {
+            chat.setAlpha(0.75f);
+            chat.getSettings().setJavaScriptEnabled(true);
+            chat.loadUrl("https://ezteq.github.io/rbtv-firetv/");
+        }
     }
 
     @Override
@@ -112,18 +114,20 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.menuTitle_chooseQuality));
 
-        builder.setSingleChoiceItems(options, currentQuality.ordinal(), new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(options, mCurrentQuality.ordinal(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ProgressBar pb = (ProgressBar)findViewById(R.id.progressBar);
-                pb.setVisibility(View.VISIBLE);
+                if (pb != null) {
+                    pb.setVisibility(View.VISIBLE);
+                }
                 new PlayStreamTask().execute(Quality.values()[which]);
-                currentQuality = Quality.values()[which];
+                mCurrentQuality = Quality.values()[which];
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.getInstance());
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("quality", currentQuality.ordinal());
-                editor.commit();
+                editor.putInt("quality", mCurrentQuality.ordinal());
+                editor.apply();
 
                 dialog.cancel();
             }
@@ -133,18 +137,20 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     private void toggleSchedule() {
         LinearLayout schedule = (LinearLayout)findViewById(R.id.containerSchedule);
-        if (schedule.getVisibility() == View.INVISIBLE) {
-            new GetScheduleTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            schedule.setAnimation(AnimationBuilder.getFadeInAnimation());
-        } else {
-            schedule.setVisibility(View.INVISIBLE);
-            schedule.removeAllViews();
+        if (schedule != null) {
+            if (schedule.getVisibility() == View.INVISIBLE) {
+                new GetScheduleTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                schedule.setAnimation(AnimationBuilder.getFadeInAnimation());
+            } else {
+                schedule.setVisibility(View.INVISIBLE);
+                schedule.removeAllViews();
+            }
         }
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        videoView.start();
+        mVideoView.start();
     }
 
     @Override
@@ -159,11 +165,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         switch (what) {
             case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                pb.setVisibility(View.INVISIBLE);
+                if (pb != null) {
+                    pb.setVisibility(View.INVISIBLE);
+                }
 
-                if (!showGetterIsRunning) {
+                if (!mShowGetterIsRunning) {
                     new GetChannelInfoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    showGetterIsRunning = true;
+                    mShowGetterIsRunning = true;
                 }
                 break;
         }
@@ -173,13 +181,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     @Override
     protected void onPause() {
-        videoView.pause();
+        mVideoView.pause();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        videoView.start();
+        mVideoView.start();
         super.onResume();
     }
 
@@ -194,73 +202,77 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     public void setInfoOverlay(ChannelInfo info) {
-        if (!info.currentShow.equals(channelInfo.currentShow)) {
+        if (!info.currentShow.equals(mChannelInfo.currentShow)) {
             toggleInfoOverlay(true);
         }
-        channelInfo = info;
+        mChannelInfo = info;
         setInfoOverlayInformation();
     }
 
     public void togglePlayState() {
         ImageView pauseView = (ImageView)findViewById(R.id.pauseImage);
-        if (videoView.isPlaying()) {
-            videoView.pause();
-            pauseView.startAnimation(AnimationBuilder.getFadeInAnimation());
-            pauseView.setVisibility(View.VISIBLE);
-        } else {
-            videoView.start();
-            pauseView.startAnimation(AnimationBuilder.getFadeOutAnimation());
-            pauseView.setVisibility(View.INVISIBLE);
+        if (pauseView != null) {
+            if (mVideoView.isPlaying()) {
+                mVideoView.pause();
+                pauseView.startAnimation(AnimationBuilder.getFadeInAnimation());
+                pauseView.setVisibility(View.VISIBLE);
+            } else {
+                mVideoView.start();
+                pauseView.startAnimation(AnimationBuilder.getFadeOutAnimation());
+                pauseView.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
     private void toggleChat() {
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(videoView.getLayoutParams());
-        WebView chat = (WebView)findViewById(R.id.webViewChat);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(mVideoView.getLayoutParams());
+        WebView chat = (WebView) findViewById(R.id.webViewChat);
 
-        switch (chatState) {
-            case Hidden:
-                //to fixed
-                int dpiMargin = 300 * Math.round(this.getResources().getDisplayMetrics().density);
-                lp.setMargins(0, 0, dpiMargin, 0);
-                chat.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black));
-                chat.setVisibility(View.VISIBLE);
-                chatState = ChatState.Fixed;
-                break;
-            case Fixed:
-                //to overlay
-                chat.setBackgroundColor(ContextCompat.getColor(this, R.color.overlayBackground));
-                chat.setVisibility(View.VISIBLE);
-                chatState = ChatState.Overlay;
-                break;
-            case Overlay:
-            //to hidden
-            lp.setMargins(0, 0, 0, 0);
-            chat.setVisibility(View.INVISIBLE);
-            chatState = ChatState.Hidden;
-            break;
+        if (chat != null) {
+            switch (mChatState) {
+                case Hidden:
+                    //to fixed
+                    int dpiMargin = 300 * Math.round(this.getResources().getDisplayMetrics().density);
+                    lp.setMargins(0, 0, dpiMargin, 0);
+                    chat.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black));
+                    chat.setVisibility(View.VISIBLE);
+                    mChatState = ChatState.Fixed;
+                    break;
+                case Fixed:
+                    //to overlay
+                    chat.setBackgroundColor(ContextCompat.getColor(this, R.color.overlayBackground));
+                    chat.setVisibility(View.VISIBLE);
+                    mChatState = ChatState.Overlay;
+                    break;
+                case Overlay:
+                    //to hidden
+                    lp.setMargins(0, 0, 0, 0);
+                    chat.setVisibility(View.INVISIBLE);
+                    mChatState = ChatState.Hidden;
+                    break;
+            }
+
+            mVideoView.setLayoutParams(lp);
         }
-
-        videoView.setLayoutParams(lp);
     }
 
     private void setupListeners() {
-        videoView.setOnPreparedListener(this);
-        videoView.setOnErrorListener(this);
-        videoView.setOnInfoListener(this);
+        mVideoView.setOnPreparedListener(this);
+        mVideoView.setOnErrorListener(this);
+        mVideoView.setOnInfoListener(this);
     }
 
     private void preparePlayer() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        currentQuality = Quality.values()[prefs.getInt("quality", Quality.Chunked.ordinal())];
-        new PlayStreamTask().execute(currentQuality);
+        mCurrentQuality = Quality.values()[prefs.getInt("quality", Quality.Chunked.ordinal())];
+        new PlayStreamTask().execute(mCurrentQuality);
     }
 
     public void playURL(String url) {
         if (url != null && url.length() > 0) {
-            videoView.stopPlayback();
-            videoView.seekTo(0);
-            videoView.setVideoURI(Uri.parse(url));
+            mVideoView.stopPlayback();
+            mVideoView.seekTo(0);
+            mVideoView.setVideoURI(Uri.parse(url));
         } else {
             showMessage(R.string.error_unknown);
         }
@@ -282,9 +294,9 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     private void setInfoOverlayInformation() {
         TextView textCurrentShow = (TextView)findViewById(R.id.textCurrentShow);
-        textCurrentShow.setText(channelInfo.currentShow);
+        if (textCurrentShow != null) textCurrentShow.setText(mChannelInfo.currentShow);
         TextView textViewerCount = (TextView)findViewById(R.id.textViewerCount);
-        textViewerCount.setText(channelInfo.viewerCount);
+        if (textViewerCount != null) textViewerCount.setText(mChannelInfo.viewerCount);
 
         AnimationSet animation = new AnimationSet(true);
         animation.addAnimation(AnimationBuilder.getFadeInAnimation());
@@ -293,19 +305,21 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     private void toggleInfoOverlay(boolean autoHide) {
         LinearLayout infoOverlay = (LinearLayout) findViewById(R.id.containerCurrentShow);
-        if (infoOverlay.getVisibility() == View.INVISIBLE) {
-            if (autoHide) {
-                AnimationSet animation = new AnimationSet(true);
-                animation.addAnimation(AnimationBuilder.getFadeInAnimation());
-                animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
-                infoOverlay.startAnimation(animation);
+        if (infoOverlay != null) {
+            if (infoOverlay.getVisibility() == View.INVISIBLE) {
+                if (autoHide) {
+                    AnimationSet animation = new AnimationSet(true);
+                    animation.addAnimation(AnimationBuilder.getFadeInAnimation());
+                    animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
+                    infoOverlay.startAnimation(animation);
+                } else {
+                    infoOverlay.setAnimation(AnimationBuilder.getFadeInAnimation());
+                    infoOverlay.setVisibility(View.VISIBLE);
+                }
             } else {
-                infoOverlay.setAnimation(AnimationBuilder.getFadeInAnimation());
-                infoOverlay.setVisibility(View.VISIBLE);
+                infoOverlay.setAnimation(AnimationBuilder.getFadeOutAnimation());
+                infoOverlay.setVisibility(View.INVISIBLE);
             }
-        } else {
-            infoOverlay.setAnimation(AnimationBuilder.getFadeOutAnimation());
-            infoOverlay.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -313,29 +327,31 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         ViewGroup insertPoint = (ViewGroup) findViewById(R.id.containerSchedule);
-        insertPoint.removeAllViews();
-        insertPoint.setVisibility(View.VISIBLE);
+        if (insertPoint != null) {
+            insertPoint.removeAllViews();
+            insertPoint.setVisibility(View.VISIBLE);
 
-        int animMulitplier = 250;
+            int animMultiplier = 250;
 
-        for (int i = 0; i < shows.size(); i++) {
-            View v = vi.inflate(R.layout.component_scheduleitem, null);
+            for (int i = 0; i < shows.size(); i++) {
+                View v = vi.inflate(R.layout.component_scheduleitem, null);
 
-            TextView timeStart = (TextView)v.findViewById(R.id.textTimeStart);
-            timeStart.setText(shows.get(i).getTimeStart());
+                TextView timeStart = (TextView) v.findViewById(R.id.textTimeStart);
+                timeStart.setText(shows.get(i).getTimeStart());
 
-            TextView type = (TextView)v.findViewById(R.id.textType);
-            type.setText(shows.get(i).getType());
+                TextView type = (TextView) v.findViewById(R.id.textType);
+                type.setText(shows.get(i).getType());
 
-            TextView title = (TextView)v.findViewById(R.id.textTitle);
-            title.setText(shows.get(i).getTitle());
+                TextView title = (TextView) v.findViewById(R.id.textTitle);
+                title.setText(shows.get(i).getTitle());
 
-            TextView topic = (TextView)v.findViewById(R.id.textTopic);
-            topic.setText(shows.get(i).getTopic());
+                TextView topic = (TextView) v.findViewById(R.id.textTopic);
+                topic.setText(shows.get(i).getTopic());
 
-            v.startAnimation(AnimationBuilder.createDelayedFadeInAnimation(i * animMulitplier));
+                v.startAnimation(AnimationBuilder.createDelayedFadeInAnimation(i * animMultiplier));
 
-            insertPoint.addView(v, -1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                insertPoint.addView(v, -1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
         }
     }
 }

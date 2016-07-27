@@ -8,6 +8,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.MainActivity;
 
 public class GetChannelInfoTask extends AsyncTask<Void, ChannelInfo, String> {
     protected String doInBackground(Void... voids) {
+        //noinspection InfiniteLoopStatement
         while (true) {
             try {
                 try {

@@ -10,12 +10,12 @@ import de.markhaehnel.rbtv.rocketbeanstv.MainActivity;
 
 public class MediaSessionHandler {
 
-    private static MediaSessionCompat mediaSession;
-    private static PlaybackStateCompat playbackState;
+    private static MediaSessionCompat mMediaSession;
+    private static PlaybackStateCompat mPlaybackState;
 
     public static void setupMediaSession(Context context) {
-        mediaSession = new MediaSessionCompat(context, "rbtv");
-        mediaSession.setCallback(new MediaSessionCompat.Callback() {
+        mMediaSession = new MediaSessionCompat(context, "rbtv");
+        mMediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
                 KeyEvent key = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
@@ -30,15 +30,15 @@ public class MediaSessionHandler {
                 return super.onMediaButtonEvent(mediaButtonEvent);
             }
         });
-        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-        mediaSession.setActive(true);
+        mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mMediaSession.setActive(true);
 
-        playbackState = new PlaybackStateCompat.Builder()
+        mPlaybackState = new PlaybackStateCompat.Builder()
                 .setActions(PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PLAY_PAUSE |
                             PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID | PlaybackStateCompat.ACTION_PAUSE |
                             PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
                 .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1)
                 .build();
-        mediaSession.setPlaybackState(playbackState);
+        mMediaSession.setPlaybackState(mPlaybackState);
     }
 }

@@ -17,7 +17,7 @@ public final class NetworkHelper {
             return false;
         }
     }
-    public static String getContentFromUrl(String url) throws IOException {
+    static String getContentFromUrl(String url) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setUseCaches(false);
         con.setRequestMethod("GET");
@@ -35,7 +35,7 @@ public final class NetworkHelper {
         }
     }
 
-    public static String getContentFromUrl(String url, Map<String, String> headers) throws IOException {
+    static String getContentFromUrl(String url, Map<String, String> headers) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setUseCaches(false);
         con.setRequestMethod("GET");
