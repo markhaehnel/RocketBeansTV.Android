@@ -18,4 +18,4 @@ proguard/
 /captures
 /app/*.apk
 .idea/
-/app/app.iml
+app/app.iml
