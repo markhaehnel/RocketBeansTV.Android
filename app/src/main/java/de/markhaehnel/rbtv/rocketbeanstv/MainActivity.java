@@ -2,8 +2,8 @@
 package de.markhaehnel.rbtv.rocketbeanstv;
 
 import android.annotation.SuppressLint;
-import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
+import org.greenrobot.eventbus.Subscribe;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -28,13 +28,13 @@ import android.widget.TextView;
 import com.devbrackets.android.exomedia.EMVideoView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.ButterKnife;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.InternetCheckEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ScheduleLoadEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.StreamUrlChangeEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.TogglePlayStateEvent;
-import de.markhaehnel.rbtv.rocketbeanstv.loader.ChannelInfoLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.ScheduleLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.StreamUrlLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.*;
@@ -84,14 +84,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    private void onInternetChecked(InternetCheckEvent event) {
+    public void onInternetChecked(InternetCheckEvent event) {
         switch (event.getStatus()) {
             case OK:
                 setupListeners();
                 MediaSessionHandler.setupMediaSession(MainActivity.this);
-                //preparePlayer();
                 setupChat();
-                new ChannelInfoLoader().start();
+                //preparePlayer();
                 break;
             case FAILED:
                 showMessage(R.string.error_noInternet);
@@ -228,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    private void onTogglePlayState(TogglePlayStateEvent event) {
+    public void onTogglePlayState(TogglePlayStateEvent event) {
         if (mVideoView.isPlaying()) {
             mVideoView.pause();
             pauseView.startAnimation(AnimationBuilder.getFadeInAnimation());
@@ -285,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    private void onStreamUrlChanged(StreamUrlChangeEvent event) {
+    public void onStreamUrlChanged(StreamUrlChangeEvent event) {
         if (event.getStatus() == EventStatus.OK) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = prefs.edit();
