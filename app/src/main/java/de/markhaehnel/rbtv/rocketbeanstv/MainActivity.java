@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 setupListeners();
                 MediaSessionHandler.setupMediaSession(MainActivity.this);
                 setupChat();
-                //preparePlayer();
+                preparePlayer();
                 break;
             case FAILED:
                 showMessage(R.string.error_noInternet);
