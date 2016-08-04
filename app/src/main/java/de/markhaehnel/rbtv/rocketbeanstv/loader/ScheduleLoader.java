@@ -1,6 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.loader;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.util.Base64;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -15,6 +16,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindString;
+import de.markhaehnel.rbtv.rocketbeanstv.R;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ScheduleLoadEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.EventStatus;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper;
@@ -22,10 +25,15 @@ import de.markhaehnel.rbtv.rocketbeanstv.utils.RandomString;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.ScheduleShow;
 
 public class ScheduleLoader extends Thread {
-    public void run() {
 
-        final String key = "";
-        final String secret = "";
+    private String key, secret;
+
+    public ScheduleLoader(String key, String secret) {
+        this.key = key;
+        this.secret = secret;
+    }
+
+    public void run() {
         final String id = "00000000-0000-0000-0000-000000000000";
 
         try {

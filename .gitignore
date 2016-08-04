@@ -19,3 +19,4 @@ proguard/
 /app/*.apk
 .idea/
 app/app.iml
+/app/src/main/res/values/keys.xml

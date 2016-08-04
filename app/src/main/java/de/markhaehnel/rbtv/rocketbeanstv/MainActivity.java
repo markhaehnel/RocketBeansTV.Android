@@ -25,20 +25,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.devbrackets.android.exomedia.EMVideoView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.ThreadMode;
-
+import java.util.ArrayList;
 import butterknife.ButterKnife;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.InternetCheckEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ScheduleLoadEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.StreamUrlChangeEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.TogglePlayStateEvent;
+import de.markhaehnel.rbtv.rocketbeanstv.loader.ChannelInfoLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.ScheduleLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.StreamUrlLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.*;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.*;
+
 import static de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper.hasInternet;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     @BindView(R.id.textCurrentShow) TextView textCurrentShow;
     @BindView(R.id.textViewerCount) TextView textViewerCount;
     @BindView(R.id.pauseImage) ImageView pauseView;
+    @BindView(R.id.containerSchedule) ViewGroup containerSchedule;
+    @BindView(R.id.scheduleProgress) ProgressBar scheduleProgress;
 
     private ChatState mChatState = ChatState.HIDDEN;
     private Quality mCurrentQuality;
@@ -55,8 +60,13 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
 
         new Thread(new Runnable() {
             @Override
@@ -68,12 +78,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 }
             }
         }).start();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 MediaSessionHandler.setupMediaSession(MainActivity.this);
                 setupChat();
                 preparePlayer();
+                new ChannelInfoLoader().start();
                 break;
             case FAILED:
                 showMessage(R.string.error_noInternet);
@@ -158,14 +163,14 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     private void toggleSchedule() {
-        LinearLayout schedule = (LinearLayout)findViewById(R.id.containerSchedule);
-        if (schedule != null) {
-            if (schedule.getVisibility() == View.INVISIBLE) {
-                new ScheduleLoader().start();
-            } else {
-                schedule.setVisibility(View.INVISIBLE);
-                schedule.removeAllViews();
-            }
+        if (containerSchedule.getVisibility() == View.INVISIBLE) {
+            scheduleProgress.setVisibility(View.VISIBLE);
+            containerSchedule.startAnimation(AnimationBuilder.getFadeInAnimation());
+            containerSchedule.setVisibility(View.VISIBLE);
+            new ScheduleLoader(getString(R.string.RBTVKEY), getString(R.string.RBTVSECRET)).start();
+        } else {
+            containerSchedule.startAnimation(AnimationBuilder.getFadeOutAnimation());
+            containerSchedule.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -212,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         switch (event.getStatus())
         {
             case OK:
-                textViewerCount.setText(String.valueOf(event.getViewerCount()));
+                textViewerCount.setText(String.format("%s %s", String.valueOf(event.getViewerCount()), getString(R.string.viewers)));
                 if (!event.getCurrentShow().equals(textCurrentShow.getText())) {
                     textCurrentShow.setText(event.getCurrentShow());
                     toggleInfoOverlay(true);
@@ -335,36 +340,47 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onScheduleLoaded(ScheduleLoadEvent event) {
+        switch(event.getStatus()) {
+            case OK:
+                fillSchedule(event.getShows());
+                break;
+            case FAILED:
+                Toast.makeText(this, R.string.error_getSchedule, Toast.LENGTH_SHORT).show();
+                containerSchedule.startAnimation(AnimationBuilder.getFadeOutAnimation());
+                containerSchedule.setVisibility(View.INVISIBLE);
+                break;
+        }
+    }
+
+    private void fillSchedule(ArrayList<ScheduleShow> shows) {
         LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.containerSchedule);
-        if (insertPoint != null) {
-            insertPoint.removeAllViews();
-            insertPoint.setVisibility(View.VISIBLE);
+        if (containerSchedule.getChildCount() > 1) {
+            containerSchedule.removeViews(1, containerSchedule.getChildCount() - 1);
+        }
 
-            int animMultiplier = 150;
+        scheduleProgress.setVisibility(View.GONE);
 
-            for (int i = 0; i < event.getShows().size(); i++) {
-                //TODO: check if set insertPoint back to null
-                View v = vi.inflate(R.layout.component_scheduleitem, insertPoint);
+        int animMultiplier = 150;
 
-                TextView timeStart = (TextView) v.findViewById(R.id.textTimeStart);
-                timeStart.setText(event.getShows().get(i).getTimeStart());
+        for (int i = 0; i < shows.size(); i++) {
+            View v = vi.inflate(R.layout.component_scheduleitem, null);
 
-                TextView type = (TextView) v.findViewById(R.id.textType);
-                type.setText(event.getShows().get(i).getType());
+            TextView timeStart = (TextView) v.findViewById(R.id.textTimeStart);
+            timeStart.setText(shows.get(i).getTimeStart());
 
-                TextView title = (TextView) v.findViewById(R.id.textTitle);
-                title.setText(event.getShows().get(i).getTitle());
+            TextView type = (TextView) v.findViewById(R.id.textType);
+            type.setText(shows.get(i).getType());
 
-                TextView topic = (TextView) v.findViewById(R.id.textTopic);
-                topic.setText(event.getShows().get(i).getTopic());
+            TextView title = (TextView) v.findViewById(R.id.textTitle);
+            title.setText(shows.get(i).getTitle());
 
-                v.startAnimation(AnimationBuilder.createDelayedFadeInAnimation(i * animMultiplier));
+            TextView topic = (TextView) v.findViewById(R.id.textTopic);
+            topic.setText(shows.get(i).getTopic());
 
-                //TODO: check if this is needed
-                insertPoint.addView(v, -1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            }
+            v.startAnimation(AnimationBuilder.createDelayedFadeInAnimation(i * animMultiplier));
+
+            containerSchedule.addView(v, -1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 }
