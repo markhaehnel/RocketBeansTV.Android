@@ -1,4 +1,4 @@
-package de.markhaehnel.rbtv.rocketbeanstv.utility;
+package de.markhaehnel.rbtv.rocketbeanstv.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public final class NetworkHelper {
             return false;
         }
     }
-    static String getContentFromUrl(String url) throws IOException {
+    public static String getContentFromUrl(String url) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setUseCaches(false);
         con.setRequestMethod("GET");
@@ -35,7 +35,7 @@ public final class NetworkHelper {
         }
     }
 
-    static String getContentFromUrl(String url, Map<String, String> headers) throws IOException {
+    public static String getContentFromUrl(String url, Map<String, String> headers) throws IOException {
         HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
         con.setUseCaches(false);
         con.setRequestMethod("GET");

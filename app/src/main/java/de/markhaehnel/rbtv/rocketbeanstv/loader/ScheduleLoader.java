@@ -1,13 +1,12 @@
-package de.markhaehnel.rbtv.rocketbeanstv.utility;
+package de.markhaehnel.rbtv.rocketbeanstv.loader;
 
-import android.os.AsyncTask;
+import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.util.Base64;
-import android.widget.Toast;
-
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,23 +15,33 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
-import de.markhaehnel.rbtv.rocketbeanstv.MainActivity;
+import butterknife.BindString;
 import de.markhaehnel.rbtv.rocketbeanstv.R;
+import de.markhaehnel.rbtv.rocketbeanstv.events.ScheduleLoadEvent;
+import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.EventStatus;
+import de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper;
+import de.markhaehnel.rbtv.rocketbeanstv.utils.RandomString;
+import de.markhaehnel.rbtv.rocketbeanstv.utils.ScheduleShow;
 
-public class GetScheduleTask extends AsyncTask<Void, String, ArrayList<ScheduleShow>> {
-    protected ArrayList<ScheduleShow> doInBackground(Void... voids) {
+public class ScheduleLoader extends Thread {
 
-        final String key = "";
-        final String secret = "";
+    private String key, secret;
+
+    public ScheduleLoader(String key, String secret) {
+        this.key = key;
+        this.secret = secret;
+    }
+
+    public void run() {
         final String id = "00000000-0000-0000-0000-000000000000";
 
         try {
+            @SuppressLint("SimpleDateFormat")
             String created = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ").format(new Date());
             created = created.substring(0, created.length()-2) + ":" + created.substring(created.length()-2, created.length());
 
-            String nonce = id + created + getRandomString(10);
+            String nonce = id + created + RandomString.generate(10);
             String sha1 = SHA1(nonce + created + secret);
             String url = "https://api.rocketmgmt.de/schedule";
             String b64sha1 = Base64.encodeToString(sha1.getBytes(), Base64.NO_WRAP);
@@ -44,23 +53,11 @@ public class GetScheduleTask extends AsyncTask<Void, String, ArrayList<ScheduleS
             headers.put("X-WSSE", "UsernameToken Username=\"" + key + "\", PasswordDigest=\"" + b64sha1 + "\", Nonce=\"" + b64nonce + "\", Created=\"" + created + "\"");
 
             String data = NetworkHelper.getContentFromUrl(url, headers);
-            if (data != null && !data.isEmpty()) {
-                JSONObject result = new JSONObject(data);
-                return getNextShows(result, 6);
-            } else {
-                return new ArrayList<>();
-            }
+            JSONObject result = new JSONObject(data);
+            EventBus.getDefault().post(new ScheduleLoadEvent(getNextShows(result, 6), EventStatus.OK));
         } catch(Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    protected void onPostExecute(ArrayList<ScheduleShow> shows) {
-        if (shows.size() > 0) {
-            MainActivity.getInstance().showSchedule(shows);
-        } else {
-            Toast.makeText(MainActivity.getInstance(), R.string.error_getSchedule, Toast.LENGTH_LONG).show();
+            EventBus.getDefault().post(new ScheduleLoadEvent(EventStatus.FAILED));
         }
     }
 
@@ -86,17 +83,6 @@ public class GetScheduleTask extends AsyncTask<Void, String, ArrayList<ScheduleS
             e.printStackTrace();
         }
         return new ArrayList<>();
-    }
-
-    private String getRandomString(int length) {
-        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < length; i++) {
-            char c = chars[random.nextInt(chars.length)];
-            sb.append(c);
-        }
-        return sb.toString();
     }
 
     private static String convertToHex(byte[] data) {

@@ -1,4 +1,4 @@
-package de.markhaehnel.rbtv.rocketbeanstv.utility;
+package de.markhaehnel.rbtv.rocketbeanstv.utils;
 
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;

@@ -39,34 +39,23 @@
         android:layout_gravity="center"
         android:visibility="visible" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/info_newVersionAvailable"
-        android:id="@+id/textNewVersionAvailable"
-        android:textColor="#b2ffffff"
-        android:visibility="invisible"
-        android:layout_gravity="start|bottom"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="32dp"
-        android:background="@color/overlayBackground"
-        android:paddingLeft="16dp"
-        android:paddingTop="8dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="8dp"
-        android:drawableStart="@android:drawable/ic_menu_info_details"
-        android:maxLines="1"
-        android:gravity="center" />
-
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="fill_parent"
         android:layout_gravity="start|center_vertical"
         android:id="@+id/containerSchedule"
         android:background="@color/overlayBackground"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/scheduleProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"

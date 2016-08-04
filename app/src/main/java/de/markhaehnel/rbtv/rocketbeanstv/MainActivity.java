@@ -1,12 +1,14 @@
 
 package de.markhaehnel.rbtv.rocketbeanstv;
 
+import android.annotation.SuppressLint;
+import butterknife.BindView;
+import org.greenrobot.eventbus.Subscribe;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
@@ -23,55 +25,85 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.devbrackets.android.exomedia.EMVideoView;
-
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
+import butterknife.ButterKnife;
+import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent;
+import de.markhaehnel.rbtv.rocketbeanstv.events.InternetCheckEvent;
+import de.markhaehnel.rbtv.rocketbeanstv.events.ScheduleLoadEvent;
+import de.markhaehnel.rbtv.rocketbeanstv.events.StreamUrlChangeEvent;
+import de.markhaehnel.rbtv.rocketbeanstv.events.TogglePlayStateEvent;
+import de.markhaehnel.rbtv.rocketbeanstv.loader.ChannelInfoLoader;
+import de.markhaehnel.rbtv.rocketbeanstv.loader.ScheduleLoader;
+import de.markhaehnel.rbtv.rocketbeanstv.loader.StreamUrlLoader;
+import de.markhaehnel.rbtv.rocketbeanstv.utils.*;
+import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.*;
 
-import de.markhaehnel.rbtv.rocketbeanstv.utility.*;
-import de.markhaehnel.rbtv.rocketbeanstv.utility.Enums.*;
+import static de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper.hasInternet;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
-    private EMVideoView mVideoView;
+    @BindView(R.id.exomediaplayer) EMVideoView mVideoView;
+    @BindView(R.id.textCurrentShow) TextView textCurrentShow;
+    @BindView(R.id.textViewerCount) TextView textViewerCount;
+    @BindView(R.id.pauseImage) ImageView pauseView;
+    @BindView(R.id.containerSchedule) ViewGroup containerSchedule;
+    @BindView(R.id.scheduleProgress) ProgressBar scheduleProgress;
 
-    private boolean mShowGetterIsRunning = false;
-    private ChannelInfo mChannelInfo = new ChannelInfo("Keine Informationen", "-");
-
-    private ChatState mChatState = ChatState.Hidden;
+    private ChatState mChatState = ChatState.HIDDEN;
     private Quality mCurrentQuality;
-
-    private static MainActivity ins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ins = this;
-
         setContentView(R.layout.activity_main);
-        mVideoView = (EMVideoView)findViewById(R.id.exomediaplayer);
-
-        new AsyncTask<Void, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                return NetworkHelper.hasInternet();
-            }
-            @Override
-            protected void onPostExecute(Boolean hasInternet) {
-                super.onPostExecute(hasInternet);
-
-                if (hasInternet) {
-                    setupListeners();
-                    MediaSessionHandler.setupMediaSession(MainActivity.this);
-                    preparePlayer();
-                    setupChat();
-                } else {
-                    showMessage(R.string.error_noInternet);
-                }
-            }
-        }.execute();
+        ButterKnife.bind(this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if(hasInternet()) {
+                    EventBus.getDefault().post(new InternetCheckEvent(EventStatus.OK));
+                } else {
+                    EventBus.getDefault().post(new InternetCheckEvent(EventStatus.FAILED));
+                }
+            }
+        }).start();
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        System.exit(0);
+        super.onStop();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onInternetChecked(InternetCheckEvent event) {
+        switch (event.getStatus()) {
+            case OK:
+                setupListeners();
+                MediaSessionHandler.setupMediaSession(MainActivity.this);
+                setupChat();
+                preparePlayer();
+                new ChannelInfoLoader().start();
+                break;
+            case FAILED:
+                showMessage(R.string.error_noInternet);
+                break;
+        }
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
     private void setupChat() {
         WebView chat = (WebView)findViewById(R.id.webViewChat);
         if (chat != null) {
@@ -85,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_CENTER:
-                togglePlayState();
+                EventBus.getDefault().post(new TogglePlayStateEvent());
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 toggleChat();
@@ -121,30 +153,24 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 if (pb != null) {
                     pb.setVisibility(View.VISIBLE);
                 }
-                new PlayStreamTask().execute(Quality.values()[which]);
+                new StreamUrlLoader(Quality.values()[which]).start();
                 mCurrentQuality = Quality.values()[which];
 
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.getInstance());
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putInt("quality", mCurrentQuality.ordinal());
-                editor.apply();
-
-                dialog.cancel();
+                dialog.dismiss();
             }
         });
         builder.show();
     }
 
     private void toggleSchedule() {
-        LinearLayout schedule = (LinearLayout)findViewById(R.id.containerSchedule);
-        if (schedule != null) {
-            if (schedule.getVisibility() == View.INVISIBLE) {
-                new GetScheduleTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                schedule.setAnimation(AnimationBuilder.getFadeInAnimation());
-            } else {
-                schedule.setVisibility(View.INVISIBLE);
-                schedule.removeAllViews();
-            }
+        if (containerSchedule.getVisibility() == View.INVISIBLE) {
+            scheduleProgress.setVisibility(View.VISIBLE);
+            containerSchedule.startAnimation(AnimationBuilder.getFadeInAnimation());
+            containerSchedule.setVisibility(View.VISIBLE);
+            new ScheduleLoader(getString(R.string.RBTVKEY), getString(R.string.RBTVSECRET)).start();
+        } else {
+            containerSchedule.startAnimation(AnimationBuilder.getFadeOutAnimation());
+            containerSchedule.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -168,11 +194,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 if (pb != null) {
                     pb.setVisibility(View.INVISIBLE);
                 }
-
-                if (!mShowGetterIsRunning) {
-                    new GetChannelInfoTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    mShowGetterIsRunning = true;
-                }
                 break;
         }
 
@@ -191,36 +212,35 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         super.onResume();
     }
 
-    @Override
-    protected void onStop() {
-        System.exit(0);
-        super.onStop();
-    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChannelInfoUpdate(ChannelInfoUpdateEvent event) {
+        switch (event.getStatus())
+        {
+            case OK:
+                textViewerCount.setText(String.format("%s %s", String.valueOf(event.getViewerCount()), getString(R.string.viewers)));
+                if (!event.getCurrentShow().equals(textCurrentShow.getText())) {
+                    textCurrentShow.setText(event.getCurrentShow());
+                    toggleInfoOverlay(true);
+                }
+                break;
 
-    public static MainActivity getInstance() {
-        return ins;
-    }
-
-    public void setInfoOverlay(ChannelInfo info) {
-        if (!info.currentShow.equals(mChannelInfo.currentShow)) {
-            toggleInfoOverlay(true);
+            case FAILED:
+                textViewerCount.setText(R.string.empty);
+                textCurrentShow.setText(R.string.no_info_available);
+                break;
         }
-        mChannelInfo = info;
-        setInfoOverlayInformation();
     }
 
-    public void togglePlayState() {
-        ImageView pauseView = (ImageView)findViewById(R.id.pauseImage);
-        if (pauseView != null) {
-            if (mVideoView.isPlaying()) {
-                mVideoView.pause();
-                pauseView.startAnimation(AnimationBuilder.getFadeInAnimation());
-                pauseView.setVisibility(View.VISIBLE);
-            } else {
-                mVideoView.start();
-                pauseView.startAnimation(AnimationBuilder.getFadeOutAnimation());
-                pauseView.setVisibility(View.INVISIBLE);
-            }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTogglePlayState(TogglePlayStateEvent event) {
+        if (mVideoView.isPlaying()) {
+            mVideoView.pause();
+            pauseView.startAnimation(AnimationBuilder.getFadeInAnimation());
+            pauseView.setVisibility(View.VISIBLE);
+        } else {
+            mVideoView.start();
+            pauseView.startAnimation(AnimationBuilder.getFadeOutAnimation());
+            pauseView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -230,25 +250,25 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
         if (chat != null) {
             switch (mChatState) {
-                case Hidden:
+                case HIDDEN:
                     //to fixed
                     int dpiMargin = 300 * Math.round(this.getResources().getDisplayMetrics().density);
                     lp.setMargins(0, 0, dpiMargin, 0);
                     chat.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black));
                     chat.setVisibility(View.VISIBLE);
-                    mChatState = ChatState.Fixed;
+                    mChatState = ChatState.FIXED;
                     break;
-                case Fixed:
+                case FIXED:
                     //to overlay
                     chat.setBackgroundColor(ContextCompat.getColor(this, R.color.overlayBackground));
                     chat.setVisibility(View.VISIBLE);
-                    mChatState = ChatState.Overlay;
+                    mChatState = ChatState.OVERLAY;
                     break;
-                case Overlay:
+                case OVERLAY:
                     //to hidden
                     lp.setMargins(0, 0, 0, 0);
                     chat.setVisibility(View.INVISIBLE);
-                    mChatState = ChatState.Hidden;
+                    mChatState = ChatState.HIDDEN;
                     break;
             }
 
@@ -264,15 +284,21 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     private void preparePlayer() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mCurrentQuality = Quality.values()[prefs.getInt("quality", Quality.Chunked.ordinal())];
-        new PlayStreamTask().execute(mCurrentQuality);
+        mCurrentQuality = Quality.values()[prefs.getInt("quality", Quality.CHUNKED.ordinal())];
+        new StreamUrlLoader(mCurrentQuality).start();
     }
 
-    public void playURL(String url) {
-        if (url != null && url.length() > 0) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onStreamUrlChanged(StreamUrlChangeEvent event) {
+        if (event.getStatus() == EventStatus.OK) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("quality", mCurrentQuality.ordinal());
+            editor.apply();
+
             mVideoView.stopPlayback();
             mVideoView.seekTo(0);
-            mVideoView.setVideoURI(Uri.parse(url));
+            mVideoView.setVideoURI(Uri.parse(event.getUrl()));
         } else {
             showMessage(R.string.error_unknown);
         }
@@ -282,25 +308,14 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         AlertDialog.Builder ad = new AlertDialog.Builder(this);
         ad.setCancelable(false);
         ad.setMessage(getString(resourceId));
-        ad.setTitle("Fehler");
-        ad.setNeutralButton("Okay", new AlertDialog.OnClickListener() {
+        ad.setTitle(getString(R.string.error));
+        ad.setNeutralButton(getString(R.string.okay), new AlertDialog.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 System.exit(0);
             }
         });
         ad.create().show();
-    }
-
-    private void setInfoOverlayInformation() {
-        TextView textCurrentShow = (TextView)findViewById(R.id.textCurrentShow);
-        if (textCurrentShow != null) textCurrentShow.setText(mChannelInfo.currentShow);
-        TextView textViewerCount = (TextView)findViewById(R.id.textViewerCount);
-        if (textViewerCount != null) textViewerCount.setText(mChannelInfo.viewerCount);
-
-        AnimationSet animation = new AnimationSet(true);
-        animation.addAnimation(AnimationBuilder.getFadeInAnimation());
-        animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
     }
 
     private void toggleInfoOverlay(boolean autoHide) {
@@ -323,35 +338,49 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
     }
 
-    public void showSchedule(ArrayList<ScheduleShow> shows) {
-        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onScheduleLoaded(ScheduleLoadEvent event) {
+        switch(event.getStatus()) {
+            case OK:
+                fillSchedule(event.getShows());
+                break;
+            case FAILED:
+                Toast.makeText(this, R.string.error_getSchedule, Toast.LENGTH_SHORT).show();
+                containerSchedule.startAnimation(AnimationBuilder.getFadeOutAnimation());
+                containerSchedule.setVisibility(View.INVISIBLE);
+                break;
+        }
+    }
 
-        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.containerSchedule);
-        if (insertPoint != null) {
-            insertPoint.removeAllViews();
-            insertPoint.setVisibility(View.VISIBLE);
+    private void fillSchedule(ArrayList<ScheduleShow> shows) {
+        LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            int animMultiplier = 250;
+        if (containerSchedule.getChildCount() > 1) {
+            containerSchedule.removeViews(1, containerSchedule.getChildCount() - 1);
+        }
 
-            for (int i = 0; i < shows.size(); i++) {
-                View v = vi.inflate(R.layout.component_scheduleitem, null);
+        scheduleProgress.setVisibility(View.GONE);
 
-                TextView timeStart = (TextView) v.findViewById(R.id.textTimeStart);
-                timeStart.setText(shows.get(i).getTimeStart());
+        int animMultiplier = 150;
 
-                TextView type = (TextView) v.findViewById(R.id.textType);
-                type.setText(shows.get(i).getType());
+        for (int i = 0; i < shows.size(); i++) {
+            View v = vi.inflate(R.layout.component_scheduleitem, null);
 
-                TextView title = (TextView) v.findViewById(R.id.textTitle);
-                title.setText(shows.get(i).getTitle());
+            TextView timeStart = (TextView) v.findViewById(R.id.textTimeStart);
+            timeStart.setText(shows.get(i).getTimeStart());
 
-                TextView topic = (TextView) v.findViewById(R.id.textTopic);
-                topic.setText(shows.get(i).getTopic());
+            TextView type = (TextView) v.findViewById(R.id.textType);
+            type.setText(shows.get(i).getType());
 
-                v.startAnimation(AnimationBuilder.createDelayedFadeInAnimation(i * animMultiplier));
+            TextView title = (TextView) v.findViewById(R.id.textTitle);
+            title.setText(shows.get(i).getTitle());
 
-                insertPoint.addView(v, -1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            }
+            TextView topic = (TextView) v.findViewById(R.id.textTopic);
+            topic.setText(shows.get(i).getTopic());
+
+            v.startAnimation(AnimationBuilder.createDelayedFadeInAnimation(i * animMultiplier));
+
+            containerSchedule.addView(v, -1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 }
