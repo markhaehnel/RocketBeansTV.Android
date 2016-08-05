@@ -1,4 +1,5 @@
 #Rocket Beans TV for Fire TV
+[![CircleCI](https://img.shields.io/circleci/project/EZTEQ/rbtv-firetv/master.svg?style=flat-square)](https://circleci.com/gh/EZTEQ/rbtv-firetv/tree/master)
 
 Watch Rocket Beans TV straight from your Fire TV in brilliant 1080p (Full HD).
 
