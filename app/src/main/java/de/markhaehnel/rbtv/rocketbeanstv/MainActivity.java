@@ -48,14 +48,15 @@ import static de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper.hasInternet;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
-    private final int ANIMATION_DURATION_NORMAL = 250;
-    private final int ANIMATION_DURATION_SHORT = 100;
+    private final long ANIMATION_DURATION_NORMAL = 250;
+    private final long ANIMATION_DURATION_SHORT = 100;
 
     @BindView(R.id.exomediaplayer) EMVideoView mVideoView;
     @BindView(R.id.textCurrentShow) TextView textCurrentShow;
     @BindView(R.id.textViewerCount) TextView textViewerCount;
     @BindView(R.id.pauseImage) ImageView pauseView;
     @BindView(R.id.containerSchedule) ViewGroup containerSchedule;
+    @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.scheduleProgress) ProgressBar scheduleProgress;
 
     private ChatState mChatState = ChatState.HIDDEN;
@@ -154,10 +155,10 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         builder.setSingleChoiceItems(options, mCurrentQuality.ordinal(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ProgressBar pb = (ProgressBar)findViewById(R.id.progressBar);
-                if (pb != null) {
-                    pb.setVisibility(View.VISIBLE);
-                }
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.animate()
+                        .setDuration(ANIMATION_DURATION_NORMAL)
+                        .alpha(1.0f);
                 new StreamUrlLoader(Quality.values()[which]).start();
                 mCurrentQuality = Quality.values()[which];
 
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         if (containerSchedule.getVisibility() == View.INVISIBLE) {
             scheduleProgress.setVisibility(View.VISIBLE);
             scheduleProgress.setAlpha(1.0f);
+            containerSchedule.setAlpha(0.0f);
             containerSchedule.setVisibility(View.VISIBLE);
             containerSchedule.animate()
                     .setDuration(ANIMATION_DURATION_NORMAL)
@@ -205,13 +207,17 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     @Override
     public boolean onInfo(MediaPlayer mp, int what, int extra) {
-        ProgressBar pb = (ProgressBar)findViewById(R.id.progressBar);
-
         switch (what) {
             case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                if (pb != null) {
-                    pb.setVisibility(View.INVISIBLE);
-                }
+                progressBar.animate()
+                        .setDuration(ANIMATION_DURATION_NORMAL)
+                        .alpha(0.0f)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressBar.setVisibility(View.INVISIBLE);
+                            }
+                        });
                 break;
         }
 
@@ -252,13 +258,22 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onTogglePlayState(TogglePlayStateEvent event) {
         if (mVideoView.isPlaying()) {
-            mVideoView.pause();
-            pauseView.startAnimation(AnimationBuilder.getFadeInAnimation());
             pauseView.setVisibility(View.VISIBLE);
+            pauseView.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .alpha(1.0f);
+            mVideoView.pause();
         } else {
             mVideoView.start();
-            pauseView.startAnimation(AnimationBuilder.getFadeOutAnimation());
-            pauseView.setVisibility(View.INVISIBLE);
+            pauseView.animate()
+                    .setDuration(ANIMATION_DURATION_SHORT)
+                    .alpha(0.0f)
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            pauseView.setVisibility(View.INVISIBLE);
+                        }
+                    });
         }
     }
 
@@ -337,21 +352,28 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     private void toggleInfoOverlay(boolean autoHide) {
-        LinearLayout infoOverlay = (LinearLayout) findViewById(R.id.containerCurrentShow);
+        final LinearLayout infoOverlay = (LinearLayout) findViewById(R.id.containerCurrentShow);
         if (infoOverlay != null) {
             if (infoOverlay.getVisibility() == View.INVISIBLE) {
+                infoOverlay.setAlpha(0.0f);
+                infoOverlay.setVisibility(View.VISIBLE);
+                infoOverlay.animate()
+                        .setDuration(ANIMATION_DURATION_NORMAL)
+                        .alpha(1.0f);
                 if (autoHide) {
-                    AnimationSet animation = new AnimationSet(true);
-                    animation.addAnimation(AnimationBuilder.getFadeInAnimation());
-                    animation.addAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
-                    infoOverlay.startAnimation(animation);
-                } else {
-                    infoOverlay.setAnimation(AnimationBuilder.getFadeInAnimation());
-                    infoOverlay.setVisibility(View.VISIBLE);
+                    infoOverlay.startAnimation(AnimationBuilder.getDelayedFadeOutAnimation());
+                    infoOverlay.setVisibility(View.INVISIBLE);
                 }
             } else {
-                infoOverlay.setAnimation(AnimationBuilder.getFadeOutAnimation());
-                infoOverlay.setVisibility(View.INVISIBLE);
+                infoOverlay.animate()
+                        .setDuration(ANIMATION_DURATION_NORMAL)
+                        .alpha(0.0f)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                infoOverlay.setVisibility(View.INVISIBLE);
+                            }
+                        });
             }
         }
     }
@@ -365,7 +387,15 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             case FAILED:
                 Toast.makeText(this, R.string.error_getSchedule, Toast.LENGTH_SHORT).show();
                 containerSchedule.startAnimation(AnimationBuilder.getFadeOutAnimation());
-                containerSchedule.setVisibility(View.INVISIBLE);
+                containerSchedule.animate()
+                        .setDuration(ANIMATION_DURATION_NORMAL)
+                        .alpha(0.0f)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                containerSchedule.setVisibility(View.INVISIBLE);
+                            }
+                        });
                 break;
         }
     }
