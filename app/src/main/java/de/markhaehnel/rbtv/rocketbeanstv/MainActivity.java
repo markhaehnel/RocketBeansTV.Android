@@ -29,7 +29,8 @@ import android.widget.Toast;
 import com.devbrackets.android.exomedia.EMVideoView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.ThreadMode;
-import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.InternetCheckEvent;
@@ -39,12 +40,16 @@ import de.markhaehnel.rbtv.rocketbeanstv.events.TogglePlayStateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.ChannelInfoLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.ScheduleLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.StreamUrlLoader;
+import de.markhaehnel.rbtv.rocketbeanstv.objects.schedule.ScheduleItem;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.*;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.*;
 
 import static de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper.hasInternet;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
+
+    private final int ANIMATION_DURATION_NORMAL = 250;
+    private final int ANIMATION_DURATION_SHORT = 100;
 
     @BindView(R.id.exomediaplayer) EMVideoView mVideoView;
     @BindView(R.id.textCurrentShow) TextView textCurrentShow;
@@ -165,12 +170,25 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     private void toggleSchedule() {
         if (containerSchedule.getVisibility() == View.INVISIBLE) {
             scheduleProgress.setVisibility(View.VISIBLE);
-            containerSchedule.startAnimation(AnimationBuilder.getFadeInAnimation());
+            scheduleProgress.setAlpha(1.0f);
             containerSchedule.setVisibility(View.VISIBLE);
+            containerSchedule.animate()
+                    .setDuration(ANIMATION_DURATION_NORMAL)
+                    .alpha(1.0f);
             new ScheduleLoader(getString(R.string.RBTVKEY), getString(R.string.RBTVSECRET)).start();
         } else {
-            containerSchedule.startAnimation(AnimationBuilder.getFadeOutAnimation());
-            containerSchedule.setVisibility(View.INVISIBLE);
+            containerSchedule.animate()
+                    .setDuration(ANIMATION_DURATION_NORMAL)
+                    .alpha(0.0f)
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            containerSchedule.setVisibility(View.INVISIBLE);
+                            if (containerSchedule.getChildCount() > 1) {
+                                containerSchedule.removeViews(1, containerSchedule.getChildCount() - 1);
+                            }
+                        }
+                    });
         }
     }
 
@@ -352,36 +370,40 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
         }
     }
 
-    private void fillSchedule(ArrayList<ScheduleShow> shows) {
-        LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    private void fillSchedule(final List<ScheduleItem> shows) {
+        final LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if (containerSchedule.getChildCount() > 1) {
-            containerSchedule.removeViews(1, containerSchedule.getChildCount() - 1);
-        }
+        scheduleProgress.animate()
+                .setDuration(ANIMATION_DURATION_SHORT)
+                .alpha(0.0f)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        scheduleProgress.setVisibility(View.GONE);
 
-        scheduleProgress.setVisibility(View.GONE);
+                        for (int i = 0; i < shows.size(); i++) {
+                            @SuppressLint("InflateParams")
+                            View v = vi.inflate(R.layout.component_scheduleitem, null);
+                            v.setAlpha(0.0f);
 
-        int animMultiplier = 150;
+                            TextView timeStart = (TextView) v.findViewById(R.id.textTimeStart);
+                            timeStart.setText(shows.get(i).getTimeStartShort());
 
-        for (int i = 0; i < shows.size(); i++) {
-            View v = vi.inflate(R.layout.component_scheduleitem, null);
+                            TextView type = (TextView) v.findViewById(R.id.textType);
+                            type.setText(shows.get(i).getType());
 
-            TextView timeStart = (TextView) v.findViewById(R.id.textTimeStart);
-            timeStart.setText(shows.get(i).getTimeStart());
+                            TextView title = (TextView) v.findViewById(R.id.textTitle);
+                            title.setText(shows.get(i).getTitle());
 
-            TextView type = (TextView) v.findViewById(R.id.textType);
-            type.setText(shows.get(i).getType());
+                            TextView topic = (TextView) v.findViewById(R.id.textTopic);
+                            topic.setText(shows.get(i).getTopic());
 
-            TextView title = (TextView) v.findViewById(R.id.textTitle);
-            title.setText(shows.get(i).getTitle());
+                            v.animate().setDuration(ANIMATION_DURATION_SHORT).alpha(1.0f);
 
-            TextView topic = (TextView) v.findViewById(R.id.textTopic);
-            topic.setText(shows.get(i).getTopic());
-
-            v.startAnimation(AnimationBuilder.createDelayedFadeInAnimation(i * animMultiplier));
-
-            containerSchedule.addView(v, -1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        }
+                            containerSchedule.addView(v, -1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        }
+                    }
+                });
     }
 }
 

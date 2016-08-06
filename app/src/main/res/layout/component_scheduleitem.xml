@@ -7,7 +7,7 @@
     android:paddingTop="8dp"
     android:paddingRight="16dp"
     android:paddingBottom="8dp"
-    android:visibility="invisible">
+    android:visibility="visible">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -19,7 +19,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="23:59"
-            android:id="@+id/textTimeStart" />
+            android:id="@+id/textTimeStart"
+            android:maxLines="1" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,9 +28,10 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Live"
             android:id="@+id/textType"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:textStyle="italic"
-            android:capitalize="characters" />
+            android:textAllCaps="true"
+            android:maxLines="1" />
     </LinearLayout>
 
     <TextView
@@ -38,7 +40,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="My example show"
         android:id="@+id/textTitle"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:maxLines="1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,5 +51,5 @@
         android:id="@+id/textTopic"
         android:ellipsize="end"
         android:maxEms="18"
-        android:singleLine="true" />
+        android:maxLines="1"/>
 </LinearLayout>

@@ -47,7 +47,7 @@
         android:id="@+id/containerSchedule"
         android:background="@color/overlayBackground"
         android:visibility="invisible"
-        android:gravity="center">
+        android:gravity="center_vertical">
 
         <ProgressBar
             android:id="@+id/scheduleProgress"

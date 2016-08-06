@@ -1,11 +1,8 @@
 
-package de.markhaehnel.rbtv.rocketbeanstv.twitch.objects;
+package de.markhaehnel.rbtv.rocketbeanstv.objects.twitch;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import de.markhaehnel.rbtv.rocketbeanstv.twitch.objects.streams.Links__;
-import de.markhaehnel.rbtv.rocketbeanstv.twitch.objects.streams.Stream;
 
 public class Streams {
 
@@ -14,6 +11,6 @@ public class Streams {
     public Stream stream;
     @SerializedName("_links")
     @Expose
-    public Links__ links;
+    public StreamLinks links;
 
 }

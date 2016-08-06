@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent;
-import de.markhaehnel.rbtv.rocketbeanstv.twitch.objects.Streams;
+import de.markhaehnel.rbtv.rocketbeanstv.objects.twitch.Streams;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.EventStatus;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper;
 

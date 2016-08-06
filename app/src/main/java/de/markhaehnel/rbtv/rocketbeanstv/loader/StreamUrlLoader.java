@@ -14,7 +14,7 @@ import java.net.URL;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.EventStatus;
 import static de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.Quality;
 import de.markhaehnel.rbtv.rocketbeanstv.events.StreamUrlChangeEvent;
-import de.markhaehnel.rbtv.rocketbeanstv.twitch.objects.AccessToken;
+import de.markhaehnel.rbtv.rocketbeanstv.objects.twitch.AccessToken;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper;
 
 

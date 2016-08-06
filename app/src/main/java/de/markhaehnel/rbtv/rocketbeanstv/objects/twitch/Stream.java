@@ -1,5 +1,5 @@
 
-package de.markhaehnel.rbtv.rocketbeanstv.twitch.objects.streams;
+package de.markhaehnel.rbtv.rocketbeanstv.objects.twitch;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -32,7 +32,7 @@ public class Stream {
     public Boolean isPlaylist;
     @SerializedName("_links")
     @Expose
-    public Links links;
+    public ChannelLinks links;
     @SerializedName("preview")
     @Expose
     public Preview preview;
