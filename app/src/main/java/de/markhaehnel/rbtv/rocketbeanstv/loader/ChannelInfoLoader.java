@@ -17,9 +17,15 @@ public class ChannelInfoLoader extends Thread {
                 String data = NetworkHelper.getContentFromUrl("https://api.twitch.tv/kraken/streams/rocketbeanstv");
                 Gson gson = new Gson();
                 Streams streams = gson.fromJson(data, Streams.class);
-                EventBus.getDefault().post(new ChannelInfoUpdateEvent(streams.stream.channel.status, streams.stream.viewers, EventStatus.OK));
+                if (streams != null) {
+                    EventBus.getDefault().post(new ChannelInfoUpdateEvent(streams.stream.channel.status, streams.stream.viewers, EventStatus.OK));
+                }
                 sleep(15000);
             } catch (IOException | InterruptedException e) {
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
                 e.printStackTrace();
                 EventBus.getDefault().post(new ChannelInfoUpdateEvent(EventStatus.FAILED));
             }
