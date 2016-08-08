@@ -251,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             case FAILED:
                 textViewerCount.setText(R.string.empty);
                 textCurrentShow.setText(R.string.no_info_available);
+                new ChannelInfoLoader().start();
                 break;
         }
     }

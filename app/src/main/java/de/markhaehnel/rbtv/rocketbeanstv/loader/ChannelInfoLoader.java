@@ -21,13 +21,13 @@ public class ChannelInfoLoader extends Thread {
                     EventBus.getDefault().post(new ChannelInfoUpdateEvent(streams.stream.channel.status, streams.stream.viewers, EventStatus.OK));
                 }
                 sleep(15000);
-            } catch (IOException | InterruptedException e) {
-                if (e instanceof InterruptedException) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
+            } catch (Exception e) {
                 e.printStackTrace();
                 EventBus.getDefault().post(new ChannelInfoUpdateEvent(EventStatus.FAILED));
+                if (e instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();
+                }
+                return;
             }
         }
     }
