@@ -17,7 +17,7 @@ public class ChannelInfoLoader extends Thread {
                 String data = NetworkHelper.getContentFromUrl("https://api.twitch.tv/kraken/streams/rocketbeanstv");
                 Gson gson = new Gson();
                 Streams streams = gson.fromJson(data, Streams.class);
-                if (streams != null) {
+                if (streams != null && streams.stream != null && streams.stream.channel != null) {
                     EventBus.getDefault().post(new ChannelInfoUpdateEvent(streams.stream.channel.status, streams.stream.viewers, EventStatus.OK));
                 }
                 sleep(15000);
