@@ -1,13 +1,11 @@
 #Rocket Beans TV for Fire TV
-[![CircleCI](https://img.shields.io/circleci/project/EZTEQ/rbtv-firetv/master.svg?style=flat-square)](https://circleci.com/gh/EZTEQ/rbtv-firetv/tree/master)
+[![CircleCI](https://img.shields.io/circleci/project/EZTEQ/rbtv-firetv/master.svg?style=flat-square)][CircleCI]
 
 Watch Rocket Beans TV straight from your Fire TV in brilliant 1080p (Full HD).
 
-Built with [ExoMedia](https://github.com/brianwernick/ExoMedia).
-
 ##Download
-[![Amazon Appstore](https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/res/images/amazon-underground-app-us-white.png)](http://www.amazon.de/dp/B018429HN6)
-or from the [GitHub releases](https://github.com/EZTEQ/rbtv-firetv/releases/latest)
+[![Amazon Appstore](https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/res/images/amazon-underground-app-us-white.png)][Amazon Appstore]
+or from the [GitHub releases][GitHub Releases]
 
 ##Usage
  - Play/Pause - self-explanatory
@@ -16,4 +14,18 @@ or from the [GitHub releases](https://github.com/EZTEQ/rbtv-firetv/releases/late
  - DPad left - Toggle schedule
  - Menu button - Select stream quality
 
+##Attribution
+This software is built using these great libraries:
+* [ExoMedia][ExoMedia] licensed under [Apache 2.0][Apache 2.0]
+* [OkHttp][OkHttp] licensed under [Apache 2.0][Apache 2.0]
+* [AppCompat-v7][AppCompat-v7] licensed under [Apache 2.0][Apache 2.0]
+
 This app is unofficial and is not affiliated with Rocket BEANS Entertainment GmbH.
+
+[CircleCI]: https://circleci.com/gh/EZTEQ/rbtv-firetv/tree/master
+[Amazon Appstore]: https://www.amazon.de/dp/B018429HN6
+[GitHub Releases]: https://github.com/EZTEQ/rbtv-firetv/releases
+[ExoMedia]: https://github.com/brianwernick/ExoMedia)
+[OkHttp]: https://github.com/square/okhttp
+[AppCompat-v7]: https://developer.android.com/topic/libraries/support-library/features.html#v7-appcompat
+[Apache 2.0]: https://www.apache.org/licenses/LICENSE-2.0

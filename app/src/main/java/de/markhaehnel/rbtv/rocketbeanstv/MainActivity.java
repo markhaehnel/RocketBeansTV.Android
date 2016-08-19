@@ -14,12 +14,13 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationSet;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,8 +30,8 @@ import android.widget.Toast;
 import com.devbrackets.android.exomedia.EMVideoView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.ThreadMode;
+import java.util.Arrays;
 import java.util.List;
-
 import butterknife.ButterKnife;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.InternetCheckEvent;
@@ -48,9 +49,6 @@ import static de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper.hasInternet;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
-    private final long ANIMATION_DURATION_NORMAL = 250;
-    private final long ANIMATION_DURATION_SHORT = 100;
-
     @BindView(R.id.exomediaplayer) EMVideoView mVideoView;
     @BindView(R.id.textCurrentShow) TextView textCurrentShow;
     @BindView(R.id.textViewerCount) TextView textViewerCount;
@@ -58,9 +56,17 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     @BindView(R.id.containerSchedule) ViewGroup containerSchedule;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.scheduleProgress) ProgressBar scheduleProgress;
+    @BindView(R.id.webViewChat) WebView webViewChat;
+
+    private final String RESOLUTION = "resolution";
+    private final long ANIMATION_DURATION_NORMAL = 250;
+    private final long ANIMATION_DURATION_SHORT = 100;
 
     private ChatState mChatState = ChatState.HIDDEN;
-    private Quality mCurrentQuality;
+    private String mCurrentResolution;
+    private String mVideoId = "";
+
+    private String[] mAvailableResolutions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             case OK:
                 setupListeners();
                 MediaSessionHandler.setupMediaSession(MainActivity.this);
-                setupChat();
                 preparePlayer();
                 new ChannelInfoLoader().start();
                 break;
@@ -110,12 +115,19 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private void setupChat() {
-        WebView chat = (WebView)findViewById(R.id.webViewChat);
-        if (chat != null) {
-            chat.setAlpha(0.75f);
-            chat.getSettings().setJavaScriptEnabled(true);
-            chat.loadUrl("https://ezteq.github.io/rbtv-firetv/");
+    private void setupChat(String videoId) {
+        if (webViewChat != null) {
+            webViewChat.setAlpha(0.75f);
+            webViewChat.getSettings().setJavaScriptEnabled(true);
+            webViewChat.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                            super.onPageFinished(view, url);
+                            view.loadUrl("javascript:(function() { document.getElementById('live-comments-controls').remove(); })()");
+                        }
+                });
+            webViewChat.loadUrl("https://www.youtube.com/live_chat?dark_theme=1&is_popout=1&v=" + videoId);
+
         }
     }
 
@@ -140,32 +152,36 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 toggleInfoOverlay(false);
                 return true;
             case KeyEvent.KEYCODE_MENU:
-                changeStreamQuality();
+                changeStreamResolution();
                 return true;
         }
         return false;
     }
 
-    private void changeStreamQuality() {
-        CharSequence options[] = new CharSequence[] {"Quelle", "Hoch", "Mittel", "Niedrig", "Mobil"};
+    private void changeStreamResolution() {
+        if (mAvailableResolutions != null && mAvailableResolutions.length > 0) {
+            final String options[] = mAvailableResolutions;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.menuTitle_chooseQuality));
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.menuTitle_chooseQuality));
 
-        builder.setSingleChoiceItems(options, mCurrentQuality.ordinal(), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                progressBar.setVisibility(View.VISIBLE);
-                progressBar.animate()
-                        .setDuration(ANIMATION_DURATION_NORMAL)
-                        .alpha(1.0f);
-                new StreamUrlLoader(Quality.values()[which]).start();
-                mCurrentQuality = Quality.values()[which];
+            int pos = Arrays.asList(options).indexOf(mCurrentResolution);
+            builder.setSingleChoiceItems(options, pos, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    showProgressBar();
+                    new StreamUrlLoader(options[which]).start();
 
-                dialog.dismiss();
-            }
-        });
-        builder.show();
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        }
+    }
+
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.animate().setDuration(ANIMATION_DURATION_NORMAL).alpha(1.0f);
     }
 
     private void toggleSchedule() {
@@ -201,7 +217,9 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        showMessage(R.string.error_unknown);
+        showProgressBar();
+        new StreamUrlLoader(mCurrentResolution).start();
+        Log.d("onErrorMediaPlayer", String.valueOf(what) + " // " + String.valueOf(extra));
         return true;
     }
 
@@ -280,28 +298,27 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     private void toggleChat() {
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(mVideoView.getLayoutParams());
-        WebView chat = (WebView) findViewById(R.id.webViewChat);
 
-        if (chat != null) {
+        if (webViewChat != null) {
             switch (mChatState) {
                 case HIDDEN:
                     //to fixed
                     int dpiMargin = 300 * Math.round(this.getResources().getDisplayMetrics().density);
                     lp.setMargins(0, 0, dpiMargin, 0);
-                    chat.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black));
-                    chat.setVisibility(View.VISIBLE);
+                    webViewChat.setBackgroundColor(ContextCompat.getColor(this, android.R.color.black));
+                    webViewChat.setVisibility(View.VISIBLE);
                     mChatState = ChatState.FIXED;
                     break;
                 case FIXED:
                     //to overlay
-                    chat.setBackgroundColor(ContextCompat.getColor(this, R.color.overlayBackground));
-                    chat.setVisibility(View.VISIBLE);
+                    webViewChat.setBackgroundColor(ContextCompat.getColor(this, R.color.overlayBackground));
+                    webViewChat.setVisibility(View.VISIBLE);
                     mChatState = ChatState.OVERLAY;
                     break;
                 case OVERLAY:
                     //to hidden
                     lp.setMargins(0, 0, 0, 0);
-                    chat.setVisibility(View.INVISIBLE);
+                    webViewChat.setVisibility(View.INVISIBLE);
                     mChatState = ChatState.HIDDEN;
                     break;
             }
@@ -318,21 +335,32 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
 
     private void preparePlayer() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mCurrentQuality = Quality.values()[prefs.getInt("quality", Quality.CHUNKED.ordinal())];
-        new StreamUrlLoader(mCurrentQuality).start();
+        mCurrentResolution = prefs.getString(RESOLUTION, "1x1");
+        new StreamUrlLoader(mCurrentResolution).start();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onStreamUrlChanged(StreamUrlChangeEvent event) {
         if (event.getStatus() == EventStatus.OK) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("quality", mCurrentQuality.ordinal());
-            editor.apply();
+
+            if (mCurrentResolution.compareToIgnoreCase(event.getStream().getResolution()) != 0) {
+                mCurrentResolution = event.getStream().getResolution();
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(RESOLUTION, mCurrentResolution);
+                editor.apply();
+            }
+
+            mAvailableResolutions = event.getStream().getAvailableResolutions();
 
             mVideoView.stopPlayback();
             mVideoView.seekTo(0);
-            mVideoView.setVideoURI(Uri.parse(event.getUrl()));
+            mVideoView.setVideoURI(Uri.parse(event.getStream().getUrl()));
+
+            if (mVideoId.trim().isEmpty() || event.getVideoId().compareTo(mVideoId) != 0) {
+                setupChat(event.getVideoId());
+                mVideoId = event.getVideoId();
+            }
         } else {
             showMessage(R.string.error_unknown);
         }

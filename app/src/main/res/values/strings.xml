@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">Rocket Beans TV</string>
-    <string name="error_twitchError">Ups, da ist etwas schief gelaufen. Hat Twitch etwa Probleme?\n\nVersuch es später erneut.</string>
     <string name="error_noInternet">Anscheinend hast du keine Verbindung zum Internet.\nDadurch kann leider keine Verbindung zum Stream aufgebaut werden.</string>
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreteten.\n\nBitte versuche es später erneut.</string>
     <string name="currentShow">Aktuelle Sendung</string>
-    <string name="info_newVersionAvailable">Es ist eine Aktualisierung für Rocket Beans TV verfügbar!</string>
     <string name="menuTitle_chooseQuality">Qualität auswählen</string>
     <string name="error_getSchedule">Fehler beim Abrufen des Sendeplans.\nMeist hilft ein Neustart deines Fire TVs.</string>
     <string name="no_info_available">Keine Informationen verfügbar</string>
