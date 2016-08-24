@@ -7,7 +7,7 @@ machine:
 dependencies:
   pre:
     - echo y | android update sdk -u -a -t tool
-    - echo y | android update sdk --no-ui --all --filter "android-24,build-tools-24.0.1,extra-android-support""
+    - echo y | android update sdk --no-ui --all --filter "android-24,build-tools-24.0.1,extra-android-support"
 
 test:
   override:
