@@ -14,7 +14,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "de.markhaehnel.rbtv.rocketbeanstv"
         minSdkVersion 22
