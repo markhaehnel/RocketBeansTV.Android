@@ -41,7 +41,7 @@ public class StreamUrlLoader extends Thread {
 
             String url = "https://www.youtube.com/get_video_info?&video_id=" + videoId.videoId;
             Map<String, String> headers = new HashMap<>();
-            headers.put("User-Agent", "Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53");
+            headers.put("User-Agent", "Mozilla/5.0");
 
             String ytResponse = NetworkHelper.getContentFromUrl(url, headers);
 
