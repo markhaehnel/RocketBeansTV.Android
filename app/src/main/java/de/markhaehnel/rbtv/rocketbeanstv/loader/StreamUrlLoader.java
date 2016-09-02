@@ -3,6 +3,7 @@ package de.markhaehnel.rbtv.rocketbeanstv.loader;
 
 import android.util.Log;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -61,6 +62,7 @@ public class StreamUrlLoader extends Thread {
 
             EventBus.getDefault().post(new StreamUrlChangeEvent(stream, videoId.videoId, EventStatus.OK));
         } catch (Exception e) {
+            FirebaseCrash.report(e);
             e.printStackTrace();
             EventBus.getDefault().post(new StreamUrlChangeEvent(EventStatus.FAILED));
         }

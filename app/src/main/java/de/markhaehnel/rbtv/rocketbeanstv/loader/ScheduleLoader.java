@@ -3,6 +3,7 @@ package de.markhaehnel.rbtv.rocketbeanstv.loader;
 import android.annotation.SuppressLint;
 import android.util.Base64;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -56,6 +57,7 @@ public class ScheduleLoader extends Thread {
 
             EventBus.getDefault().post(new ScheduleLoadEvent(scheduleData.getNextShows(5), EventStatus.OK));
         } catch(Exception e) {
+            FirebaseCrash.report(e);
             e.printStackTrace();
             EventBus.getDefault().post(new ScheduleLoadEvent(EventStatus.FAILED));
         }

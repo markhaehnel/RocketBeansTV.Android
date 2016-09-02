@@ -28,6 +28,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.devbrackets.android.exomedia.EMVideoView;
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.ThreadMode;
 import java.util.Arrays;
@@ -48,6 +50,8 @@ import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.*;
 import static de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper.hasInternet;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @BindView(R.id.exomediaplayer) EMVideoView mVideoView;
     @BindView(R.id.textCurrentShow) TextView textCurrentShow;
@@ -78,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     @Override
     protected void onStart() {
         super.onStart();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         EventBus.getDefault().register(this);
 
         new Thread(new Runnable() {

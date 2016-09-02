@@ -1,5 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.utils;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,6 +15,7 @@ public class AuthHelper {
             sha1hash = md.digest();
             return convertToHex(sha1hash);
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            FirebaseCrash.report(e);
             e.printStackTrace();
         }
         return "";
