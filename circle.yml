@@ -7,7 +7,7 @@ machine:
 dependencies:
   pre:
     - echo y | android update sdk -u -a -t tool
-    - ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --all --filter "android-24,build-tools-24.0.1,extra-android-support"
+    - ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | android update sdk --no-ui --all --filter "android-24,build-tools-24.0.2,extra-android-support"
 
 test:
   override:
