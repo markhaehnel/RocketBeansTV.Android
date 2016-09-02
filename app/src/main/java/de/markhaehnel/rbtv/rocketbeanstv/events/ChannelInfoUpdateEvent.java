@@ -6,14 +6,14 @@ import lombok.Getter;
 @Getter
 public class ChannelInfoUpdateEvent {
     private String currentShow;
-    private long viewerCount;
+    private String viewerCount;
     private EventStatus status;
 
     public ChannelInfoUpdateEvent(EventStatus status) {
         this.status = status;
     }
 
-    public ChannelInfoUpdateEvent(String currentShow, long viewerCount, EventStatus status) {
+    public ChannelInfoUpdateEvent(String currentShow, String viewerCount, EventStatus status) {
         this.currentShow = currentShow;
         this.viewerCount = viewerCount;
         this.status = status;

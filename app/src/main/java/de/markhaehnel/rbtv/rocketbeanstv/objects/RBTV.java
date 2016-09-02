@@ -3,7 +3,10 @@ package de.markhaehnel.rbtv.rocketbeanstv.objects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class VideoId {
+import lombok.Getter;
+
+@Getter
+public class RBTV {
 
     @SerializedName("cached")
     @Expose
@@ -11,6 +14,12 @@ public class VideoId {
     @SerializedName("videoId")
     @Expose
     public String videoId;
+    @SerializedName("title")
+    @Expose
+    public String title;
+    @SerializedName("viewerCount")
+    @Expose
+    public String viewerCount;
     @SerializedName("error")
     @Expose
     public Object error;
