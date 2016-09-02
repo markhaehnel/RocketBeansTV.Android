@@ -41,4 +41,6 @@ dependencies {
     compile 'com.devbrackets.android:exomedia:2.5.6'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.google.firebase:firebase-core:9.4.0'
+    compile 'com.google.firebase:firebase-crash:9.4.0'
 }
