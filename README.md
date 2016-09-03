@@ -17,14 +17,19 @@ or from the [GitHub releases][GitHub Releases]
 This software is built using these great libraries:
 * [ExoMedia][ExoMedia] licensed under [Apache 2.0][Apache 2.0]
 * [OkHttp][OkHttp] licensed under [Apache 2.0][Apache 2.0]
+* [Butter Knife][Butter Knife] licensed under [Apache 2.0][Apache 2.0]
+* [Gson][Gson] licensed under [Apache 2.0][Apache 2.0]
+* [EventBus][EventBus] licensed under [Apache 2.0][Apache 2.0]
 * [AppCompat-v7][AppCompat-v7] licensed under [Apache 2.0][Apache 2.0]
 
 This app is unofficial and is not affiliated with Rocket BEANS Entertainment GmbH.
 
-[CircleCI]: https://circleci.com/gh/EZTEQ/rbtv-firetv/tree/master
 [Amazon Appstore]: https://www.amazon.de/dp/B018429HN6
 [GitHub Releases]: https://github.com/EZTEQ/rbtv-firetv/releases
 [ExoMedia]: https://github.com/brianwernick/ExoMedia)
 [OkHttp]: https://github.com/square/okhttp
+[Butter Knife]: https://github.com/JakeWharton/butterknife
+[Gson]: https://github.com/google/gson
+[EventBus]: https://github.com/greenrobot/EventBus
 [AppCompat-v7]: https://developer.android.com/topic/libraries/support-library/features.html#v7-appcompat
 [Apache 2.0]: https://www.apache.org/licenses/LICENSE-2.0
