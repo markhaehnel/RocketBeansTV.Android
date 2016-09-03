@@ -277,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 new ChannelInfoLoader().start();
                 break;
         }
+        Heartbeat.doHeartbeat(mFirebaseAnalytics);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

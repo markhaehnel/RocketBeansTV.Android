@@ -24,7 +24,6 @@ public class ChannelInfoLoader extends Thread {
                     EventBus.getDefault().post(EventStatus.FAILED);
                 }
                 sleep(30000);
-                break;
             } catch (Exception e) {
                 FirebaseCrash.report(e);
                 e.printStackTrace();
