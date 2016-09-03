@@ -8,11 +8,12 @@
     android:layout_height="fill_parent"
     android:background="@android:color/black">
 
-    <com.devbrackets.android.exomedia.EMVideoView
+    <com.devbrackets.android.exomedia.ui.widget.EMVideoView
+        android:id="@+id/exomediaplayer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/exomediaplayer"
-        EMVideoView:defaultControlsEnabled="false" />
+        android:background="@android:color/black"
+        EMVideoView:useDefaultControls="false"/>
 
     <WebView
         android:layout_width="300dp"
@@ -29,8 +30,7 @@
         android:layout_gravity="center"
         android:src="@drawable/exomedia_ic_pause_white"
         android:background="@color/overlayBackground"
-        android:visibility="invisible"
-        android:contentDescription="Pauses" />
+        android:visibility="invisible" />
 
     <ProgressBar
         android:layout_width="wrap_content"

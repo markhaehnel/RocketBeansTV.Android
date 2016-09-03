@@ -7,14 +7,12 @@ import org.greenrobot.eventbus.Subscribe;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.devbrackets.android.exomedia.EMVideoView;
+
+import com.devbrackets.android.exomedia.listener.OnErrorListener;
+import com.devbrackets.android.exomedia.listener.OnPreparedListener;
+import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,6 +36,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Arrays;
 import java.util.List;
 import butterknife.ButterKnife;
+import de.markhaehnel.rbtv.rocketbeanstv.events.BufferUpdateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.InternetCheckEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ScheduleLoadEvent;
@@ -49,7 +51,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.*;
 
 import static de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper.hasInternet;
 
-public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
+public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -71,18 +73,20 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     private String mVideoId = "";
 
     private String[] mAvailableResolutions;
+    private boolean mPaused = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         ButterKnife.bind(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         EventBus.getDefault().register(this);
 
         new Thread(new Runnable() {
@@ -123,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     private void setupChat(String videoId) {
         if (webViewChat != null) {
             webViewChat.setAlpha(0.75f);
+            webViewChat.setFocusable(false);
+            webViewChat.setFocusableInTouchMode(false);
             webViewChat.getSettings().setJavaScriptEnabled(true);
             webViewChat.setWebViewClient(new WebViewClient() {
                     @Override
@@ -160,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                 changeStreamResolution();
                 return true;
         }
-        return false;
+        return super.onKeyDown(keyCode, event);
     }
 
     private void changeStreamResolution() {
@@ -174,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             builder.setSingleChoiceItems(options, pos, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    showProgressBar();
                     new StreamUrlLoader(options[which]).start();
 
                     dialog.dismiss();
@@ -185,8 +190,22 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     private void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.animate().setDuration(ANIMATION_DURATION_NORMAL).alpha(1.0f);
+        if (progressBar.getVisibility() == View.INVISIBLE) {
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.animate().setDuration(ANIMATION_DURATION_NORMAL).alpha(1.0f);
+        }
+    }
+
+    private void hideProgressBar() {
+        progressBar.animate()
+                .setDuration(ANIMATION_DURATION_NORMAL)
+                .alpha(0.0f)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
     }
 
     private void toggleSchedule() {
@@ -216,39 +235,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     @Override
-    public void onPrepared(MediaPlayer mp) {
-        mVideoView.start();
-    }
-
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        showProgressBar();
-        new StreamUrlLoader(mCurrentResolution).start();
-        Log.d("onErrorMediaPlayer", String.valueOf(what) + " // " + String.valueOf(extra));
-        return true;
-    }
-
-    @Override
-    public boolean onInfo(MediaPlayer mp, int what, int extra) {
-        switch (what) {
-            case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                progressBar.animate()
-                        .setDuration(ANIMATION_DURATION_NORMAL)
-                        .alpha(0.0f)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                progressBar.setVisibility(View.INVISIBLE);
-                            }
-                        });
-                break;
-        }
-
-        return false;
-    }
-
-    @Override
     protected void onPause() {
+        mPaused = true;
         mVideoView.pause();
         super.onPause();
     }
@@ -256,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     @Override
     protected void onResume() {
         mVideoView.start();
+        mPaused = false;
         super.onResume();
     }
 
@@ -287,9 +276,12 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             pauseView.animate()
                     .setDuration(ANIMATION_DURATION_SHORT)
                     .alpha(1.0f);
+            mPaused = true;
             mVideoView.pause();
+
         } else {
             mVideoView.start();
+            mPaused = false;
             pauseView.animate()
                     .setDuration(ANIMATION_DURATION_SHORT)
                     .alpha(0.0f)
@@ -299,6 +291,17 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
                             pauseView.setVisibility(View.INVISIBLE);
                         }
                     });
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBufferUpdate(BufferUpdateEvent event) {
+        if (event.getStatus() == BufferUpdateEvent.BufferState.BUFFERING_END) {
+            hideProgressBar();
+        } else {
+            if(!mPaused) {
+                showProgressBar();
+            }
         }
     }
 
@@ -334,9 +337,21 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
     }
 
     private void setupListeners() {
-        mVideoView.setOnPreparedListener(this);
-        mVideoView.setOnErrorListener(this);
-        mVideoView.setOnInfoListener(this);
+        mVideoView.setMeasureBasedOnAspectRatioEnabled(true);
+        mVideoView.setOnPreparedListener(new OnPreparedListener() {
+            @Override
+            public void onPrepared() {
+                mVideoView.start();
+            }
+        });
+        mVideoView.setOnErrorListener(new OnErrorListener() {
+            @Override
+            public boolean onError() {
+                new StreamUrlLoader(mCurrentResolution).start();
+                return true;
+            }
+        });
+        new PlayStateListener(mVideoView).start();
     }
 
     private void preparePlayer() {
@@ -358,7 +373,8 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnPre
             }
 
             mAvailableResolutions = event.getStream().getAvailableResolutions();
-
+            mPaused = false;
+            pauseView.setVisibility(View.INVISIBLE);
             mVideoView.stopPlayback();
             mVideoView.seekTo(0);
             mVideoView.setVideoURI(Uri.parse(event.getStream().getUrl()));
