@@ -26,7 +26,7 @@ This app is unofficial and is not affiliated with Rocket BEANS Entertainment Gmb
 
 [Amazon Appstore]: https://www.amazon.de/dp/B018429HN6
 [GitHub Releases]: https://github.com/EZTEQ/rbtv-firetv/releases
-[ExoMedia]: https://github.com/brianwernick/ExoMedia)
+[ExoMedia]: https://github.com/brianwernick/ExoMedia
 [OkHttp]: https://github.com/square/okhttp
 [Butter Knife]: https://github.com/JakeWharton/butterknife
 [Gson]: https://github.com/google/gson
