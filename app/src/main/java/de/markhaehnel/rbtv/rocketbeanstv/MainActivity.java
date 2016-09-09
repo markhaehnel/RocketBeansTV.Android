@@ -7,6 +7,7 @@ import org.greenrobot.eventbus.Subscribe;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -472,6 +473,16 @@ public class MainActivity extends AppCompatActivity {
 
                             TextView type = (TextView) v.findViewById(R.id.textType);
                             type.setText(shows.get(i).getType());
+                            switch (shows.get(i).getType().toUpperCase()) {
+                                case "LIVE":
+                                    type.setBackgroundColor(ContextCompat.getColor(v.getContext(), android.R.color.holo_red_dark));
+                                    break;
+                                case "PREMIERE":
+                                    type.setBackgroundColor(ContextCompat.getColor(v.getContext(), android.R.color.holo_green_dark));
+                                    break;
+                                default:
+                                    type.setBackgroundColor(Color.TRANSPARENT);
+                            }
 
                             TextView title = (TextView) v.findViewById(R.id.textTitle);
                             title.setText(shows.get(i).getTitle());
