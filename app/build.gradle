@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
     provided 'org.projectlombok:lombok:1.12.6'
     apt 'org.projectlombok:lombok:1.12.6'
     compile 'org.greenrobot:eventbus:3.0.0'
