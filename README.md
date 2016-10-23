@@ -22,7 +22,7 @@ This software is built using these great libraries:
 * [EventBus][EventBus] licensed under [Apache 2.0][Apache 2.0]
 * [AppCompat-v7][AppCompat-v7] licensed under [Apache 2.0][Apache 2.0]
 
-This app is unofficial and is not affiliated with Rocket BEANS Entertainment GmbH.
+This app is unofficial and is not affiliated with Rocket Beans Entertainment GmbH.
 
 [Amazon Appstore]: https://www.amazon.de/dp/B018429HN6
 [GitHub Releases]: https://github.com/EZTEQ/rbtv-firetv/releases
