@@ -130,15 +130,19 @@ public class MainActivity extends AppCompatActivity {
             webViewChat.setAlpha(0.75f);
             webViewChat.setFocusable(false);
             webViewChat.setFocusableInTouchMode(false);
+            webViewChat.setClickable(false);
             webViewChat.getSettings().setJavaScriptEnabled(true);
             webViewChat.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
                             super.onPageFinished(view, url);
-                            view.loadUrl("javascript:(function() { document.getElementById('live-comments-controls').remove(); })()");
+                            view.loadUrl("javascript:(function() { " +
+                                        "document.getElementsByTagName('yt-live-chat-header-renderer')[0].remove();" +
+                                        "document.getElementsByTagName('yt-live-chat-message-input-renderer')[0].remove();" +
+                                    "})()");
                         }
                 });
-            webViewChat.loadUrl("https://www.youtube.com/live_chat?dark_theme=1&is_popout=1&v=" + videoId);
+            webViewChat.loadUrl("https://gaming.youtube.com/live_chat?is_popout=1&v=" + videoId);
 
         }
     }
