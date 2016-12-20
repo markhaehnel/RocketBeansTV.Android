@@ -21,6 +21,7 @@ This software is built using these great libraries:
 * [Gson][Gson] licensed under [Apache 2.0][Apache 2.0]
 * [EventBus][EventBus] licensed under [Apache 2.0][Apache 2.0]
 * [AppCompat-v7][AppCompat-v7] licensed under [Apache 2.0][Apache 2.0]
+* [Joda Time Android][Joda Time Android] licensed under [Apache 2.0][Apache 2.0]
 
 This app is unofficial and is not affiliated with Rocket Beans Entertainment GmbH.
 
@@ -32,4 +33,5 @@ This app is unofficial and is not affiliated with Rocket Beans Entertainment Gmb
 [Gson]: https://github.com/google/gson
 [EventBus]: https://github.com/greenrobot/EventBus
 [AppCompat-v7]: https://developer.android.com/topic/libraries/support-library/features.html#v7-appcompat
+[Joda Time Android]: https://github.com/dlew/joda-time-android
 [Apache 2.0]: https://www.apache.org/licenses/LICENSE-2.0
