@@ -1,20 +1,21 @@
-#Rocket Beans TV for Fire TV
+# Rocket Beans TV for Fire TV
 
 Watch Rocket Beans TV straight from your Fire TV in brilliant 1080p (Full HD).
 
-##Download
+## Download
 [![Amazon Appstore](https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/res/images/amazon-underground-app-us-white.png)][Amazon Appstore]
 or from the [GitHub releases][GitHub Releases]
 
-##Usage
+## Usage
  - Play/Pause - self-explanatory
  - DPad up/down - Toggle currently running show.
  - DPad right - Toggle chat (Fixed, Overlay, Hidden)
  - DPad left - Toggle schedule
  - Menu button - Select stream quality
 
-##Attribution
+## Attribution
 This software is built using these great libraries:
+
 * [ExoMedia][ExoMedia] licensed under [Apache 2.0][Apache 2.0]
 * [OkHttp][OkHttp] licensed under [Apache 2.0][Apache 2.0]
 * [Butter Knife][Butter Knife] licensed under [Apache 2.0][Apache 2.0]
