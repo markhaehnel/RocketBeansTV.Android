@@ -1,6 +1,7 @@
 
 package de.markhaehnel.rbtv.rocketbeanstv;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import butterknife.BindView;
 import org.greenrobot.eventbus.Subscribe;
@@ -18,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -32,8 +34,12 @@ import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.ThreadMode;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import butterknife.ButterKnife;
@@ -58,11 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.exomediaplayer) EMVideoView mVideoView;
     @BindView(R.id.textCurrentShow) TextView textCurrentShow;
-    @BindView(R.id.textViewerCount) TextView textViewerCount;
+    @BindView(R.id.textCurrentTopic) TextView textCurrentTopic;
     @BindView(R.id.pauseImage) ImageView pauseView;
     @BindView(R.id.containerSchedule) ViewGroup containerSchedule;
     @BindView(R.id.progressBar) ProgressBar progressBar;
     @BindView(R.id.scheduleProgress) ProgressBar scheduleProgress;
+    @BindView(R.id.progressCurrentShow) ProgressBar progressCurrentShow;
     @BindView(R.id.webViewChat) WebView webViewChat;
 
     private final String RESOLUTION = "resolution";
@@ -80,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        JodaTimeAndroid.init(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         ButterKnife.bind(this);
     }
@@ -116,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 setupListeners();
                 MediaSessionHandler.setupMediaSession(MainActivity.this);
                 preparePlayer();
-                new ChannelInfoLoader().start();
+                new ChannelInfoLoader(getString(R.string.RBTVKEY), getString(R.string.RBTVSECRET)).start();
                 break;
             case FAILED:
                 showMessage(R.string.error_noInternet);
@@ -143,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                 });
             webViewChat.loadUrl("https://gaming.youtube.com/live_chat?is_popout=1&v=" + videoId);
-
         }
     }
 
@@ -258,17 +264,31 @@ public class MainActivity extends AppCompatActivity {
         switch (event.getStatus())
         {
             case OK:
-                textViewerCount.setText(String.format("%s %s", String.valueOf(event.getViewerCount()), getString(R.string.viewers)));
-                if (!event.getCurrentShow().equals(textCurrentShow.getText())) {
-                    textCurrentShow.setText(event.getCurrentShow());
+                if (!event.getScheduleItem().getTitle().equals(textCurrentShow.getText())) {
+                    textCurrentShow.setText(event.getScheduleItem().getTitle());
+                    textCurrentTopic.setText(event.getScheduleItem().getTopic());
+
                     toggleInfoOverlay(true);
                 }
+
+                DateTime startTime = new DateTime(event.getScheduleItem().getTimeStart());
+                DateTime now = DateTime.now();
+                Duration duration = new Duration(startTime, now);
+
+                progressCurrentShow.setMax(event.getScheduleItem().getLength().intValue());
+
+                if (duration.getStandardSeconds() < progressCurrentShow.getMax()) {
+                    ObjectAnimator animation = ObjectAnimator.ofInt(progressCurrentShow, "progress", (int) duration.getStandardSeconds());
+                    animation.setDuration(1000);
+                    animation.setInterpolator(new DecelerateInterpolator());
+                    animation.start();
+                }
+
                 break;
 
             case FAILED:
-                textViewerCount.setText(R.string.empty);
                 textCurrentShow.setText(R.string.no_info_available);
-                new ChannelInfoLoader().start();
+                new ChannelInfoLoader(getString(R.string.RBTVKEY), getString(R.string.RBTVSECRET)).start();
                 break;
         }
         Heartbeat.doHeartbeat(mFirebaseAnalytics);
