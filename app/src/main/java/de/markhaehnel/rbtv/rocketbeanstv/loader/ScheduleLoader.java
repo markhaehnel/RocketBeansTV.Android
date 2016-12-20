@@ -42,7 +42,7 @@ public class ScheduleLoader extends Thread {
 
             String nonce = id + created + RandomString.generate(10);
             String sha1 = SHA1(nonce + created + secret);
-            String url = "https://api.rocketmgmt.de/schedule";
+            String url = "https://api.rocketmgmt.de/schedule/next/5";
             String b64sha1 = Base64.encodeToString(sha1.getBytes(), Base64.NO_WRAP);
             String b64nonce = Base64.encodeToString(nonce.getBytes(), Base64.NO_WRAP);
 
