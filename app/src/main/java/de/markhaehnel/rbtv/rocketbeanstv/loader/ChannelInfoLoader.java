@@ -1,5 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.loader;
 
+import android.net.Network;
+
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 
@@ -26,12 +28,15 @@ public class ChannelInfoLoader extends Thread {
             try {
 
                 String url = "https://api.rocketmgmt.de/schedule/current";
+                String urlViewer = "https://node.markhaehnel.de/rbtv/";
 
                 String response = NetworkHelper.getContentFromUrl(url, Authentication.getAuthenticationHeaders(key, secret));
+                String responseViewer = NetworkHelper.getContentFromUrl(urlViewer);
 
                 Gson gson = new Gson();
                 ScheduleItem scheduleItem = gson.fromJson(response, ScheduleItem.class);
-                EventBus.getDefault().post(new ChannelInfoUpdateEvent(scheduleItem, EventStatus.OK));
+                RBTV rbtv = gson.fromJson(responseViewer, RBTV.class);
+                EventBus.getDefault().post(new ChannelInfoUpdateEvent(scheduleItem, rbtv, EventStatus.OK));
                 sleep(30000);
             } catch (Exception e) {
                 FirebaseCrash.report(e);

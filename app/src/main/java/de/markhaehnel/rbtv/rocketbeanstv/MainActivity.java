@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.exomediaplayer) EMVideoView mVideoView;
     @BindView(R.id.textCurrentShow) TextView textCurrentShow;
     @BindView(R.id.textCurrentTopic) TextView textCurrentTopic;
+    @BindView(R.id.textViewerCount) TextView textViewerCount;
     @BindView(R.id.pauseImage) ImageView pauseView;
     @BindView(R.id.containerSchedule) ViewGroup containerSchedule;
     @BindView(R.id.progressBar) ProgressBar progressBar;
@@ -267,14 +268,14 @@ public class MainActivity extends AppCompatActivity {
                 if (!event.getScheduleItem().getTitle().equals(textCurrentShow.getText())) {
                     textCurrentShow.setText(event.getScheduleItem().getTitle());
                     textCurrentTopic.setText(event.getScheduleItem().getTopic());
-
                     toggleInfoOverlay(true);
                 }
+
+                textViewerCount.setText(event.getRbtv().getViewerCount());
 
                 DateTime startTime = new DateTime(event.getScheduleItem().getTimeStart());
                 DateTime now = DateTime.now();
                 Duration duration = new Duration(startTime, now);
-
                 progressCurrentShow.setMax(event.getScheduleItem().getLength().intValue());
 
                 if (duration.getStandardSeconds() < progressCurrentShow.getMax()) {
