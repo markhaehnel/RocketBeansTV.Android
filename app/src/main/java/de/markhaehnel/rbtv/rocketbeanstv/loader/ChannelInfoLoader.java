@@ -1,7 +1,5 @@
 package de.markhaehnel.rbtv.rocketbeanstv.loader;
 
-import android.net.Network;
-
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.gson.Gson;
 
@@ -9,18 +7,10 @@ import org.greenrobot.eventbus.EventBus;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.objects.RBTV;
 import de.markhaehnel.rbtv.rocketbeanstv.objects.schedule.ScheduleItem;
-import de.markhaehnel.rbtv.rocketbeanstv.utils.Authentication;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.EventStatus;
 import de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper;
 
 public class ChannelInfoLoader extends Thread {
-
-    private String key, secret;
-
-    public ChannelInfoLoader(String key, String secret) {
-        this.key = key;
-        this.secret = secret;
-    }
 
     public void run() {
         //noinspection LoopStatementThatDoesntLoop
@@ -30,7 +20,7 @@ public class ChannelInfoLoader extends Thread {
                 String url = "https://rbtvapi.herokuapp.com/schedule/current";
                 String urlViewer = "https://rbtvapi.herokuapp.com/stream/";
 
-                String response = NetworkHelper.getContentFromUrl(url, Authentication.getAuthenticationHeaders(key, secret));
+                String response = NetworkHelper.getContentFromUrl(url);
                 String responseViewer = NetworkHelper.getContentFromUrl(urlViewer);
 
                 Gson gson = new Gson();

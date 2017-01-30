@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 setupListeners();
                 MediaSessionHandler.setupMediaSession(MainActivity.this);
                 preparePlayer();
-                new ChannelInfoLoader(getString(R.string.RBTVKEY), getString(R.string.RBTVSECRET)).start();
+                new ChannelInfoLoader().start();
                 break;
             case FAILED:
                 showMessage(R.string.error_noInternet);
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             containerSchedule.animate()
                     .setDuration(ANIMATION_DURATION_NORMAL)
                     .alpha(1.0f);
-            new ScheduleLoader(getString(R.string.RBTVKEY), getString(R.string.RBTVSECRET)).start();
+            new ScheduleLoader().start();
         } else {
             containerSchedule.animate()
                     .setDuration(ANIMATION_DURATION_NORMAL)
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
             case FAILED:
                 textCurrentShow.setText(R.string.no_info_available);
-                new ChannelInfoLoader(getString(R.string.RBTVKEY), getString(R.string.RBTVSECRET)).start();
+                new ChannelInfoLoader().start();
                 break;
         }
         Heartbeat.doHeartbeat(mFirebaseAnalytics);
