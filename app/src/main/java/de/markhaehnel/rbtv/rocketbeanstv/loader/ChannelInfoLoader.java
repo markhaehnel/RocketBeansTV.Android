@@ -27,8 +27,8 @@ public class ChannelInfoLoader extends Thread {
         while (true) {
             try {
 
-                String url = "https://api.rocketmgmt.de/schedule/current";
-                String urlViewer = "https://node.markhaehnel.de/rbtv/";
+                String url = "https://rbtvapi.herokuapp.com/schedule/current";
+                String urlViewer = "https://rbtvapi.herokuapp.com/stream/";
 
                 String response = NetworkHelper.getContentFromUrl(url, Authentication.getAuthenticationHeaders(key, secret));
                 String responseViewer = NetworkHelper.getContentFromUrl(urlViewer);

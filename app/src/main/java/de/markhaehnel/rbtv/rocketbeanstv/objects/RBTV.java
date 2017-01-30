@@ -8,15 +8,9 @@ import lombok.Getter;
 @Getter
 public class RBTV {
 
-    @SerializedName("cached")
-    @Expose
-    public Boolean cached;
     @SerializedName("videoId")
     @Expose
     public String videoId;
-    @SerializedName("title")
-    @Expose
-    public String title;
     @SerializedName("viewerCount")
     @Expose
     public String viewerCount;

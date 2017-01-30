@@ -24,7 +24,7 @@ public class ScheduleLoader extends Thread {
         final String id = "00000000-0000-0000-0000-000000000000";
 
         try {
-            String url = "https://api.rocketmgmt.de/schedule/next/5";
+            String url = "https://rbtvapi.herokuapp.com/schedule/next/5";
 
             String data = NetworkHelper.getContentFromUrl(url, Authentication.getAuthenticationHeaders(key, secret));
             Gson gson = new Gson();
