@@ -39,10 +39,8 @@ public class StreamUrlLoader extends Thread {
 
             if (data.getError() == null) {
                 String url = "https://www.youtube.com/get_video_info?&video_id=" + data.getVideoId();
-                Map<String, String> headers = new HashMap<>();
-                headers.put("User-Agent", "Mozilla/5.0");
 
-                String ytResponse = NetworkHelper.getContentFromUrl(url, headers);
+                String ytResponse = NetworkHelper.getContentFromUrl(url);
 
                 HashMap<String, String> parameters = new HashMap<>();
                 for (String param : ytResponse.split(Pattern.quote("&"))) {

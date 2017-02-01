@@ -24,17 +24,4 @@ public final class NetworkHelper {
 
         return response.body().string();
     }
-
-    public static String getContentFromUrl(String url, Map<String, String> headers) throws IOException {
-        Headers.Builder headerBuilder = new Headers.Builder();
-        for (Map.Entry<String, String> header: headers.entrySet()) {
-            headerBuilder.add(header.getKey(), header.getValue());
-        }
-
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(url).headers(headerBuilder.build()).build();
-        Response response = client.newCall(request).execute();
-
-        return response.body().string();
-    }
 }
