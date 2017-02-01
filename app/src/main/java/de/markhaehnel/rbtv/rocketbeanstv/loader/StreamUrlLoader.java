@@ -9,7 +9,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import de.markhaehnel.rbtv.rocketbeanstv.events.StreamUrlChangeEvent;
@@ -50,12 +49,8 @@ public class StreamUrlLoader extends Thread {
                 }
 
                 String hlsUrl = parameters.get("hlsvp");
-
                 List<Stream> streams = PlaylistHelper.getStreamsFromM3U(NetworkHelper.getContentFromUrl(hlsUrl));
-
                 Stream stream = PlaylistHelper.getStreamByResolution(streams, mResolution);
-
-
                 EventBus.getDefault().post(new StreamUrlChangeEvent(stream, data.getVideoId(), EventStatus.OK));
             } else {
                 EventBus.getDefault().post(new StreamUrlChangeEvent(EventStatus.FAILED));

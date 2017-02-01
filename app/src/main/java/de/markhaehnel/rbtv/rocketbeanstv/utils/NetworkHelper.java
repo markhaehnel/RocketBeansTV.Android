@@ -2,8 +2,6 @@ package de.markhaehnel.rbtv.rocketbeanstv.utils;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Map;
-import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
