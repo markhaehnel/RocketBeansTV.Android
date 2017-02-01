@@ -13,10 +13,8 @@ import de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper;
 public class ScheduleLoader extends Thread {
 
     public void run() {
-        final String id = "00000000-0000-0000-0000-000000000000";
-
         try {
-            String url = "https://rbtvapi.herokuapp.com/schedule/next/5";
+            String url = "https://rbtvapi.markhaehnel.de/schedule/next/5";
 
             String data = NetworkHelper.getContentFromUrl(url);
             Gson gson = new Gson();

@@ -32,7 +32,7 @@ public class StreamUrlLoader extends Thread {
     public void run() {
 
         try {
-            String response = NetworkHelper.getContentFromUrl("https://rbtvapi.herokuapp.com/stream/");
+            String response = NetworkHelper.getContentFromUrl("https://rbtvapi.markhaehnel.de/stream");
 
             Gson gson = new Gson();
             RBTV data = gson.fromJson(response, RBTV.class);
