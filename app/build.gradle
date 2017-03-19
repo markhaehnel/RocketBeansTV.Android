@@ -37,7 +37,7 @@ dependencies {
     compile 'com.devbrackets.android:exomedia:4.0.0-preview3'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
-    compile 'net.danlew:android.joda:2.9.5.1'
+    compile 'net.danlew:android.joda:2.9.7'
     compile 'com.google.firebase:firebase-core:10.2.0'
     compile 'com.google.firebase:firebase-crash:10.2.0'
     apt 'org.projectlombok:lombok:1.12.6'
