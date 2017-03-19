@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -48,7 +48,6 @@ import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.InternetCheckEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.ScheduleLoadEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.events.StreamUrlChangeEvent;
-import de.markhaehnel.rbtv.rocketbeanstv.events.TogglePlayStateEvent;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.ChannelInfoLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.ScheduleLoader;
 import de.markhaehnel.rbtv.rocketbeanstv.loader.StreamUrlLoader;
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    @BindView(R.id.exomediaplayer) EMVideoView mVideoView;
+    @BindView(R.id.exomediaplayer) VideoView mVideoView;
     @BindView(R.id.textCurrentShow) TextView textCurrentShow;
     @BindView(R.id.textCurrentTopic) TextView textCurrentTopic;
     @BindView(R.id.textViewerCount) TextView textViewerCount;
@@ -157,9 +156,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-                EventBus.getDefault().post(new TogglePlayStateEvent());
-                return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 toggleChat();
                 return true;
@@ -170,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_HOME:
                 System.exit(0);
                 return true;
+            case KeyEvent.KEYCODE_DPAD_CENTER:
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 toggleInfoOverlay(false);
@@ -296,31 +293,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onTogglePlayState(TogglePlayStateEvent event) {
-        if (mVideoView.isPlaying()) {
-            pauseView.setVisibility(View.VISIBLE);
-            pauseView.animate()
-                    .setDuration(ANIMATION_DURATION_SHORT)
-                    .alpha(1.0f);
-            mPaused = true;
-            mVideoView.pause();
-
-        } else {
-            mVideoView.start();
-            mPaused = false;
-            pauseView.animate()
-                    .setDuration(ANIMATION_DURATION_SHORT)
-                    .alpha(0.0f)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            pauseView.setVisibility(View.INVISIBLE);
-                        }
-                    });
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onBufferUpdate(BufferUpdateEvent event) {
         if (event.getStatus() == BufferUpdateEvent.BufferState.BUFFERING_END) {
             hideProgressBar();
@@ -372,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
         });
         mVideoView.setOnErrorListener(new OnErrorListener() {
             @Override
-            public boolean onError() {
+            public boolean onError(Exception e) {
                 new StreamUrlLoader(mCurrentResolution).start();
                 return true;
             }

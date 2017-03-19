@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:EMVideoView="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@android:color/black">
 
-    <com.devbrackets.android.exomedia.ui.widget.EMVideoView
+    <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/exomediaplayer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@android:color/black"
-        EMVideoView:useDefaultControls="false"/>
+        app:useDefaultControls="false"/>
 
     <WebView
         android:layout_width="300dp"

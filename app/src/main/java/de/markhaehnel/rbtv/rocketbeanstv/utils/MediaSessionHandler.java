@@ -1,15 +1,8 @@
 package de.markhaehnel.rbtv.rocketbeanstv.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.view.KeyEvent;
-
-import org.greenrobot.eventbus.EventBus;
-
-import de.markhaehnel.rbtv.rocketbeanstv.MainActivity;
-import de.markhaehnel.rbtv.rocketbeanstv.events.TogglePlayStateEvent;
 
 public class MediaSessionHandler {
 
@@ -18,21 +11,6 @@ public class MediaSessionHandler {
 
     public static void setupMediaSession(Context context) {
         mMediaSession = new MediaSessionCompat(context, "rbtv");
-        mMediaSession.setCallback(new MediaSessionCompat.Callback() {
-            @Override
-            public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
-                KeyEvent key = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-
-                if (key.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (key.getKeyCode()) {
-                        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                            EventBus.getDefault().post(new TogglePlayStateEvent());
-                            return true;
-                    }
-                }
-                return super.onMediaButtonEvent(mediaButtonEvent);
-            }
-        });
         mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mMediaSession.setActive(true);
 

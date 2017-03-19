@@ -1,6 +1,6 @@
 package de.markhaehnel.rbtv.rocketbeanstv.utils;
 
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
+import com.devbrackets.android.exomedia.ui.widget.VideoView;
 import com.google.firebase.crash.FirebaseCrash;
 
 import org.greenrobot.eventbus.EventBus;
@@ -10,9 +10,9 @@ import de.markhaehnel.rbtv.rocketbeanstv.events.BufferUpdateEvent.BufferState;
 
 public class PlayStateListener extends Thread {
 
-    private EMVideoView mVideoView;
+    private VideoView mVideoView;
 
-    public PlayStateListener(EMVideoView videoView) {
+    public PlayStateListener(VideoView videoView) {
         mVideoView = videoView;
     }
 
