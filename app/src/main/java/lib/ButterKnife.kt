@@ -1,4 +1,4 @@
-package de.markhaehnel.rbtv.rocketbeanstv
+package lib
 
 import android.app.Activity
 import android.app.Dialog

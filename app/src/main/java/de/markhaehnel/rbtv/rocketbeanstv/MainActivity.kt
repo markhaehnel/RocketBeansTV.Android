@@ -24,6 +24,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import co.metalab.asyncawait.async
 
 import com.devbrackets.android.exomedia.ui.widget.VideoView
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -37,7 +38,6 @@ import org.joda.time.Duration
 import java.util.Arrays
 import de.markhaehnel.rbtv.rocketbeanstv.events.BufferUpdateEvent
 import de.markhaehnel.rbtv.rocketbeanstv.events.ChannelInfoUpdateEvent
-import de.markhaehnel.rbtv.rocketbeanstv.events.InternetCheckEvent
 import de.markhaehnel.rbtv.rocketbeanstv.events.ScheduleLoadEvent
 import de.markhaehnel.rbtv.rocketbeanstv.events.StreamUrlChangeEvent
 import de.markhaehnel.rbtv.rocketbeanstv.loader.ChannelInfoLoader
@@ -48,6 +48,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.utils.*
 import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.*
 
 import de.markhaehnel.rbtv.rocketbeanstv.utils.NetworkHelper.hasInternet
+import lib.bindView
 
 class MainActivity : AppCompatActivity() {
 
@@ -86,32 +87,23 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         EventBus.getDefault().register(this)
 
-        Thread(Runnable {
-            if (hasInternet()) {
-                EventBus.getDefault().post(InternetCheckEvent(EventStatus.OK))
+        async {
+            val connected = await { hasInternet() }
+            if (connected) {
+                setupListeners()
+                MediaSessionHandler.setupMediaSession(this@MainActivity)
+                preparePlayer()
+                ChannelInfoLoader().start()
             } else {
-                EventBus.getDefault().post(InternetCheckEvent(EventStatus.FAILED))
+                showMessage(R.string.error_noInternet)
             }
-        }).start()
+        }
     }
 
     override fun onStop() {
         EventBus.getDefault().unregister(this)
         System.exit(0)
         super.onStop()
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onInternetChecked(event: InternetCheckEvent) {
-        when (event.status) {
-            Enums.EventStatus.OK -> {
-                setupListeners()
-                MediaSessionHandler.setupMediaSession(this@MainActivity)
-                preparePlayer()
-                ChannelInfoLoader().start()
-            }
-            Enums.EventStatus.FAILED -> showMessage(R.string.error_noInternet)
-        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -262,10 +254,8 @@ class MainActivity : AppCompatActivity() {
     fun onBufferUpdate(event: BufferUpdateEvent) {
         if (event.status === BufferUpdateEvent.BufferState.BUFFERING_END) {
             hideProgressBar()
-        } else {
-            if (!mPaused) {
-                showProgressBar()
-            }
+        } else if (!mPaused) {
+            showProgressBar()
         }
     }
 
