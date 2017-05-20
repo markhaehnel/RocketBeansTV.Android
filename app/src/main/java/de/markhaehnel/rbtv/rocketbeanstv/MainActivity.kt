@@ -19,7 +19,6 @@ import android.view.animation.DecelerateInterpolator
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -43,6 +42,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.events.StreamUrlChangeEvent
 import de.markhaehnel.rbtv.rocketbeanstv.loader.ChannelInfoLoader
 import de.markhaehnel.rbtv.rocketbeanstv.loader.ScheduleLoader
 import de.markhaehnel.rbtv.rocketbeanstv.loader.StreamUrlLoader
+import de.markhaehnel.rbtv.rocketbeanstv.objects.Stream
 import de.markhaehnel.rbtv.rocketbeanstv.objects.schedule.ScheduleItem
 import de.markhaehnel.rbtv.rocketbeanstv.utils.*
 import de.markhaehnel.rbtv.rocketbeanstv.utils.Enums.*
@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     val textCurrentShow: TextView by bindView(R.id.textCurrentShow)
     val textCurrentTopic: TextView by bindView(R.id.textCurrentTopic)
     val textViewerCount: TextView by bindView(R.id.textViewerCount)
-    val pauseView: ImageView by bindView(R.id.pauseImage)
     val containerSchedule: ViewGroup by bindView(R.id.containerSchedule)
     val progressBar: ProgressBar by bindView(R.id.progressBar)
     val scheduleProgress: ProgressBar by bindView(R.id.scheduleProgress)
@@ -70,10 +69,11 @@ class MainActivity : AppCompatActivity() {
     private val ANIMATION_DURATION_SHORT: Long = 100
 
     private var mChatState = ChatState.HIDDEN
-    private var mCurrentResolution: String? = null
+    private var mStreams = listOf<Stream>()
+    private var mCurrentStream: Stream? = null
+    private var mCurrentResolution: String = ""
     private var mVideoId = ""
 
-    private var mAvailableResolutions: Array<String>? = null
     private var mPaused = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -139,8 +139,47 @@ class MainActivity : AppCompatActivity() {
                 System.exit(0)
                 return true
             }
-            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> {
+            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_UP -> {
                 toggleInfoOverlay(false)
+                return true
+            }
+            KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
+                var currentIndex = -1
+
+                mStreams.forEachIndexed { i, stream ->
+                    if (mCurrentStream?.videoId == stream.videoId) currentIndex = i
+                }
+
+                if (currentIndex > -1) {
+                    if (currentIndex == mStreams.count() - 1) {
+                        mCurrentStream = mStreams.first()
+                    } else {
+                        mCurrentStream = mStreams[currentIndex + 1]
+                    }
+                }
+
+                Toast.makeText(this, getString(R.string.camera) + " " + currentIndex, Toast.LENGTH_SHORT).show()
+                playStream(mCurrentStream as Stream)
+
+                return true
+            }
+            KeyEvent.KEYCODE_MEDIA_REWIND -> {
+                var currentIndex = -1
+                mStreams.forEachIndexed { i, stream ->
+                    if (mCurrentStream?.videoId == stream.videoId) currentIndex = i
+                }
+
+                if (currentIndex > -1) {
+                    if (currentIndex == 0) {
+                        mCurrentStream = mStreams.last()
+                    } else {
+                        mCurrentStream = mStreams[currentIndex + 1]
+                    }
+                }
+
+                Toast.makeText(this, getString(R.string.camera) + " " + currentIndex, Toast.LENGTH_SHORT).show()
+                playStream(mCurrentStream as Stream)
+
                 return true
             }
             KeyEvent.KEYCODE_MENU -> {
@@ -152,8 +191,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeStreamResolution() {
-        if ((mAvailableResolutions as Array<String>).isNotEmpty()) {
-            val options = mAvailableResolutions
+        if ((mCurrentStream?.availableResolutions as Array<String>).isNotEmpty()) {
+            val options = mCurrentStream?.availableResolutions
 
             val builder = AlertDialog.Builder(this)
             builder.setTitle(getString(R.string.menuTitle_chooseQuality))
@@ -292,7 +331,7 @@ class MainActivity : AppCompatActivity() {
         mVideoView.setMeasureBasedOnAspectRatioEnabled(true)
         mVideoView.setOnPreparedListener { mVideoView.start() }
         mVideoView.setOnErrorListener {
-            StreamUrlLoader(mCurrentResolution!!).start()
+            StreamUrlLoader(mCurrentResolution).start()
             true
         }
         PlayStateListener(mVideoView).start()
@@ -301,34 +340,48 @@ class MainActivity : AppCompatActivity() {
     private fun preparePlayer() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         mCurrentResolution = prefs.getString(RESOLUTION, "1x1")
-        StreamUrlLoader(mCurrentResolution!!).start()
+        StreamUrlLoader(mCurrentResolution).start()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onStreamUrlChanged(event: StreamUrlChangeEvent) {
         if (event.status == EventStatus.OK) {
 
-            if (mCurrentResolution!!.compareTo(event.stream!!.resolution, ignoreCase = true) != 0) {
-                mCurrentResolution = event.stream!!.resolution
+            mStreams = event.streams
+
+            if (mCurrentStream != null) {
+                mCurrentStream = mStreams.find { x -> x.videoId.compareTo((mCurrentStream as Stream).videoId, true) == 0 }
+            } else {
+                mCurrentStream = mStreams.first()
+
+                if (mStreams.count() > 1) {
+                    Toast.makeText(this, getString(R.string.multi_cam_active), Toast.LENGTH_LONG).show()
+                }
+            }
+
+            if (mCurrentResolution.compareTo(mCurrentStream?.resolution as String, ignoreCase = true) != 0) {
+                mCurrentResolution = mCurrentStream?.resolution as String
                 val prefs = PreferenceManager.getDefaultSharedPreferences(this)
                 val editor = prefs.edit()
                 editor.putString(RESOLUTION, mCurrentResolution)
                 editor.apply()
             }
 
-            mAvailableResolutions = event.stream!!.availableResolutions
-            mPaused = false
-            pauseView.visibility = View.INVISIBLE
-            mVideoView.stopPlayback()
-            mVideoView.seekTo(0)
-            mVideoView.setVideoURI(Uri.parse(event.stream!!.url))
+            playStream(mCurrentStream as Stream)
 
-            if (mVideoId.trim { it <= ' ' }.isEmpty() || event.videoId!!.compareTo(mVideoId) != 0) {
-                setupChat(event.videoId!!)
-                mVideoId = event.videoId!!
-            }
         } else {
             showMessage(R.string.error_unknown)
+        }
+    }
+
+    fun playStream(stream: Stream) {
+        mVideoView.stopPlayback()
+        mVideoView.seekTo(0)
+        mVideoView.setVideoURI(Uri.parse(stream.url))
+
+        if (mVideoId.trim { it <= ' ' }.isEmpty() || stream.videoId.compareTo(mVideoId) != 0) {
+            setupChat(stream.videoId)
+            mVideoId = stream.videoId
         }
     }
 

@@ -10,4 +10,6 @@
     <string name="error">Fehler</string>
     <string name="okay">Okay</string>
     <string name="viewers">" Zuschauer"</string>
+    <string name="camera">Kamera</string>
+    <string name="multi_cam_active">RBTV sendet aktuell in Multi-Cam-Mode.\nMit ⏪ und ⏩ kannst du durch die Kameras schalten.</string>
 </resources>

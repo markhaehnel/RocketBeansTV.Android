@@ -26,7 +26,9 @@ class ChannelInfoLoader : Thread() {
                 val gson = Gson()
                 val scheduleItem = gson.fromJson(response, ScheduleItem::class.java)
                 val rbtv = gson.fromJson(responseViewer, RBTV::class.java)
+
                 EventBus.getDefault().post(ChannelInfoUpdateEvent(scheduleItem, rbtv, EventStatus.OK))
+
                 Thread.sleep(30000)
             } catch (e: Exception) {
                 FirebaseCrash.report(e)
