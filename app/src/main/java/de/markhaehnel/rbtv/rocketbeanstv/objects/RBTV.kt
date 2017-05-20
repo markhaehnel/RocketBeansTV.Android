@@ -4,13 +4,13 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class RBTV {
-    @SerializedName("videoId")
+    @SerializedName("cameras")
     @Expose
-    var videoId: String? = null
+    var cameras: List<String> = listOf<String>()
 
     @SerializedName("viewerCount")
     @Expose
-    var viewerCount: String? = null
+    var viewerCount: String = "0"
 
     @SerializedName("error")
     @Expose
