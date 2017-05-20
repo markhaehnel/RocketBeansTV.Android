@@ -7,10 +7,11 @@ Watch Rocket Beans TV straight from your Fire TV in brilliant 1080p (Full HD).
 or from the [GitHub releases][GitHub Releases]
 
 ## Usage
- - DPad up/down - Toggle currently running show.
+ - DPad center/up/down - Toggle currently running show.
  - DPad right - Toggle chat (Fixed, Overlay, Hidden)
  - DPad left - Toggle schedule
  - Menu button - Select stream quality
+ - Rewind / Forward - Switch camera if multi-cam streaming is active
 
 ## Attribution
 This software is built using these great libraries:
