@@ -3,17 +3,16 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.google.gms:google-services:3.0.0'
     }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "26.0.0-rc2"
     defaultConfig {
         applicationId "de.markhaehnel.rbtv.rocketbeanstv"
         minSdkVersion 22
@@ -33,16 +32,22 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.devbrackets.android:exomedia:4.0.0'
     compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.okhttp3:okhttp:3.7.0'
     compile 'net.danlew:android.joda:2.9.7'
-    compile 'com.google.firebase:firebase-core:10.2.0'
-    compile 'com.google.firebase:firebase-crash:10.2.0'
-    apt 'org.projectlombok:lombok:1.12.6'
-    apt 'com.jakewharton:butterknife-compiler:8.5.1'
-    provided 'org.projectlombok:lombok:1.12.6'
+    compile 'com.google.firebase:firebase-core:10.2.6'
+    compile 'com.google.firebase:firebase-crash:10.2.6'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'com.android.support:support-core-utils:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'co.metalab.asyncawait:asyncawait:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
