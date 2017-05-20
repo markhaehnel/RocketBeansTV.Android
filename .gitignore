@@ -20,3 +20,4 @@ proguard/
 .idea/
 app/app.iml
 app/google-services.json
+app/release/
