@@ -1,6 +1,6 @@
 package de.markhaehnel.rbtv.rocketbeanstv.utils
 
-import com.devbrackets.android.exomedia.ui.widget.VideoView
+import com.devbrackets.android.exomedia.ui.widget.EMVideoView
 import com.google.firebase.crash.FirebaseCrash
 
 import org.greenrobot.eventbus.EventBus
@@ -8,7 +8,7 @@ import org.greenrobot.eventbus.EventBus
 import de.markhaehnel.rbtv.rocketbeanstv.events.BufferUpdateEvent
 import de.markhaehnel.rbtv.rocketbeanstv.events.BufferUpdateEvent.BufferState
 
-class PlayStateListener(private val mVideoView: VideoView) : Thread() {
+class PlayStateListener(private val mVideoView: EMVideoView) : Thread() {
 
     override fun run() {
         while (true) {

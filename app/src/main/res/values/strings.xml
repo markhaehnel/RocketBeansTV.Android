@@ -4,12 +4,15 @@
     <string name="error_unknown">Ein unbekannter Fehler ist aufgetreteten.\n\nBitte versuche es später erneut.</string>
     <string name="currentShow">Aktuelle Sendung</string>
     <string name="menuTitle_chooseQuality">Qualität auswählen</string>
-    <string name="error_getSchedule">Fehler beim Abrufen des Sendeplans.\nMeist hilft ein Neustart deines Fire TVs.</string>
+    <string name="error_getSchedule">Beim Abrufen des Sendeplans ist ein Fehler aufgetreten.</string>
+    <string name="error_title">Fehler</string>
     <string name="no_info_available">Keine Informationen verfügbar</string>
     <string name="empty" />
     <string name="error">Fehler</string>
     <string name="okay">Okay</string>
     <string name="viewers">" Zuschauer"</string>
     <string name="camera">Kamera</string>
-    <string name="multi_cam_active">RBTV sendet aktuell in Multi-Cam-Mode.\nMit ⏪ und ⏩ kannst du durch die Kameras schalten.</string>
+    <string name="multi_cam_active">RBTV sendet aktuell im Multi-Cam Modus.\nMit ⏪ und ⏩ kannst du durch die Kameras schalten.</string>
+    <string name="multi_cam_title">Information</string>
+
 </resources>

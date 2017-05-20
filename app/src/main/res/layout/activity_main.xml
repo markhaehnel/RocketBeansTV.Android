@@ -7,7 +7,7 @@
     android:layout_height="fill_parent"
     android:background="@android:color/black">
 
-    <com.devbrackets.android.exomedia.ui.widget.VideoView
+    <com.devbrackets.android.exomedia.ui.widget.EMVideoView
         android:id="@+id/exomediaplayer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -22,21 +22,35 @@
         android:layout_gravity="end"
         android:background="@android:color/black" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pauseImage"
-        android:layout_gravity="center"
-        android:src="@drawable/exomedia_ic_pause_white"
-        android:background="@color/overlayBackground"
-        android:visibility="invisible" />
-
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
         android:layout_gravity="center"
         android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/containerNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:background="@color/overlayBackground"
+        android:padding="8dp"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/textNotificationTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/textNotificationContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"

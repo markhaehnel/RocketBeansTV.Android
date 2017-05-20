@@ -7,10 +7,12 @@ import android.content.Context
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Debug
 import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -22,14 +24,10 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import co.metalab.asyncawait.async
-
-import com.devbrackets.android.exomedia.ui.widget.VideoView
+import com.devbrackets.android.exomedia.ui.widget.EMVideoView
 import com.google.firebase.analytics.FirebaseAnalytics
-
 import net.danlew.android.joda.JodaTimeAndroid
-
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.ThreadMode
 import org.joda.time.DateTime
@@ -54,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
-    val mVideoView: VideoView by bindView(R.id.exomediaplayer)
+    val mVideoView: EMVideoView by bindView(R.id.exomediaplayer)
     val textCurrentShow: TextView by bindView(R.id.textCurrentShow)
     val textCurrentTopic: TextView by bindView(R.id.textCurrentTopic)
     val textViewerCount: TextView by bindView(R.id.textViewerCount)
@@ -63,6 +61,9 @@ class MainActivity : AppCompatActivity() {
     val scheduleProgress: ProgressBar by bindView(R.id.scheduleProgress)
     val progressCurrentShow: ProgressBar by bindView(R.id.progressCurrentShow)
     val webViewChat: WebView by bindView(R.id.webViewChat)
+    val containerNotification: LinearLayout by bindView(R.id.containerNotification)
+    val textNotificationTitle: TextView by bindView(R.id.textNotificationTitle)
+    val textNotificationContent: TextView by bindView(R.id.textNotificationContent)
 
     private val RESOLUTION = "resolution"
     private val ANIMATION_DURATION_NORMAL: Long = 250
@@ -73,6 +74,8 @@ class MainActivity : AppCompatActivity() {
     private var mCurrentStream: Stream? = null
     private var mCurrentResolution: String = ""
     private var mVideoId = ""
+
+    private var  mNotificationManager: NotificationManager? = null
 
     private var mPaused = false
 
@@ -144,43 +147,45 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
-                var currentIndex = -1
+                if (mStreams.count() > 1 && mCurrentStream != null) {
+                    var currentIndex = -1
 
-                mStreams.forEachIndexed { i, stream ->
-                    if (mCurrentStream?.videoId == stream.videoId) currentIndex = i
-                }
-
-                if (currentIndex > -1) {
-                    if (currentIndex == mStreams.count() - 1) {
-                        mCurrentStream = mStreams.first()
-                    } else {
-                        mCurrentStream = mStreams[currentIndex + 1]
+                    mStreams.forEachIndexed { i, stream ->
+                        if (mCurrentStream?.videoId == stream.videoId) currentIndex = i
                     }
+
+                    if (currentIndex > -1) {
+                        if (currentIndex == mStreams.count() - 1) {
+                            mCurrentStream = mStreams.first()
+                        } else {
+                            mCurrentStream = mStreams[currentIndex + 1]
+                        }
+                    }
+
+                    playStream(mCurrentStream as Stream)
+
+                    return true
                 }
-
-                Toast.makeText(this, getString(R.string.camera) + " " + currentIndex, Toast.LENGTH_SHORT).show()
-                playStream(mCurrentStream as Stream)
-
-                return true
             }
             KeyEvent.KEYCODE_MEDIA_REWIND -> {
-                var currentIndex = -1
-                mStreams.forEachIndexed { i, stream ->
-                    if (mCurrentStream?.videoId == stream.videoId) currentIndex = i
-                }
-
-                if (currentIndex > -1) {
-                    if (currentIndex == 0) {
-                        mCurrentStream = mStreams.last()
-                    } else {
-                        mCurrentStream = mStreams[currentIndex + 1]
+                if (mStreams.count() > 1 && mCurrentStream != null) {
+                    var currentIndex = -1
+                    mStreams.forEachIndexed { i, stream ->
+                        if (mCurrentStream?.videoId == stream.videoId) currentIndex = i
                     }
+
+                    if (currentIndex > -1) {
+                        if (currentIndex == 0) {
+                            mCurrentStream = mStreams.last()
+                        } else {
+                            mCurrentStream = mStreams[currentIndex - 1]
+                        }
+                    }
+
+                    playStream(mCurrentStream as Stream)
+
+                    return true
                 }
-
-                Toast.makeText(this, getString(R.string.camera) + " " + currentIndex, Toast.LENGTH_SHORT).show()
-                playStream(mCurrentStream as Stream)
-
-                return true
             }
             KeyEvent.KEYCODE_MENU -> {
                 changeStreamResolution()
@@ -251,6 +256,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        mNotificationManager =  NotificationManager(containerNotification, textNotificationTitle, textNotificationContent)
+
         mVideoView.start()
         mPaused = false
         super.onResume()
@@ -355,7 +362,7 @@ class MainActivity : AppCompatActivity() {
                 mCurrentStream = mStreams.first()
 
                 if (mStreams.count() > 1) {
-                    Toast.makeText(this, getString(R.string.multi_cam_active), Toast.LENGTH_LONG).show()
+                    mNotificationManager?.ShowNotification(getString(R.string.multi_cam_title), getString(R.string.multi_cam_active), 10000)
                 }
             }
 
@@ -375,6 +382,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun playStream(stream: Stream) {
+        Log.v("PLAYSTREAM", "videoId: ${stream.videoId}")
+
         mVideoView.stopPlayback()
         mVideoView.seekTo(0)
         mVideoView.setVideoURI(Uri.parse(stream.url))
@@ -419,7 +428,8 @@ class MainActivity : AppCompatActivity() {
         when (event.status) {
             Enums.EventStatus.OK -> fillSchedule(event.shows as List<ScheduleItem>)
             Enums.EventStatus.FAILED -> {
-                Toast.makeText(this, R.string.error_getSchedule, Toast.LENGTH_SHORT).show()
+                mNotificationManager?.ShowNotification(getString(R.string.error_title), getString(R.string.error_getSchedule), 5000)
+
                 containerSchedule.startAnimation(AnimationBuilder.fadeOutAnimation)
                 containerSchedule.animate()
                         .setDuration(ANIMATION_DURATION_NORMAL)
