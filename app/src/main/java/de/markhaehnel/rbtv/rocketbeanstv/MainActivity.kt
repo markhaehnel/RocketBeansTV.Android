@@ -7,7 +7,6 @@ import android.content.Context
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.os.Debug
 import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -19,7 +18,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -73,7 +71,6 @@ class MainActivity : AppCompatActivity() {
     private var mStreams = listOf<Stream>()
     private var mCurrentStream: Stream? = null
     private var mCurrentResolution: String = ""
-    private var mVideoId = ""
 
     private var  mNotificationManager: NotificationManager? = null
 
@@ -94,6 +91,7 @@ class MainActivity : AppCompatActivity() {
             val connected = await { hasInternet() }
             if (connected) {
                 setupListeners()
+                setupChat()
                 MediaSessionHandler.setupMediaSession(this@MainActivity)
                 preparePlayer()
                 ChannelInfoLoader().start()
@@ -110,22 +108,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun setupChat(videoId: String) {
+    private fun setupChat() {
         webViewChat.alpha = 0.75f
         webViewChat.isFocusable = false
         webViewChat.isFocusableInTouchMode = false
         webViewChat.isClickable = false
         webViewChat.settings.javaScriptEnabled = true
-        webViewChat.setWebViewClient(object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-                super.onPageFinished(view, url)
-                view.loadUrl("javascript:(function() { " +
-                        "document.getElementsByTagName('yt-live-chat-header-renderer')[0].remove();" +
-                        "document.getElementsByTagName('yt-live-chat-message-input-renderer')[0].remove();" +
-                        "})()")
-            }
-        })
-        webViewChat.loadUrl("https://gaming.youtube.com/live_chat?is_popout=1&v=" + videoId)
+        webViewChat.loadUrl("https://rocketbeans.tv/superchad/")
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -387,11 +376,6 @@ class MainActivity : AppCompatActivity() {
         mVideoView.stopPlayback()
         mVideoView.seekTo(0)
         mVideoView.setVideoURI(Uri.parse(stream.url))
-
-        if (mVideoId.trim { it <= ' ' }.isEmpty() || stream.videoId.compareTo(mVideoId) != 0) {
-            setupChat(stream.videoId)
-            mVideoId = stream.videoId
-        }
     }
 
     fun showMessage(resourceId: Int) {
