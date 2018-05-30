@@ -23,7 +23,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import co.metalab.asyncawait.async
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView
+import com.devbrackets.android.exomedia.ui.widget.VideoView
 import com.google.firebase.analytics.FirebaseAnalytics
 import net.danlew.android.joda.JodaTimeAndroid
 import org.greenrobot.eventbus.EventBus
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
-    val mVideoView: EMVideoView by bindView(R.id.exomediaplayer)
+    val mVideoView: VideoView by bindView(R.id.exomediaplayer)
     val textCurrentShow: TextView by bindView(R.id.textCurrentShow)
     val textCurrentTopic: TextView by bindView(R.id.textCurrentTopic)
     val textViewerCount: TextView by bindView(R.id.textViewerCount)

@@ -1,6 +1,5 @@
 package de.markhaehnel.rbtv.rocketbeanstv.loader
 
-import com.google.firebase.crash.FirebaseCrash
 import com.google.gson.Gson
 
 import org.greenrobot.eventbus.EventBus
@@ -22,7 +21,6 @@ class ScheduleLoader : Thread() {
 
             EventBus.getDefault().post(ScheduleLoadEvent(scheduleData.schedule, EventStatus.OK))
         } catch (e: Exception) {
-            FirebaseCrash.report(e)
             e.printStackTrace()
             EventBus.getDefault().post(ScheduleLoadEvent(EventStatus.FAILED))
         }

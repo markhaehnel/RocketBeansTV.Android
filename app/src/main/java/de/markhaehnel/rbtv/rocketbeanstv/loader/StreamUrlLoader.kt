@@ -1,7 +1,6 @@
 package de.markhaehnel.rbtv.rocketbeanstv.loader
 
 
-import com.google.firebase.crash.FirebaseCrash
 import com.google.gson.Gson
 
 import org.greenrobot.eventbus.EventBus
@@ -58,7 +57,6 @@ class StreamUrlLoader(private val mResolution: String) : Thread() {
                 EventBus.getDefault().post(StreamUrlChangeEvent(EventStatus.FAILED))
             }
         } catch (e: Exception) {
-            FirebaseCrash.report(e)
             e.printStackTrace()
             EventBus.getDefault().post(StreamUrlChangeEvent(EventStatus.FAILED))
         }

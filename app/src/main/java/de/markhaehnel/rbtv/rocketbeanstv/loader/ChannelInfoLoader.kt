@@ -1,6 +1,5 @@
 package de.markhaehnel.rbtv.rocketbeanstv.loader
 
-import com.google.firebase.crash.FirebaseCrash
 import com.google.gson.Gson
 
 import org.greenrobot.eventbus.EventBus
@@ -31,7 +30,6 @@ class ChannelInfoLoader : Thread() {
 
                 Thread.sleep(30000)
             } catch (e: Exception) {
-                FirebaseCrash.report(e)
                 e.printStackTrace()
                 EventBus.getDefault().post(ChannelInfoUpdateEvent(EventStatus.FAILED))
                 if (e is InterruptedException) {

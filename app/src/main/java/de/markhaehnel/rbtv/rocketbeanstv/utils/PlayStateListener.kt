@@ -1,14 +1,13 @@
 package de.markhaehnel.rbtv.rocketbeanstv.utils
 
-import com.devbrackets.android.exomedia.ui.widget.EMVideoView
-import com.google.firebase.crash.FirebaseCrash
+import com.devbrackets.android.exomedia.ui.widget.VideoView
 
 import org.greenrobot.eventbus.EventBus
 
 import de.markhaehnel.rbtv.rocketbeanstv.events.BufferUpdateEvent
 import de.markhaehnel.rbtv.rocketbeanstv.events.BufferUpdateEvent.BufferState
 
-class PlayStateListener(private val mVideoView: EMVideoView) : Thread() {
+class PlayStateListener(private val mVideoView: VideoView) : Thread() {
 
     override fun run() {
         while (true) {
@@ -19,7 +18,6 @@ class PlayStateListener(private val mVideoView: EMVideoView) : Thread() {
                 }
                 Thread.sleep(500)
             } catch (e: Exception) {
-                FirebaseCrash.report(e)
                 e.printStackTrace()
                 EventBus.getDefault().post(BufferUpdateEvent(BufferState.BUFFERING_END))
                 if (e is InterruptedException) {

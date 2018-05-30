@@ -7,7 +7,7 @@
     android:layout_height="fill_parent"
     android:background="@android:color/black">
 
-    <com.devbrackets.android.exomedia.ui.widget.EMVideoView
+    <com.devbrackets.android.exomedia.ui.widget.VideoView
         android:id="@+id/exomediaplayer"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
