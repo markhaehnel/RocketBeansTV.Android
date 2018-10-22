@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         webViewChat.isFocusableInTouchMode = false
         webViewChat.isClickable = false
         webViewChat.settings.javaScriptEnabled = true
-        webViewChat.loadUrl("https://rocketbeans.tv/superchad/")
+        webViewChat.loadUrl("https://rbtvchat-production.server.ezhub.de")
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
