@@ -14,3 +14,6 @@ or from the [GitHub releases][GitHub Releases]
  - Rewind / Forward - Switch camera if multi-cam streaming is active
 
 This app is unofficial and is not affiliated with Rocket Beans Entertainment GmbH.
+
+[Amazon Appstore]: https://www.amazon.de/dp/B018429HN6
+[GitHub Releases]: https://github.com/EZTEQ/rbtv-firetv/releases
