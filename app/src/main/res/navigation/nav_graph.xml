@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
+            app:startDestination="@id/startupFragment">
+    <fragment android:id="@+id/startupFragment" android:name="de.markhaehnel.rbtv.rocketbeanstv.ui.startup.StartupFragment"
+              android:label="fragment_startup" tools:layout="@layout/fragment_startup"/>
+</navigation>
