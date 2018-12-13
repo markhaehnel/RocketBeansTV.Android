@@ -1,9 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.vo
 
-import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
-@Entity(primaryKeys = ["id"])
 data class ScheduleItem(
     @field:SerializedName("id")
     val id: Int,

@@ -75,6 +75,9 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$rootProject.uiAutomatorVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
+
+    testImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.mockWebServerVersion"
+    testImplementation "android.arch.core:core-testing:$rootProject.archCoreTestingVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
