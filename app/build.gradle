@@ -5,10 +5,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'io.fabric'
 
-kapt {
-    generateStubs = true
-}
-
 android {
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
@@ -22,7 +18,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
