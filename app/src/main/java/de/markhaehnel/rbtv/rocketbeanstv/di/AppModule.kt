@@ -1,15 +1,13 @@
 package de.markhaehnel.rbtv.rocketbeanstv.di
 
-import android.app.Application
-import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import de.markhaehnel.rbtv.rocketbeanstv.api.RbtvService
-import de.markhaehnel.rbtv.rocketbeanstv.db.RbtvDb
-import de.markhaehnel.rbtv.rocketbeanstv.db.StreamDao
+import de.markhaehnel.rbtv.rocketbeanstv.api.YouTubeService
 import de.markhaehnel.rbtv.rocketbeanstv.util.LiveDataCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 @Module(includes = [ViewModelModule::class])
@@ -27,16 +25,13 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideDb(app: Application): RbtvDb {
-        return Room
-            .databaseBuilder(app, RbtvDb::class.java, "rbtv.db")
-            .fallbackToDestructiveMigration()
+    fun provideYouTubeService(): YouTubeService {
+        return Retrofit.Builder()
+            .baseUrl("https://www.youtube.com/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
+            .create(YouTubeService::class.java)
     }
 
-    @Singleton
-    @Provides
-    fun provideStreamDao(db: RbtvDb): StreamDao {
-        return db.streamDao()
-    }
 }

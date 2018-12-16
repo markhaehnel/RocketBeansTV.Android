@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
@@ -65,6 +66,6 @@ class StartupFragment : Fragment(), Injectable {
 
     override fun onResume() {
         super.onResume()
-        //NavHostFragment.findNavController(this).navigate(StartupFragmentDirections.actionStartupFragmentToPlayerFragment())
+        NavHostFragment.findNavController(this).navigate(StartupFragmentDirections.actionStartupFragmentToPlayerFragment())
     }
 }

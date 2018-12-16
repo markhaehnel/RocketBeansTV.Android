@@ -2,7 +2,6 @@ package de.markhaehnel.rbtv.rocketbeanstv
 
 import android.app.Activity
 import android.app.Application
-import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import de.markhaehnel.rbtv.rocketbeanstv.di.AppInjector

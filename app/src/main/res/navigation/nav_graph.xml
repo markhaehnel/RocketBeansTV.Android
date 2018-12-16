@@ -4,5 +4,9 @@
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
             app:startDestination="@id/startupFragment">
     <fragment android:id="@+id/startupFragment" android:name="de.markhaehnel.rbtv.rocketbeanstv.ui.startup.StartupFragment"
-              android:label="fragment_startup" tools:layout="@layout/fragment_startup"/>
+              android:label="fragment_startup" tools:layout="@layout/fragment_startup">
+        <action android:id="@+id/action_startupFragment_to_playerFragment" app:destination="@id/playerFragment"/>
+    </fragment>
+    <fragment android:id="@+id/playerFragment" android:name="de.markhaehnel.rbtv.rocketbeanstv.ui.player.PlayerFragment"
+              android:label="fragment_player" tools:layout="@layout/fragment_player"/>
 </navigation>
