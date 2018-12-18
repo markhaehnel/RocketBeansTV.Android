@@ -1,6 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.vo
 
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 data class ScheduleItem(
     @field:SerializedName("id")
@@ -16,10 +17,10 @@ data class ScheduleItem(
     val show: String,
 
     @field:SerializedName("timeStart")
-    val timeStart: String,
+    val timeStart: Date,
 
     @field:SerializedName("timeEnd")
-    val timeEnd: String,
+    val timeEnd: Date,
 
     @field:SerializedName("length")
     val length: Int,

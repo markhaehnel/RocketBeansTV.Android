@@ -7,8 +7,10 @@ import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.api.RbtvService
 import de.markhaehnel.rbtv.rocketbeanstv.api.YouTubeService
 import de.markhaehnel.rbtv.rocketbeanstv.vo.Resource
+import de.markhaehnel.rbtv.rocketbeanstv.vo.Schedule
+import de.markhaehnel.rbtv.rocketbeanstv.vo.ScheduleItem
 import de.markhaehnel.rbtv.rocketbeanstv.vo.Stream
-import de.markhaehnel.rbtv.rocketbeanstv.vo.StreamDataRaw
+import de.markhaehnel.rbtv.rocketbeanstv.vo.StreamManifest
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,32 +22,36 @@ import javax.inject.Singleton
 
 @Singleton
 class StreamRepository @Inject constructor(
+    private val appExecutors: AppExecutors,
     private val rbtvService: RbtvService,
     private val youTubeService: YouTubeService
 ) {
 
     fun loadStream(): LiveData<Resource<Stream>> {
-        val data = MutableLiveData<Resource<Stream>>()
-
-        rbtvService.getStream().enqueue(object : Callback<Stream> {
-            override fun onResponse(call: Call<Stream>?, response: Response<Stream>?) {
-                data.value = Resource.success(response?.body())
-            }
-
-            override fun onFailure(call: Call<Stream>?, t: Throwable?) {
-                data.value = Resource.error(t.toString())
-            }
-        })
-
-        return data
+        return object : NetworkBoundResource<Stream>(appExecutors) {
+            override fun createCall() = rbtvService.getStream()
+        }.asLiveData()
     }
 
-    fun loadStreamDataRaw(videoId: String): LiveData<Resource<StreamDataRaw>> {
-        val data = MutableLiveData<Resource<StreamDataRaw>>()
+    fun loadCurrentShow(): LiveData<Resource<ScheduleItem>> {
+        return object : NetworkBoundResource<ScheduleItem>(appExecutors) {
+            override fun createCall() = rbtvService.getCurrentShow()
+        }.asLiveData()
+    }
+
+    fun loadUpcomingShows(): LiveData<Resource<Schedule>> {
+        return object : NetworkBoundResource<Schedule>(appExecutors) {
+            override fun createCall() = rbtvService.getUpcomingShows()
+        }.asLiveData()
+    }
+
+    fun loadStreamManifest(videoId: String): LiveData<Resource<StreamManifest>> {
+        //TODO: move this to NetworkBoundResource
+        val data = MutableLiveData<Resource<StreamManifest>>()
+        data.value = Resource.loading(null)
 
         youTubeService.getRawStreamData(videoId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
-
                 val responseString = response?.body()!!.string()
 
                 val parameters = HashMap<String, String>()
@@ -57,7 +63,7 @@ class StreamRepository @Inject constructor(
 
                 val hlsUrl: String = parameters["hlsvp"] as String
 
-                val dataRaw = StreamDataRaw(hlsUrl.toUri())
+                val dataRaw = StreamManifest(hlsUrl.toUri())
                 data.value = Resource.success(dataRaw)
             }
 

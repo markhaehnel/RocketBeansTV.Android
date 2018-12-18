@@ -3,7 +3,6 @@ package de.markhaehnel.rbtv.rocketbeanstv.api
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,7 +23,6 @@ class ApiResponseTest {
         val apiResponse: ApiSuccessResponse<String> = ApiResponse
             .create<String>(Response.success("foo")) as ApiSuccessResponse<String>
         assertThat<String>(apiResponse.body, `is`("foo"))
-        assertThat<Int>(apiResponse.nextPage, `is`(nullValue()))
     }
 
     @Test

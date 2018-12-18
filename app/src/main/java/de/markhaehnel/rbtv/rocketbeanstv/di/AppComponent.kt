@@ -3,7 +3,6 @@ package de.markhaehnel.rbtv.rocketbeanstv.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
-import dagger.android.AndroidInjectionModule
 import dagger.android.support.AndroidSupportInjectionModule
 import de.markhaehnel.rbtv.rocketbeanstv.RbtvApp
 import javax.inject.Singleton

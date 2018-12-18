@@ -10,6 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@Suppress("unused")
 open class AppExecutors(
     private val diskIO: Executor,
     private val networkIO: Executor,

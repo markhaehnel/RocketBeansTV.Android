@@ -1,19 +1,18 @@
-# Rocket Beans TV for Fire TV
+<p align="center">
+    <img src="https://i.imgur.com/ulstbn3.png">
+</p>
 
-Watch Rocket Beans TV straight from your Fire TV in brilliant 1080p (Full HD).
+<p align="center">
+    <a href="https://circleci.com/gh/markhaehnel/RocketBeansTV.Android"><img src="https://img.shields.io/circleci/project/github/markhaehnel/RocketBeansTV.Android/master.svg?style=for-the-badge"></a>
+    <a href="https://circleci.com/gh/markhaehnel/RocketBeansTV.Android"><img src="https://img.shields.io/github/license/markhaehnel/RocketBeansTV.Android.svg?style=for-the-badge"></a>
+    <a href="https://circleci.com/gh/markhaehnel/RocketBeansTV.Android"><img src="https://img.shields.io/github/release/markhaehnel/RocketBeansTV.Android.svg?style=for-the-badge"></a>
+</p>
 
-## Download
-[![Amazon Appstore](https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/res/images/amazon-underground-app-us-white.png)][Amazon Appstore]
-or from the [GitHub releases][GitHub Releases]
+<p align="center">
+    <img src="https://i.imgur.com/LqPUAI5.png">
+    <img src="https://i.imgur.com/JCXhOrC.png">
+</p>
 
-## Usage
- - DPad center/up/down - Toggle currently running show.
- - DPad right - Toggle chat (Fixed, Overlay, Hidden)
- - DPad left - Toggle schedule
- - Menu button - Select stream quality
- - Rewind / Forward - Switch camera if multi-cam streaming is active
-
-This app is unofficial and is not affiliated with Rocket Beans Entertainment GmbH.
-
-[Amazon Appstore]: https://www.amazon.de/dp/B018429HN6
-[GitHub Releases]: https://github.com/EZTEQ/rbtv-firetv/releases
+<p align="center">
+    Watch Rocket Beans TV on your Android TV or Fire TV and access features like schedule and chat directly from the app.
+</p>

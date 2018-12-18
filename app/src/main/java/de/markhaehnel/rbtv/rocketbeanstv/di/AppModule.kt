@@ -1,5 +1,6 @@
 package de.markhaehnel.rbtv.rocketbeanstv.di
 
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import de.markhaehnel.rbtv.rocketbeanstv.api.RbtvService
@@ -15,9 +16,13 @@ class AppModule {
     @Singleton
     @Provides
     fun provideRbtvService(): RbtvService {
+        val gson = GsonBuilder()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
+            .create()
+
         return Retrofit.Builder()
             .baseUrl("https://rbtvapi-production.server.ezhub.de/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
             .create(RbtvService::class.java)

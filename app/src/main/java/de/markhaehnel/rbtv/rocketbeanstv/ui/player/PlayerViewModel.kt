@@ -1,29 +1,30 @@
 package de.markhaehnel.rbtv.rocketbeanstv.ui.player
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.repository.StreamRepository
 import de.markhaehnel.rbtv.rocketbeanstv.util.AbsentLiveData
-import de.markhaehnel.rbtv.rocketbeanstv.vo.Resource
-import de.markhaehnel.rbtv.rocketbeanstv.vo.Stream
-import de.markhaehnel.rbtv.rocketbeanstv.vo.StreamDataRaw
+import de.markhaehnel.rbtv.rocketbeanstv.vo.*
 import javax.inject.Inject
 
 class PlayerViewModel
 @Inject constructor(streamRepository: StreamRepository) : ViewModel() {
 
-    val stream: LiveData<Resource<Stream>> = streamRepository.loadStream()
-
-    var streamData: LiveData<Resource<StreamDataRaw>> = Transformations
-        .switchMap(stream) { stream ->
+    val streamInfo: LiveData<Resource<Stream>> = streamRepository.loadStream()
+    var streamManifest: LiveData<Resource<StreamManifest>> = Transformations
+        .switchMap(streamInfo) { stream ->
             if (stream.data === null) {
                 AbsentLiveData.create()
             } else {
-                streamRepository.loadStreamDataRaw(stream.data.videoId)
+                streamRepository.loadStreamManifest(stream.data.videoId)
             }
         }
 
+    val currentShow: LiveData<Resource<ScheduleItem>> = streamRepository.loadCurrentShow()
+    val upcomingShows: LiveData<Resource<Schedule>> = streamRepository.loadUpcomingShows()
 
+    fun retry() {
+        //TODO: implement retry
+    }
 }

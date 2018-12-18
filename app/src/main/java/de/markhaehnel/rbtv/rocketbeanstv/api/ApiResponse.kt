@@ -1,8 +1,6 @@
 package de.markhaehnel.rbtv.rocketbeanstv.api
 
 import retrofit2.Response
-import timber.log.Timber
-import java.util.regex.Pattern
 
 /**
  * Common class used by API responses.
@@ -41,6 +39,6 @@ sealed class ApiResponse<T> {
  */
 class ApiEmptyResponse<T> : ApiResponse<T>()
 
-data class ApiSuccessResponse<T>(val body: T) : ApiResponse<T>() {}
+data class ApiSuccessResponse<T>(val body: T) : ApiResponse<T>()
 
 data class ApiErrorResponse<T>(val errorMessage: String) : ApiResponse<T>()

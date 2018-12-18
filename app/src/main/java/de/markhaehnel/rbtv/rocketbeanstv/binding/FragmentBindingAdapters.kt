@@ -1,6 +1,5 @@
 package de.markhaehnel.rbtv.rocketbeanstv.binding
 
-import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import javax.inject.Inject
 
