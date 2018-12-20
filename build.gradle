@@ -23,7 +23,7 @@ buildscript {
         daggerVersion = '2.19'
         timberVersion = '4.7.1'
         retrofitVersion = '2.5.0'
-        firebaseVersion = '16.0.5'
+        firebaseVersion = '16.0.6'
         crashlyticsVersion = '2.9.7'
         mockWebServerVersion = '3.8.1'
         archCoreTestingVersion = '1.1.1'
