@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-    <img src="https://i.imgur.com/LqPUAI5.png">
-    <img src="https://i.imgur.com/JCXhOrC.png">
+    <a href="https://play.google.com/store/apps/details?id=de.markhaehnel.rbtv.rocketbeanstv"><img src="https://i.imgur.com/LqPUAI5.png"></a>
+    <a href="https://www.amazon.de/dp/B018429HN6"><img src="https://i.imgur.com/JCXhOrC.png"></a>
 </p>
 
 <p align="center">
