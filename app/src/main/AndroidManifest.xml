@@ -16,7 +16,7 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             tools:ignore="GoogleAppIndexingWarning"
-            android:banner="@drawable/ic_logo">
+            android:banner="@drawable/ic_banner">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
