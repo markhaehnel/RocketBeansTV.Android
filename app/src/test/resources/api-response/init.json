@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "data": {
+    "websocket": {
+      "url": "https://api.rocketbeans.tv/",
+      "path": "/socket.io"
+    },
+    "streamInfo": {
+      "twitchChannel": "rocketbeanstv",
+      "youtubeToken": "1wbqvTGnd3w",
+      "info": {
+        "progress": 79.98837037037038,
+        "showId": 90,
+        "viewers": {
+          "twitch": 995,
+          "youtube": 2470,
+          "total": 3465
+        },
+        "timeEnd": "2018-12-20T10:15:00.000Z",
+        "timeStart": "2018-12-20T09:30:00.000Z",
+        "title": "MoinMoin #988",
+        "topic": "Die Morning-Show mit Etienne",
+        "type": "live"
+      }
+    }
+  }
+}

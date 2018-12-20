@@ -11,20 +11,20 @@ import javax.inject.Inject
 class PlayerViewModel
 @Inject constructor(streamRepository: StreamRepository) : ViewModel() {
 
-    val streamInfo: LiveData<Resource<Stream>> = streamRepository.loadStream()
+    var rbtvServiceInfo = streamRepository.loadServiceInfo()
+
     var streamManifest: LiveData<Resource<StreamManifest>> = Transformations
-        .switchMap(streamInfo) { stream ->
-            if (stream.data === null) {
+        .switchMap(rbtvServiceInfo) { serviceInfo ->
+            if (serviceInfo.data === null) {
                 AbsentLiveData.create()
             } else {
-                streamRepository.loadStreamManifest(stream.data.videoId)
+                streamRepository.loadStreamManifest(serviceInfo.data.service.streamInfo.youtubeToken)
             }
         }
 
-    val currentShow: LiveData<Resource<ScheduleItem>> = streamRepository.loadCurrentShow()
-    val upcomingShows: LiveData<Resource<Schedule>> = streamRepository.loadUpcomingShows()
+    val schedule: LiveData<Resource<Schedule>> = streamRepository.loadSchedule()
 
     fun retry() {
-        //TODO: implement retry
+    //TODO: implement retry
     }
 }

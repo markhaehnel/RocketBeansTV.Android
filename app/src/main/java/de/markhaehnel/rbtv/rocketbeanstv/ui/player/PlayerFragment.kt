@@ -46,8 +46,7 @@ class PlayerFragment : Fragment(), Injectable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        playerViewModel = ViewModelProviders.of(this, viewModelFactory)
-            .get(PlayerViewModel::class.java)
+        playerViewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         initStreamData()
@@ -65,22 +64,22 @@ class PlayerFragment : Fragment(), Injectable {
     }
 
     private fun initStreamData() {
-        playerViewModel.streamInfo.observe(viewLifecycleOwner, Observer { stream ->
-            //TODO: implement stream info panel
-        })
-
-        playerViewModel.streamManifest.observe(viewLifecycleOwner, Observer { streamData ->
-            if (streamData?.data != null) {
-                videoView.setVideoURI(streamData.data.hlsUri)
+        playerViewModel.rbtvServiceInfo.observe(viewLifecycleOwner, Observer { serviceInfo ->
+            if (serviceInfo?.data != null) {
+                //TODO: implement info panel
             }
         })
 
-        playerViewModel.currentShow.observe(viewLifecycleOwner, Observer { currentShow ->
-            //TODO: implement stream info panel
+        playerViewModel.streamManifest.observe(viewLifecycleOwner, Observer { streamManifest ->
+            if (streamManifest?.data != null) {
+                videoView.setVideoURI(streamManifest.data.hlsUri)
+            }
         })
 
-        playerViewModel.upcomingShows.observe(viewLifecycleOwner, Observer { upcomingShows ->
-            //TODO: implement schedule
+        playerViewModel.schedule.observe(viewLifecycleOwner, Observer { schedule ->
+            if (schedule?.data != null) {
+               //TODO: implement schedule
+            }
         })
     }
 

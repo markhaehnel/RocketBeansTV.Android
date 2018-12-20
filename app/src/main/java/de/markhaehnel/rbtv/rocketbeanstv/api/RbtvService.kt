@@ -1,18 +1,18 @@
 package de.markhaehnel.rbtv.rocketbeanstv.api
 
 import androidx.lifecycle.LiveData
+import de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo
 import de.markhaehnel.rbtv.rocketbeanstv.vo.Schedule
-import de.markhaehnel.rbtv.rocketbeanstv.vo.ScheduleItem
-import de.markhaehnel.rbtv.rocketbeanstv.vo.Stream
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface RbtvService {
-    @GET("stream")
-    fun getStream(): LiveData<ApiResponse<Stream>>
+    @GET("v1/frontend/init")
+    fun getServiceInfo(): LiveData<ApiResponse<RbtvServiceInfo>>
 
-    @GET("schedule/current")
-    fun getCurrentShow(): LiveData<ApiResponse<ScheduleItem>>
-
-    @GET("schedule/next/5")
-    fun getUpcomingShows(): LiveData<ApiResponse<Schedule>>
+    @GET("v1/schedule/normalized")
+    fun getSchedule(
+        @Query("startDay") startDay: Long = System.currentTimeMillis() / 1000L,
+        @Query("endDay") endDay: Long? = startDay
+    ): LiveData<ApiResponse<Schedule>>
 }

@@ -1,0 +1,853 @@
+{
+  "success": true,
+  "data": [
+    {
+      "date": "2018-08-11T22:00:00.000Z",
+      "elements": [
+        {
+          "id": 26610,
+          "title": "Zocken mit Denzel #3",
+          "topic": "Lands of Lore: The Throne of Chaos",
+          "showId": 281,
+          "episodeId": 8224,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/0250260d18540d1f8fa3d13dfc49628b.jpeg",
+          "timeStart": "2018-08-12T10:40:00.000Z",
+          "timeEnd": "2018-08-12T13:08:52.000Z",
+          "duration": 8932,
+          "durationClass": 2,
+          "bohnen": [],
+          "streamExclusive": false,
+          "type": "rerun"
+        },
+        {
+          "id": 26901,
+          "title": "Mal was Neues",
+          "topic": "",
+          "showId": 146,
+          "episodeId": 8184,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/824e7db6b243bba7f154dd891bbec0ea.jpeg",
+          "timeStart": "2018-08-12T13:10:00.000Z",
+          "timeEnd": "2018-08-12T14:44:42.000Z",
+          "duration": 5682,
+          "durationClass": 1,
+          "bohnen": [
+            {
+              "mgmtid": 73,
+              "name": "Donnie",
+              "role": "onair",
+              "images": [],
+              "episodeCount": 374
+            },
+            {
+              "mgmtid": 81,
+              "name": "Mark",
+              "role": "offair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/37303031-0eee-4926-b3f7-e7b18cbbae20_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/37303031-0eee-4926-b3f7-e7b18cbbae20_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/37303031-0eee-4926-b3f7-e7b18cbbae20_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/37303031-0eee-4926-b3f7-e7b18cbbae20_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 23
+            },
+            {
+              "mgmtid": 48,
+              "name": "Nastassja",
+              "role": "offair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/cab42e0f-7f4d-485d-b57b-5ad10feb16cb_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/cab42e0f-7f4d-485d-b57b-5ad10feb16cb_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/cab42e0f-7f4d-485d-b57b-5ad10feb16cb_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/cab42e0f-7f4d-485d-b57b-5ad10feb16cb_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 124
+            }
+          ],
+          "streamExclusive": false,
+          "type": "rerun"
+        },
+        {
+          "id": 26589,
+          "title": "Zocken mit Denzel #",
+          "topic": "Ich bin dann mal Arzt",
+          "showId": 281,
+          "episodeId": 8242,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/0250260d18540d1f8fa3d13dfc49628b.jpeg",
+          "timeStart": "2018-08-12T14:30:00.000Z",
+          "timeEnd": "2018-08-12T16:28:30.000Z",
+          "duration": 7110,
+          "durationClass": 2,
+          "bohnen": [
+            {
+              "mgmtid": 11,
+              "name": "Dennis",
+              "role": "onair",
+              "images": [],
+              "episodeCount": 545
+            },
+            {
+              "mgmtid": 27,
+              "name": "Krogi",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/565a578d-87d4-4531-8987-891493770700_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/565a578d-87d4-4531-8987-891493770700_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/565a578d-87d4-4531-8987-891493770700_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/565a578d-87d4-4531-8987-891493770700_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 247
+            }
+          ],
+          "streamExclusive": false,
+          "type": "rerun"
+        },
+        {
+          "id": 26654,
+          "title": "BestOfBeans #4",
+          "topic": "Best of Juli",
+          "showId": null,
+          "episodeId": 0,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/e814f30794cbd05a52551a7ab4ed973a.jpeg",
+          "timeStart": "2018-08-12T16:30:00.000Z",
+          "timeEnd": "2018-08-12T16:43:57.000Z",
+          "duration": 837,
+          "durationClass": 0,
+          "bohnen": [],
+          "streamExclusive": false,
+          "type": "premiere"
+        },
+        {
+          "id": 26617,
+          "title": "VR∙Nerds TV #75",
+          "topic": "Electronauts",
+          "showId": null,
+          "episodeId": 0,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/4c62b2c0825fd7115c3a214a77cc19b9.jpeg",
+          "timeStart": "2018-08-12T16:45:00.000Z",
+          "timeEnd": "2018-08-12T17:00:49.000Z",
+          "duration": 949,
+          "durationClass": 0,
+          "bohnen": [],
+          "streamExclusive": false,
+          "type": "premiere"
+        },
+        {
+          "id": 26727,
+          "title": "Retro Klub #57",
+          "topic": "Die Geschichte von Turrican",
+          "showId": 120,
+          "episodeId": 8227,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/cc2fd8ee6dad0e3c737616cd416482eb.jpeg",
+          "timeStart": "2018-08-12T17:00:00.000Z",
+          "timeEnd": "2018-08-12T18:06:32.000Z",
+          "duration": 3992,
+          "durationClass": 1,
+          "bohnen": [
+            {
+              "mgmtid": 15,
+              "name": "Gregor",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 1008
+            }
+          ],
+          "streamExclusive": false,
+          "type": "premiere"
+        },
+        {
+          "id": 26235,
+          "title": "Speedrundale #40",
+          "topic": "Bloodstained: Curse of the Moon",
+          "showId": 124,
+          "episodeId": 8127,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/2b43d26768e132145cd3d6b4ba5fad60.jpeg",
+          "timeStart": "2018-08-12T18:05:00.000Z",
+          "timeEnd": "2018-08-12T18:56:24.000Z",
+          "duration": 3084,
+          "durationClass": 1,
+          "bohnen": [
+            {
+              "mgmtid": 15,
+              "name": "Gregor",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 1008
+            },
+            {
+              "mgmtid": 46,
+              "name": "Sia Ashouri",
+              "role": "external",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/4b84b42d-096c-4b35-91b0-31e67378272c_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4b84b42d-096c-4b35-91b0-31e67378272c_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4b84b42d-096c-4b35-91b0-31e67378272c_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4b84b42d-096c-4b35-91b0-31e67378272c_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 113
+            },
+            {
+              "mgmtid": 33,
+              "name": "Simon",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/85546a12-e17a-4ee4-91f0-1edb3039cd65_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/85546a12-e17a-4ee4-91f0-1edb3039cd65_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/85546a12-e17a-4ee4-91f0-1edb3039cd65_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/85546a12-e17a-4ee4-91f0-1edb3039cd65_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 1331
+            }
+          ],
+          "streamExclusive": false,
+          "type": "premiere"
+        },
+        {
+          "id": 26612,
+          "title": "Let’s Play ",
+          "topic": "mit Donnie",
+          "showId": 175,
+          "episodeId": 8225,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/9b15caaf13d15316bfc621f654e79aff.jpeg",
+          "timeStart": "2018-08-12T19:00:00.000Z",
+          "timeEnd": "2018-08-12T20:28:24.000Z",
+          "duration": 5304,
+          "durationClass": 1,
+          "bohnen": [
+            {
+              "mgmtid": 73,
+              "name": "Donnie",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 374
+            }
+          ],
+          "streamExclusive": false,
+          "type": "rerun"
+        },
+        {
+          "id": 26613,
+          "title": "Let’s Play ",
+          "topic": "Quake Champions: Ranked 2vs2",
+          "showId": 175,
+          "episodeId": 8229,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/9b15caaf13d15316bfc621f654e79aff.jpeg",
+          "timeStart": "2018-08-12T20:30:00.000Z",
+          "timeEnd": "2018-08-12T22:36:49.000Z",
+          "duration": 7609,
+          "durationClass": 2,
+          "bohnen": [
+            {
+              "mgmtid": 14,
+              "name": "Etienne",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/b993e38b-ed23-4e82-bdee-b0cf0d67b280_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/b993e38b-ed23-4e82-bdee-b0cf0d67b280_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/b993e38b-ed23-4e82-bdee-b0cf0d67b280_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/b993e38b-ed23-4e82-bdee-b0cf0d67b280_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 1195
+            },
+            {
+              "mgmtid": 57,
+              "name": "René",
+              "role": "offair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/870a397d-ba35-4341-83db-6c50577c6fe7_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/870a397d-ba35-4341-83db-6c50577c6fe7_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/870a397d-ba35-4341-83db-6c50577c6fe7_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/870a397d-ba35-4341-83db-6c50577c6fe7_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 134
+            }
+          ],
+          "streamExclusive": false,
+          "type": "rerun"
+        },
+        {
+          "id": 26621,
+          "title": "Let’s Play ",
+          "topic": "No Man's Sky: Noch mehr Next!",
+          "showId": 175,
+          "episodeId": 8233,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/ed98935a6c43fde3537ea4336acd84f4.jpeg",
+          "timeStart": "2018-08-12T22:25:00.000Z",
+          "timeEnd": "2018-08-13T01:24:43.000Z",
+          "duration": 10783,
+          "durationClass": 3,
+          "bohnen": [
+            {
+              "mgmtid": 80,
+              "name": "Sandro",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/1442f818-0dfc-4f22-911a-31a01b58281a_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/1442f818-0dfc-4f22-911a-31a01b58281a_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/1442f818-0dfc-4f22-911a-31a01b58281a_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/1442f818-0dfc-4f22-911a-31a01b58281a_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 108
+            },
+            {
+              "mgmtid": 12,
+              "name": "Dennis",
+              "role": "offair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/2764acb1-4d8c-4644-a807-374b359dee38_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/2764acb1-4d8c-4644-a807-374b359dee38_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/2764acb1-4d8c-4644-a807-374b359dee38_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/2764acb1-4d8c-4644-a807-374b359dee38_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 152
+            }
+          ],
+          "streamExclusive": false,
+          "type": "rerun"
+        },
+        {
+          "id": 26622,
+          "title": "Rage of Empires #36",
+          "topic": "Age of Empires Training mit Donnie und Marah",
+          "showId": 268,
+          "episodeId": 8236,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/9b15caaf13d15316bfc621f654e79aff.jpeg",
+          "timeStart": "2018-08-13T01:25:00.000Z",
+          "timeEnd": "2018-08-13T02:41:00.000Z",
+          "duration": 4560,
+          "durationClass": 1,
+          "bohnen": [
+            {
+              "mgmtid": 73,
+              "name": "Donnie",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 374
+            },
+            {
+              "mgmtid": 60,
+              "name": "Marah",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/cc5cf096-5263-4534-9991-0429f4af89fd_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/cc5cf096-5263-4534-9991-0429f4af89fd_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/cc5cf096-5263-4534-9991-0429f4af89fd_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/cc5cf096-5263-4534-9991-0429f4af89fd_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 55
+            }
+          ],
+          "streamExclusive": false,
+          "type": "rerun"
+        },
+        {
+          "id": 26614,
+          "title": "Press Select #5",
+          "topic": "Thema: Videospiel-Skandale #2",
+          "showId": 170,
+          "episodeId": 2187,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/ceee7ca92bab273daadbc81b65de8a8c.jpeg",
+          "timeStart": "2018-08-13T02:40:00.000Z",
+          "timeEnd": "2018-08-13T04:43:15.000Z",
+          "duration": 7395,
+          "durationClass": 2,
+          "bohnen": [
+            {
+              "mgmtid": 8,
+              "name": "Colin",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/9624f74d-2c94-4564-b1aa-0c6b91a6236c_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/9624f74d-2c94-4564-b1aa-0c6b91a6236c_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/9624f74d-2c94-4564-b1aa-0c6b91a6236c_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/9624f74d-2c94-4564-b1aa-0c6b91a6236c_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 301
+            },
+            {
+              "mgmtid": 15,
+              "name": "Gregor",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/d9591a09-68a6-49dd-819a-d7ed1d4c6042_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 1008
+            },
+            {
+              "mgmtid": 9,
+              "name": "Schröck",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/a82d2fbc-aad8-4b4c-9037-3a12a03ddaf1_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/a82d2fbc-aad8-4b4c-9037-3a12a03ddaf1_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/a82d2fbc-aad8-4b4c-9037-3a12a03ddaf1_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/a82d2fbc-aad8-4b4c-9037-3a12a03ddaf1_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 471
+            }
+          ],
+          "streamExclusive": false,
+          "type": "rerun"
+        },
+        {
+          "id": 26626,
+          "title": "Let’s Play 1",
+          "topic": "Planet der Affen: Last Frontier",
+          "showId": 175,
+          "episodeId": 0,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/ed98935a6c43fde3537ea4336acd84f4.jpeg",
+          "timeStart": "2018-08-13T04:45:00.000Z",
+          "timeEnd": "2018-08-13T06:15:42.000Z",
+          "duration": 5442,
+          "durationClass": 1,
+          "bohnen": [
+            {
+              "mgmtid": 73,
+              "name": "Donnie",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/4940eda1-13d0-4d33-b8a5-f1b1554230b1_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 374
+            }
+          ],
+          "streamExclusive": false,
+          "type": "rerun"
+        },
+        {
+          "id": 26734,
+          "title": "Knallhart Durchgenommen #10",
+          "topic": "Deus Ex: Mankind Divided mit Simon",
+          "showId": 113,
+          "episodeId": 3721,
+          "episodeImage": "https://s3-eu-west-1.amazonaws.com/static.rocketbeans.tv/s/04315c8484ca798ec09207eb1c4f9c94.jpeg",
+          "timeStart": "2018-08-13T06:15:00.000Z",
+          "timeEnd": "2018-08-13T08:35:00.000Z",
+          "duration": 8400,
+          "durationClass": 2,
+          "bohnen": [
+            {
+              "mgmtid": 33,
+              "name": "Simon",
+              "role": "onair",
+              "images": [
+                {
+                  "url": "//static.rocketbeans.tv/img/85546a12-e17a-4ee4-91f0-1edb3039cd65_orig.png",
+                  "name": "source",
+                  "height": 836,
+                  "width": 998
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/85546a12-e17a-4ee4-91f0-1edb3039cd65_72x60.png",
+                  "name": "small",
+                  "height": 60,
+                  "width": 72
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/85546a12-e17a-4ee4-91f0-1edb3039cd65_239x200.png",
+                  "name": "medium",
+                  "height": 200,
+                  "width": 239
+                },
+                {
+                  "url": "//static.rocketbeans.tv/img/85546a12-e17a-4ee4-91f0-1edb3039cd65_597x500.png",
+                  "name": "large",
+                  "height": 500,
+                  "width": 597
+                }
+              ],
+              "episodeCount": 1331
+            }
+          ],
+          "streamExclusive": false,
+          "type": "rerun"
+        }
+      ]
+    }
+  ]
+}

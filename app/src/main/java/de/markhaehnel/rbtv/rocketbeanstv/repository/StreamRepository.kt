@@ -6,11 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.api.RbtvService
 import de.markhaehnel.rbtv.rocketbeanstv.api.YouTubeService
-import de.markhaehnel.rbtv.rocketbeanstv.vo.Resource
-import de.markhaehnel.rbtv.rocketbeanstv.vo.Schedule
-import de.markhaehnel.rbtv.rocketbeanstv.vo.ScheduleItem
-import de.markhaehnel.rbtv.rocketbeanstv.vo.Stream
-import de.markhaehnel.rbtv.rocketbeanstv.vo.StreamManifest
+import de.markhaehnel.rbtv.rocketbeanstv.vo.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,22 +22,15 @@ class StreamRepository @Inject constructor(
     private val rbtvService: RbtvService,
     private val youTubeService: YouTubeService
 ) {
-
-    fun loadStream(): LiveData<Resource<Stream>> {
-        return object : NetworkBoundResource<Stream>(appExecutors) {
-            override fun createCall() = rbtvService.getStream()
+    fun loadServiceInfo(): LiveData<Resource<RbtvServiceInfo>> {
+        return object : NetworkBoundResource<RbtvServiceInfo>(appExecutors) {
+            override fun createCall() = rbtvService.getServiceInfo()
         }.asLiveData()
     }
 
-    fun loadCurrentShow(): LiveData<Resource<ScheduleItem>> {
-        return object : NetworkBoundResource<ScheduleItem>(appExecutors) {
-            override fun createCall() = rbtvService.getCurrentShow()
-        }.asLiveData()
-    }
-
-    fun loadUpcomingShows(): LiveData<Resource<Schedule>> {
+    fun loadSchedule(): LiveData<Resource<Schedule>> {
         return object : NetworkBoundResource<Schedule>(appExecutors) {
-            override fun createCall() = rbtvService.getUpcomingShows()
+            override fun createCall() = rbtvService.getSchedule()
         }.asLiveData()
     }
 

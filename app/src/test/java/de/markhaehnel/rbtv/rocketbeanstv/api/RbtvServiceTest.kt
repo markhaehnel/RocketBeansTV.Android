@@ -3,8 +3,7 @@ package de.markhaehnel.rbtv.rocketbeanstv.api
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import de.markhaehnel.rbtv.rocketbeanstv.util.LiveDataCallAdapterFactory
 import de.markhaehnel.rbtv.rocketbeanstv.util.LiveDataTestUtil.getValue
-import de.markhaehnel.rbtv.rocketbeanstv.vo.ScheduleItem
-import de.markhaehnel.rbtv.rocketbeanstv.vo.Stream
+import de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.Okio
@@ -19,6 +18,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 @RunWith(JUnit4::class)
 class RbtvServiceTest {
@@ -47,60 +48,61 @@ class RbtvServiceTest {
     }
 
     @Test
-    fun getStream() {
-        enqueueResponse("stream.json")
-        val stream = (getValue(service.getStream()) as ApiSuccessResponse).body
+    fun getServiceInfo() {
+        enqueueResponse("init.json")
+        val serviceInfo = (getValue(service.getServiceInfo()) as ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()
-        assertThat(request.path, `is`("/stream"))
+        assertThat(request.path, `is`("/v1/frontend/init"))
 
-        assertThat<Stream>(stream, notNullValue())
-        assertThat(stream.videoId, `is`("fIobsq6W33U"))
-        assertThat(stream.viewerCount, `is`(2142))
-        assertThat(stream.cameras[0], `is`("fIobsq6W33U"))
-    }
+        assertThat<RbtvServiceInfo>(serviceInfo, notNullValue())
 
-    @Test
-    fun getCurrentShow() {
-        enqueueResponse("schedule-current.json")
-        val show = (getValue(service.getCurrentShow()) as ApiSuccessResponse).body
+        val streamInfo = serviceInfo.service.streamInfo
+        assertThat(streamInfo.youtubeToken, `is`("1wbqvTGnd3w"))
+        assertThat(streamInfo.twitchChannel, `is`("rocketbeanstv"))
 
-        val request = mockWebServer.takeRequest()
-        assertThat(request.path, `is`("/schedule/current"))
+        val webSocket = serviceInfo.service.webSocket
+        assertThat(webSocket.url, `is`("https://api.rocketbeans.tv/"))
+        assertThat(webSocket.path, `is`("/socket.io"))
 
-        assertThat<ScheduleItem>(show, notNullValue())
-        assertThat(show.id, `is`(30102))
-        assertThat(show.title, `is`("Hängi Hauptquartier"))
-        assertThat(show.topic, `is`("mit Sandro"))
-        assertThat(show.show, `is`("Hängi Hauptquartier"))
-        //TODO: test the time
-        //assertThat(show.timeStart, `is`("2018-12-13T14:00:00+01:00"))
-        //assertThat(show.timeEnd, `is`("2018-12-13T17:00:00+01:00"))
-        assertThat(show.length, `is`(10800))
-        assertThat(show.type, `is`("live"))
-        assertThat(show.game, `is`("GRIS"))
+        val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        df.timeZone = TimeZone.getTimeZone("GMT")
+
+        val showInfo = streamInfo.showInfo
+        assertThat(showInfo.progress, `is`(79.98837037037038))
+        assertThat(showInfo.showId, `is`(90))
+        assertThat(showInfo.timeStart, `is`(df.parse("2018-12-20T09:30:00.000Z")))
+        assertThat(showInfo.timeEnd, `is`(df.parse("2018-12-20T10:15:00.000Z")))
+        assertThat(showInfo.title, `is`("MoinMoin #988"))
+        assertThat(showInfo.topic, `is`("Die Morning-Show mit Etienne"))
+        assertThat(showInfo.type, `is`("live"))
+
+        val viewers = streamInfo.showInfo.viewers
+        assertThat(viewers.twitch, `is`(995))
+        assertThat(viewers.youtube, `is`(2470))
+        assertThat(viewers.total, `is`(3465))
     }
 
     @Test
     fun getUpcomingShows() {
-        enqueueResponse("schedule-next-5.json")
-        val schedule = (getValue(service.getUpcomingShows()) as ApiSuccessResponse).body
+        enqueueResponse("scheduleSingleDay.json")
+        val schedule = (getValue(service.getSchedule(1534024800)) as ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()
-        assertThat(request.path, `is`("/schedule/next/5"))
+        assertThat(request.path, `is`("/v1/schedule/normalized?startDay=1534024800&endDay=1534024800"))
 
-        assertThat(schedule.items.size, `is`(5))
+        assertThat(schedule.data.count(), `is`(1))
+        assertThat(schedule.data[0].shows.count(), `is`(14))
 
-        val show = schedule.items[0]
-        assertThat(show.id, `is`(30102))
-        assertThat(show.title, `is`("Hängi Hauptquartier"))
+        val show = schedule.data[0].shows[0]
+        assertThat(show.id, `is`(26610))
+        assertThat(show.title, `is`("Zocken mit Denzel #3"))
         //TODO: test the time
-        //assertThat(show.timeStart, `is`("2018-12-13T14:00:00+01:00"))
-        assertThat(show.type, `is`("live"))
-        assertThat(show.game, `is`("GRIS"))
+        //assertThat(show.timeStart, `is`("2018-08-12T10:40:00.000Z"))
+        assertThat(show.type, `is`("rerun"))
 
-        val show2 = schedule.items[1]
-        assertThat(show2.length, `is`(10800))
+        val show2 = schedule.data[0].shows[1]
+        assertThat(show2.duration, `is`(5682))
     }
 
 
