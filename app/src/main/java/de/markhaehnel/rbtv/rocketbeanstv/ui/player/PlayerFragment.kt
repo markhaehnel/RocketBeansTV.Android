@@ -17,13 +17,14 @@ import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import kotlinx.android.synthetic.main.fragment_player.*
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class PlayerFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    var binding by autoCleared<FragmentPlayerBinding>()
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
+    var binding by autoCleared<FragmentPlayerBinding>()
 
     private lateinit var playerViewModel: PlayerViewModel
 
@@ -35,6 +36,7 @@ class PlayerFragment : Fragment(), Injectable {
             false,
             dataBindingComponent
         )
+
         dataBinding.retryCallback = object : RetryCallback {
             override fun retry() {
                 playerViewModel.retry()
@@ -49,8 +51,20 @@ class PlayerFragment : Fragment(), Injectable {
         playerViewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         binding.setLifecycleOwner(viewLifecycleOwner)
 
+        binding.serviceInfo = playerViewModel.rbtvServiceInfo
+        binding.isServiceInfoVisible = playerViewModel.isServiceInfoVisible
+
+        initServiceInfo()
         initStreamData()
         initPlayer()
+    }
+
+    private fun initServiceInfo() {
+        playerViewModel.rbtvServiceInfo.observe(viewLifecycleOwner, Observer { serviceInfo ->
+            if (serviceInfo?.data != null) {
+                progressBar.progress = serviceInfo.data.service.streamInfo.showInfo.progress.roundToInt()
+            }
+        })
     }
 
     override fun onResume() {
@@ -64,21 +78,9 @@ class PlayerFragment : Fragment(), Injectable {
     }
 
     private fun initStreamData() {
-        playerViewModel.rbtvServiceInfo.observe(viewLifecycleOwner, Observer { serviceInfo ->
-            if (serviceInfo?.data != null) {
-                //TODO: implement info panel
-            }
-        })
-
         playerViewModel.streamManifest.observe(viewLifecycleOwner, Observer { streamManifest ->
             if (streamManifest?.data != null) {
                 videoView.setVideoURI(streamManifest.data.hlsUri)
-            }
-        })
-
-        playerViewModel.schedule.observe(viewLifecycleOwner, Observer { schedule ->
-            if (schedule?.data != null) {
-               //TODO: implement schedule
             }
         })
     }

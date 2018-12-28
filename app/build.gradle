@@ -6,11 +6,11 @@ apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    compileSdkVersion 28
     defaultConfig {
         applicationId "de.markhaehnel.rbtv.rocketbeanstv"
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
+        minSdkVersion 22
+        targetSdkVersion 28
         versionCode 40
         versionName "5.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -34,40 +34,69 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation "com.devbrackets.android:exomedia:4.2.3"
-    implementation "com.google.firebase:firebase-core:$rootProject.firebaseVersion"
-    implementation "com.crashlytics.sdk.android:crashlytics:$rootProject.crashlyticsVersion"
-    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
-    kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
-    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
-    implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
-    kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
-    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-scalars:$rootProject.retrofitVersion"
-    implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
-    implementation "android.arch.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
-    implementation "android.arch.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
-    implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
-    implementation "androidx.core:core-ktx:$rootProject.ktxVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
-    kapt "androidx.lifecycle:lifecycle-compiler:$rootProject.lifecycleVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$rootProject.kotlinVersion"
+    def exomedia_version = "4.2.3"
+    implementation "com.devbrackets.android:exomedia:$exomedia_version"
 
-    // Testing
-    androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
-    androidTestImplementation "androidx.test.uiautomator:uiautomator:$rootProject.uiAutomatorVersion"
-    testImplementation "junit:junit:$rootProject.junitVersion"
-    testImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.mockWebServerVersion"
-    testImplementation "android.arch.core:core-testing:$rootProject.archCoreTestingVersion"
+    def firebase_version = '16.0.6'
+    implementation "com.google.firebase:firebase-core:$firebase_version"
+
+    def crashlytics_version = '2.9.8'
+    implementation "com.crashlytics.sdk.android:crashlytics:$crashlytics_version"
+
+    def dagger_version = '2.19'
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+
+    def retrofit_version = '2.5.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+
+    def timber_version = '4.7.1'
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    def support_version = '1.0.2'
+    implementation "androidx.appcompat:appcompat:$support_version"
+
+    def contstraint_version = '2.0.0-alpha3'
+    implementation "androidx.constraintlayout:constraintlayout:$contstraint_version"
+
+    def ktx_version = '1.0.1'
+    implementation "androidx.core:core-ktx:$ktx_version"
+
+    def lifecycle_version = '2.0.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+
+    def glide_version = '4.8.0'
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    implementation "android.arch.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "android.arch.navigation:navigation-ui-ktx:$navigation_version"
+
+    // TESTING
+    def testing_core_version = '2.0.0'
+    androidTestImplementation "androidx.arch.core:core-testing:$testing_core_version"
+
+    def testing_espresso_version = '3.1.0-alpha4'
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$testing_espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$testing_espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$testing_espresso_version"
+
+    def testing_junit_version = '4.12'
+    testImplementation "junit:junit:$testing_junit_version"
+
+    def testing_mockwebserver_version = '3.8.1'
+    testImplementation "com.squareup.okhttp3:mockwebserver:$testing_mockwebserver_version"
+
+    def testing_arch_core_version = '1.1.1'
+    testImplementation "android.arch.core:core-testing:$testing_arch_core_version"
 }
 
 apply plugin: 'com.google.gms.google-services'
