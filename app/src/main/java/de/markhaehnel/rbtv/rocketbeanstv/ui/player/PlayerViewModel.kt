@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.repository.StreamRepository
 import de.markhaehnel.rbtv.rocketbeanstv.util.AbsentLiveData
 import de.markhaehnel.rbtv.rocketbeanstv.vo.*
+import io.lindstrom.m3u8.model.MasterPlaylist
 import javax.inject.Inject
 
 class PlayerViewModel
@@ -19,6 +20,15 @@ class PlayerViewModel
                 AbsentLiveData.create()
             } else {
                 streamRepository.loadStreamManifest(serviceInfo.data.service.streamInfo.youtubeToken)
+            }
+        }
+
+    var streamPlaylist: LiveData<Resource<MasterPlaylist>> = Transformations
+        .switchMap(streamManifest) { manifest ->
+            if (manifest === null || manifest.data === null) {
+                AbsentLiveData.create()
+            } else {
+                streamRepository.loadPlaylist(manifest.data.hlsUri.toString())
             }
         }
 

@@ -80,6 +80,9 @@ dependencies {
     implementation "android.arch.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$navigation_version"
 
+    def m3u8parser_version = '0.6'
+    implementation "io.lindstrom:m3u8-parser:$m3u8parser_version"
+
     // TESTING
     def testing_core_version = '2.0.0'
     androidTestImplementation "androidx.arch.core:core-testing:$testing_core_version"

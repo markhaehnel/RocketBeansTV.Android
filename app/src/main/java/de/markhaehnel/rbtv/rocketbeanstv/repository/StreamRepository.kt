@@ -7,6 +7,9 @@ import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.api.RbtvService
 import de.markhaehnel.rbtv.rocketbeanstv.api.YouTubeService
 import de.markhaehnel.rbtv.rocketbeanstv.vo.*
+import io.lindstrom.m3u8.model.MasterPlaylist
+import io.lindstrom.m3u8.model.MediaPlaylist
+import io.lindstrom.m3u8.parser.MasterPlaylistParser
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,23 +43,55 @@ class StreamRepository @Inject constructor(
         data.value = Resource.loading(null)
 
         youTubeService.getRawStreamData(videoId).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
-                val responseString = response?.body()!!.string()
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                val responseString = response.body()?.string()
 
-                val parameters = HashMap<String, String>()
-                for (param in responseString.split(Pattern.quote("&").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
-                    val line = param.split(Pattern.quote("=").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                    if (line.size == 2)
-                        parameters.put(line[0], URLDecoder.decode(line[1], "UTF-8"))
+                if (responseString != null) {
+
+
+                    val parameters = HashMap<String, String>()
+                    for (param in responseString.split(Pattern.quote("&").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+                        val line =
+                            param.split(Pattern.quote("=").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                        if (line.size == 2)
+                            parameters.put(line[0], URLDecoder.decode(line[1], "UTF-8"))
+                    }
+
+                    val hlsUrl: String = parameters["hlsvp"] as String
+
+                    val dataRaw = StreamManifest(hlsUrl.toUri())
+                    data.value = Resource.success(dataRaw)
+                } else {
+                    data.value = Resource.error("responseString is null")
                 }
-
-                val hlsUrl: String = parameters["hlsvp"] as String
-
-                val dataRaw = StreamManifest(hlsUrl.toUri())
-                data.value = Resource.success(dataRaw)
             }
 
             override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                data.value = Resource.error(t.toString())
+            }
+        })
+
+        return data
+    }
+
+    fun loadPlaylist(playlistUrl: String): LiveData<Resource<MasterPlaylist>> {
+        val data = MutableLiveData<Resource<MasterPlaylist>>()
+        data.value = Resource.loading(null)
+
+        youTubeService.getPlaylist(playlistUrl).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                val responseString = response.body()?.string()
+
+                if (responseString != null) {
+                    val playlist = MasterPlaylistParser().readPlaylist(responseString)
+
+                    data.value = Resource.success(playlist)
+                } else {
+                    data.value = Resource.error("responseString is null")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 data.value = Resource.error(t.toString())
             }
         })
