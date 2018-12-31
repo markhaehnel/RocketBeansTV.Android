@@ -19,9 +19,9 @@ import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
 import de.markhaehnel.rbtv.rocketbeanstv.R
+import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
 import kotlinx.android.synthetic.main.fragment_player.*
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 class PlayerFragment : Fragment(), Injectable {
     @Inject
@@ -48,8 +48,10 @@ class PlayerFragment : Fragment(), Injectable {
         }
 
         val scheduleFragment = ScheduleFragment()
+        val serviceInfoFragment = ServiceInfoFragment()
         childFragmentManager.beginTransaction().apply {
             replace(R.id.scheduleContainer, scheduleFragment)
+            replace(R.id.serviceInfoContainer, serviceInfoFragment)
             commit()
         }
 
@@ -64,19 +66,9 @@ class PlayerFragment : Fragment(), Injectable {
         binding.serviceInfo = playerViewModel.rbtvServiceInfo
         binding.isServiceInfoVisible = playerViewModel.isServiceInfoVisible
 
-        initServiceInfo()
         initStreamData()
         initPlayer()
     }
-
-    private fun initServiceInfo() {
-        playerViewModel.rbtvServiceInfo.observe(viewLifecycleOwner, Observer { serviceInfo ->
-            if (serviceInfo?.data != null) {
-                progressBar.progress = serviceInfo.data.service.streamInfo.showInfo.progress.roundToInt()
-            }
-        })
-    }
-
     override fun onResume() {
         super.onResume()
         videoView.start()

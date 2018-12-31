@@ -9,6 +9,7 @@ import dagger.multibindings.IntoMap
 import de.markhaehnel.rbtv.rocketbeanstv.ui.player.PlayerViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.viewmodel.RbtvViewModelFactory
 import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleViewModel
+import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.ui.startup.StartupViewModel
 
 @Suppress("unused")
@@ -29,6 +30,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ScheduleViewModel::class)
     abstract fun bindScheduleViewModel(scheduleViewModel: ScheduleViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ServiceInfoViewModel::class)
+    abstract fun bindServiceInfoViewModel(serviceInfoViewModel: ServiceInfoViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: RbtvViewModelFactory): ViewModelProvider.Factory

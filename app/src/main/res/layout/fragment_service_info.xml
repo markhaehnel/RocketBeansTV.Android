@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="androidx.lifecycle.LiveData" />
+        <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.Resource" />
+        <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo" />
+
+        <variable
+                name="retryCallback"
+                type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback" />
+        <variable
+                name="serviceInfo"
+                type="LiveData&lt;Resource&lt;RbtvServiceInfo>>" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="76dp"
+            android:id="@+id/serviceInfoConstraint"
+            android:background="@color/colorServiceInfoOverlay">
+        <ProgressBar
+                android:layout_width="0dp"
+                android:id="@+id/progressBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="8dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
+        <TextView
+                android:text="@{serviceInfo.data.service.streamInfo.showInfo.title}"
+                tools:text="Moin Moin #100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/serviceInfoTitleText"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/serviceInfoTopicText"/>
+
+        <TextView
+                android:text="@{serviceInfo.data.service.streamInfo.showInfo.topic}"
+                tools:text="mit Etienne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/serviceInfoTopicText"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+                android:text="@{serviceInfo.data.service.streamInfo.showInfo.type}"
+                tools:text="LIVE"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/serviceInfoProgressText"
+                android:textAllCaps="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/serviceInfoViewerText"/>
+
+        <TextView
+                android:text="@{Integer.toString(serviceInfo.data.service.streamInfo.showInfo.viewers.total) + ` Viewer`}"
+                tools:text="1234 Viewer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/serviceInfoViewerText"
+                android:textAllCaps="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
