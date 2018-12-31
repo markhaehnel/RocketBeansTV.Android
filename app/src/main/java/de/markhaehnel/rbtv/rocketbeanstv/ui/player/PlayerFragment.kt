@@ -91,7 +91,6 @@ class PlayerFragment : Fragment(), Injectable {
         playerViewModel.streamPlaylist.observe(viewLifecycleOwner, Observer { streamPlaylist ->
             if (streamPlaylist?.data != null) {
                 videoView.setVideoURI(streamPlaylist.data.highestBandwith().uri().toUri())
-
             }
         })
     }
