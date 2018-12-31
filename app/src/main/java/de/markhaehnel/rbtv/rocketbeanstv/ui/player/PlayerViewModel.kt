@@ -32,8 +32,6 @@ class PlayerViewModel
             }
         }
 
-    val schedule: LiveData<Resource<Schedule>> = streamRepository.loadSchedule()
-
     var isServiceInfoVisible: Boolean = true
 
     fun retry() {

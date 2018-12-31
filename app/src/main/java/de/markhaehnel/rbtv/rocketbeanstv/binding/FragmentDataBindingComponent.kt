@@ -7,5 +7,4 @@ class FragmentDataBindingComponent(fragment: Fragment) : DataBindingComponent {
     private val adapter = FragmentBindingAdapters(fragment)
 
     fun getFragmentBindingAdapters() = adapter
-
 }

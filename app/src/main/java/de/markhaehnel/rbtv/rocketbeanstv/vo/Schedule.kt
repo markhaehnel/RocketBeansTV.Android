@@ -3,17 +3,18 @@ package de.markhaehnel.rbtv.rocketbeanstv.vo
 import com.google.gson.annotations.SerializedName
 
 data class Schedule(
-    val `data`: List<ScheduleDay>,
+    @field:SerializedName("data")
+    val days: List<ScheduleDay>,
     val success: Boolean
 )
 
 data class ScheduleDay(
     val date: String,
     @field:SerializedName("elements")
-    val shows: List<ScheduleElement>
+    val items: List<ScheduleItem>
 )
 
-data class ScheduleElement(
+data class ScheduleItem(
     val bohnen: List<Beans>,
     val duration: Int,
     val durationClass: Int,

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
@@ -16,8 +15,10 @@ import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
 import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentPlayerBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
+import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
+import de.markhaehnel.rbtv.rocketbeanstv.R
 import kotlinx.android.synthetic.main.fragment_player.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -44,6 +45,12 @@ class PlayerFragment : Fragment(), Injectable {
             override fun retry() {
                 playerViewModel.retry()
             }
+        }
+
+        val scheduleFragment = ScheduleFragment()
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.scheduleContainer, scheduleFragment)
+            commit()
         }
 
         binding = dataBinding

@@ -91,17 +91,17 @@ class RbtvServiceTest {
         val request = mockWebServer.takeRequest()
         assertThat(request.path, `is`("/v1/schedule/normalized?startDay=1534024800&endDay=1534024800"))
 
-        assertThat(schedule.data.count(), `is`(1))
-        assertThat(schedule.data[0].shows.count(), `is`(14))
+        assertThat(schedule.days.count(), `is`(1))
+        assertThat(schedule.days[0].items.count(), `is`(14))
 
-        val show = schedule.data[0].shows[0]
+        val show = schedule.days[0].items[0]
         assertThat(show.id, `is`(26610))
         assertThat(show.title, `is`("Zocken mit Denzel #3"))
         //TODO: test the time
         //assertThat(show.timeStart, `is`("2018-08-12T10:40:00.000Z"))
         assertThat(show.type, `is`("rerun"))
 
-        val show2 = schedule.data[0].shows[1]
+        val show2 = schedule.days[0].items[1]
         assertThat(show2.duration, `is`(5682))
     }
 
