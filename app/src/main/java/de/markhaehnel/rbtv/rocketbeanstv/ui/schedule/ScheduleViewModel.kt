@@ -1,12 +1,10 @@
 package de.markhaehnel.rbtv.rocketbeanstv.ui.schedule
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.repository.StreamRepository
-import de.markhaehnel.rbtv.rocketbeanstv.util.AbsentLiveData
-import de.markhaehnel.rbtv.rocketbeanstv.vo.*
-import io.lindstrom.m3u8.model.MasterPlaylist
+import de.markhaehnel.rbtv.rocketbeanstv.vo.Resource
+import de.markhaehnel.rbtv.rocketbeanstv.vo.Schedule
 import javax.inject.Inject
 
 class ScheduleViewModel

@@ -5,7 +5,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.util.*
 
-
 /**
  * Adds a custom `User-Agent` header to OkHttp requests.
  */
@@ -21,7 +20,7 @@ class UserAgentInterceptor(val userAgent: String) : Interceptor {
             Build.MODEL,
             Build.BRAND,
             Build.DEVICE,
-            Locale.getDefault().getLanguage()
+            Locale.getDefault().language
         )
     )
 

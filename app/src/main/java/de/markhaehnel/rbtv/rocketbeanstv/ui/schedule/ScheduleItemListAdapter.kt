@@ -43,8 +43,8 @@ class ScheduleItemListAdapter(
             dataBindingComponent
         )
         binding.root.setOnClickListener {
-            binding.show?.let {
-                showClickCallback?.invoke(it)
+            binding.show?.let {scheduleItem ->
+                showClickCallback?.invoke(scheduleItem)
             }
         }
         return binding
