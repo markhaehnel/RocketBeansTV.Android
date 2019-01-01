@@ -20,7 +20,6 @@ abstract class ViewModelModule {
     @ViewModelKey(StartupViewModel::class)
     abstract fun bindStartupViewModel(userViewModel: StartupViewModel): ViewModel
 
-
     @Binds
     @IntoMap
     @ViewModelKey(PlayerViewModel::class)

@@ -47,13 +47,7 @@ class PlayerFragment : Fragment(), Injectable {
             }
         }
 
-        val scheduleFragment = ScheduleFragment()
-        val serviceInfoFragment = ServiceInfoFragment()
-        childFragmentManager.beginTransaction().apply {
-            replace(R.id.scheduleContainer, scheduleFragment)
-            replace(R.id.serviceInfoContainer, serviceInfoFragment)
-            commit()
-        }
+        inflateFragments()
 
         binding = dataBinding
         return dataBinding.root
@@ -77,6 +71,16 @@ class PlayerFragment : Fragment(), Injectable {
     override fun onPause() {
         super.onPause()
         videoView.pause()
+    }
+
+    private fun inflateFragments() {
+        val scheduleFragment = ScheduleFragment()
+        val serviceInfoFragment = ServiceInfoFragment()
+        childFragmentManager.beginTransaction().apply {
+            replace(R.id.scheduleContainer, scheduleFragment)
+            replace(R.id.serviceInfoContainer, serviceInfoFragment)
+            commit()
+        }
     }
 
     private fun initStreamData() {

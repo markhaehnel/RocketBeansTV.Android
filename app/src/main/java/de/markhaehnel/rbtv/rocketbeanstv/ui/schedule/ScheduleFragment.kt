@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -18,6 +17,9 @@ import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentScheduleBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
+import kotlinx.android.synthetic.main.fragment_schedule.*
+import java.util.Calendar
+import java.util.TimeZone
 import javax.inject.Inject
 
 class ScheduleFragment : Fragment(), Injectable {
@@ -72,7 +74,16 @@ class ScheduleFragment : Fragment(), Injectable {
     private fun initSchedule() {
         scheduleViewModel.schedule.observe(viewLifecycleOwner, Observer { schedule ->
             if (schedule.data !== null && schedule.data.days.isNotEmpty()) {
-                adapter.submitList(schedule.data.days[0].items)
+                val items = schedule.data.days[0].items
+
+                adapter.submitList(items)
+
+                val cal = Calendar.getInstance(TimeZone.getTimeZone("gmt"))
+                val currentIndex = items.indexOfLast {
+                    it.timeEnd.before(cal.time)
+                }
+
+                show_list.scrollToPosition(currentIndex)
             }
         })
     }
