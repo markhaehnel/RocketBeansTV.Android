@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'io.fabric'
+apply from: "$project.rootDir/tools/git-version.gradle"
 
 android {
     compileSdkVersion 28
@@ -11,8 +12,8 @@ android {
         applicationId "de.markhaehnel.rbtv.rocketbeanstv"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 40
-        versionName "5.0.0"
+        versionCode gitVersionCode
+        versionName gitVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
     }
@@ -73,7 +74,7 @@ dependencies {
 
     def glide_version = '4.8.0'
     implementation "com.github.bumptech.glide:glide:$glide_version"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
