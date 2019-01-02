@@ -29,7 +29,12 @@ data class ScheduleItem(
     val title: String,
     val topic: String,
     val type: String
-)
+) {
+    fun isCurrentlyRunning() : Boolean {
+        val currentTime = System.currentTimeMillis()
+        return this.timeStart.time <= currentTime && this.timeEnd.time > currentTime
+    }
+}
 
 data class Beans(
     val episodeCount: Int,

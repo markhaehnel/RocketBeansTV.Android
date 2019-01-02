@@ -9,16 +9,10 @@
         <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo" />
         <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.Status" />
 
-        <variable
-                name="retryCallback"
-                type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback" />
-        <variable
-                name="serviceInfo"
-                type="LiveData&lt;Resource&lt;RbtvServiceInfo>>" />
-
-        <variable
-                name="isServiceInfoVisible"
-                type="Boolean" />
+        <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback" />
+        <variable name="serviceInfo" type="LiveData&lt;Resource&lt;RbtvServiceInfo>>" />
+        <variable name="isServiceInfoVisible" type="LiveData&lt;Boolean>" />
+        <variable name="isScheduleVisible" type="LiveData&lt;Boolean>" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -38,14 +32,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:background="@color/colorServiceInfoOverlay"
-            app:layout_constraintBottom_toTopOf="@+id/serviceInfoContainer"/>
+            app:layout_constraintBottom_toTopOf="@+id/serviceInfoContainer"
+            app:visibleGone="@{isScheduleVisible}"/>
 
         <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="76dp"
                 android:id="@+id/serviceInfoContainer"
                 android:background="@color/colorServiceInfoOverlay"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:visibleGone="@{isServiceInfoVisible}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

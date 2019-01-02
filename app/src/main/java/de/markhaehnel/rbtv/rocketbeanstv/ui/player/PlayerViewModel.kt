@@ -1,11 +1,13 @@
 package de.markhaehnel.rbtv.rocketbeanstv.ui.player
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.repository.StreamRepository
 import de.markhaehnel.rbtv.rocketbeanstv.util.AbsentLiveData
-import de.markhaehnel.rbtv.rocketbeanstv.vo.*
+import de.markhaehnel.rbtv.rocketbeanstv.vo.Resource
+import de.markhaehnel.rbtv.rocketbeanstv.vo.StreamManifest
 import io.lindstrom.m3u8.model.MasterPlaylist
 import javax.inject.Inject
 
@@ -32,7 +34,8 @@ class PlayerViewModel
             }
         }
 
-    var isServiceInfoVisible: Boolean = true
+    var isServiceInfoVisible = MutableLiveData<Boolean>().apply { postValue(false) }
+    var isScheduleVisible = MutableLiveData<Boolean>().apply { postValue(false) }
 
     fun retry() {
     //TODO: implement retry

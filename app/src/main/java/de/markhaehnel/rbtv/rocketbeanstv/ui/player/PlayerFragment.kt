@@ -1,6 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.ui.player
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,15 +12,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
 import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentPlayerBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
+import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
-import de.markhaehnel.rbtv.rocketbeanstv.R
-import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
 import kotlinx.android.synthetic.main.fragment_player.*
 import javax.inject.Inject
 
@@ -53,12 +54,14 @@ class PlayerFragment : Fragment(), Injectable {
         return dataBinding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         playerViewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         binding.serviceInfo = playerViewModel.rbtvServiceInfo
         binding.isServiceInfoVisible = playerViewModel.isServiceInfoVisible
+        binding.isScheduleVisible = playerViewModel.isScheduleVisible
 
         initStreamData()
         initPlayer()
@@ -95,5 +98,19 @@ class PlayerFragment : Fragment(), Injectable {
         videoView.setOnPreparedListener {
             videoView.start()
         }
+    }
+
+    fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        when(keyCode) {
+            KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_UP -> {
+                playerViewModel.isServiceInfoVisible.postValue(playerViewModel.isServiceInfoVisible.value == false)
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                playerViewModel.isScheduleVisible.postValue(playerViewModel.isScheduleVisible.value == false)
+                return true
+            }
+        }
+        return false
     }
 }

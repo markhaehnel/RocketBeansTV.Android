@@ -18,8 +18,6 @@ import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import kotlinx.android.synthetic.main.fragment_schedule.*
-import java.util.Calendar
-import java.util.TimeZone
 import javax.inject.Inject
 
 class ScheduleFragment : Fragment(), Injectable {
@@ -78,9 +76,8 @@ class ScheduleFragment : Fragment(), Injectable {
 
                 adapter.submitList(items)
 
-                val cal = Calendar.getInstance(TimeZone.getTimeZone("gmt"))
-                val currentIndex = items.indexOfLast {
-                    it.timeEnd.before(cal.time)
+                val currentIndex = items.indexOfFirst {
+                    it.isCurrentlyRunning()
                 }
 
                 show_list.scrollToPosition(currentIndex)
