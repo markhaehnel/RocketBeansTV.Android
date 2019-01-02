@@ -5,8 +5,6 @@ project_type: android
 trigger_map:
 - push_branch: "*"
   workflow: test
-- push_branch: master
-  workflow: deploy_playstore_internal
 - pull_request_source_branch: "*"
   workflow: test
 workflows:
