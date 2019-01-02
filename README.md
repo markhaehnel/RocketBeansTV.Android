@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <a href="https://circleci.com/gh/markhaehnel/RocketBeansTV.Android"><img src="https://img.shields.io/circleci/project/github/markhaehnel/RocketBeansTV.Android/master.svg?style=for-the-badge"></a>
+    <a href="https://app.bitrise.io/app/46391304895b0957"><img src="https://img.shields.io/bitrise/46391304895b0957/master.svg?token=DgTkmd96_gVVpmAwbwqu_g&style=for-the-badge"></a>
     <a href="https://circleci.com/gh/markhaehnel/RocketBeansTV.Android"><img src="https://img.shields.io/github/license/markhaehnel/RocketBeansTV.Android.svg?style=for-the-badge"></a>
     <a href="https://circleci.com/gh/markhaehnel/RocketBeansTV.Android"><img src="https://img.shields.io/github/release/markhaehnel/RocketBeansTV.Android.svg?style=for-the-badge"></a>
 </p>
