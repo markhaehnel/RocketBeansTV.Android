@@ -7,10 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import de.markhaehnel.rbtv.rocketbeanstv.ui.player.PlayerFragment
+import de.markhaehnel.rbtv.rocketbeanstv.util.FragmentInterface
 import javax.inject.Inject
-
-
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
@@ -26,10 +24,12 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navContainer)
-        val currentFragment : PlayerFragment = navHostFragment?.getChildFragmentManager()?.fragments?.get(0) as PlayerFragment
-        currentFragment.onKeyDown(keyCode, event)
+        val currentFragment = navHostFragment?.getChildFragmentManager()?.fragments?.get(0)
+        if (currentFragment is FragmentInterface){
+            val res = currentFragment.onKeyDown(keyCode, event)
+            if (res) return res;
+        }
 
         return super.onKeyDown(keyCode, event)
     }

@@ -19,12 +19,13 @@ import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
+import de.markhaehnel.rbtv.rocketbeanstv.util.FragmentInterface
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
 import kotlinx.android.synthetic.main.fragment_player.*
 import javax.inject.Inject
 
-class PlayerFragment : Fragment(), Injectable {
+class PlayerFragment : Fragment(), Injectable, FragmentInterface {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -54,7 +55,6 @@ class PlayerFragment : Fragment(), Injectable {
         return dataBinding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         playerViewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         binding.setLifecycleOwner(viewLifecycleOwner)
@@ -74,6 +74,16 @@ class PlayerFragment : Fragment(), Injectable {
     override fun onPause() {
         super.onPause()
         videoView.pause()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        when(keyCode) {
+            KeyEvent.KEYCODE_DPAD_CENTER -> {
+                playerViewModel.isServiceInfoVisible.postValue(playerViewModel.isServiceInfoVisible.value == false)
+                return true
+            }
+        }
+        return false
     }
 
     private fun inflateFragments() {
@@ -98,19 +108,5 @@ class PlayerFragment : Fragment(), Injectable {
         videoView.setOnPreparedListener {
             videoView.start()
         }
-    }
-
-    fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        when(keyCode) {
-            KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_UP -> {
-                playerViewModel.isServiceInfoVisible.postValue(playerViewModel.isServiceInfoVisible.value == false)
-                return true
-            }
-            KeyEvent.KEYCODE_DPAD_LEFT -> {
-                playerViewModel.isScheduleVisible.postValue(playerViewModel.isScheduleVisible.value == false)
-                return true
-            }
-        }
-        return false
     }
 }
