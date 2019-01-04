@@ -6,7 +6,6 @@
         <import type="androidx.lifecycle.LiveData" />
 
         <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback" />
-        <variable name="onScheduleClickCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

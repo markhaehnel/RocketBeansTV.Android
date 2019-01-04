@@ -5,12 +5,12 @@
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <import type="androidx.lifecycle.LiveData"/>
         <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.Resource"/>
         <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo"/>
 
         <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback"/>
+        <variable name="onScheduleClickCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback" />
         <variable name="serviceInfo" type="LiveData&lt;Resource&lt;RbtvServiceInfo>>"/>
     </data>
 
@@ -76,5 +76,28 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_height="8dp"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
+        <ImageButton
+                android:src="@drawable/ic_schedule"
+                android:contentDescription="@string/schedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/serviceInfoScheduleButton"
+                app:layout_constraintEnd_toStartOf="@+id/serviceInfoChatButton"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_marginEnd="8dp"
+                android:onClick="@{() -> onScheduleClickCallback.click()}"/>
+
+        <ImageButton
+                android:src="@drawable/ic_chat"
+                android:contentDescription="@string/chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/serviceInfoChatButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_marginEnd="8dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

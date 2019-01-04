@@ -15,6 +15,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
 import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentServiceInfoBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
+import de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import kotlinx.android.synthetic.main.fragment_service_info.*
@@ -44,6 +45,15 @@ class ServiceInfoFragment : Fragment(), Injectable {
         dataBinding.retryCallback = object : RetryCallback {
             override fun retry() {
                 serviceInfoViewModel.retry()
+            }
+        }
+
+        dataBinding.onScheduleClickCallback = object : ClickCallback {
+            override fun click () {
+                val parent = parentFragment
+                if (parent is ServiceInfoFragmentInterface) {
+                    parent.onShowSchedule()
+                }
             }
         }
 

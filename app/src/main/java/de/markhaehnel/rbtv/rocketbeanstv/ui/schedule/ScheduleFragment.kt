@@ -1,9 +1,11 @@
 package de.markhaehnel.rbtv.rocketbeanstv.ui.schedule
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -47,8 +49,18 @@ class ScheduleFragment : DialogFragment(), Injectable {
             }
         }
 
+
+
         binding = dataBinding
         return dataBinding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog.window?.apply {
+            setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.colorServiceInfoOverlay)))
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

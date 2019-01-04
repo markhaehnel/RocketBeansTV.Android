@@ -16,17 +16,17 @@ import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
 import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentPlayerBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
-import de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
+import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragmentInterface
 import de.markhaehnel.rbtv.rocketbeanstv.util.FragmentInterface
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
 import kotlinx.android.synthetic.main.fragment_player.*
 import javax.inject.Inject
 
-class PlayerFragment : Fragment(), Injectable, FragmentInterface {
+class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFragmentInterface {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -58,16 +58,10 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface {
         playerViewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         binding.setLifecycleOwner(viewLifecycleOwner)
 
-        binding.onScheduleClickCallback = object : ClickCallback {
-            override fun click() {
-                val scheduleFragment = ScheduleFragment()
-                scheduleFragment.show(fragmentManager, "fragment_schedule")
-            }
-        }
-
         initStreamData()
         initPlayer()
     }
+
     override fun onResume() {
         super.onResume()
         videoView.start()
@@ -89,6 +83,13 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface {
             }
         }
         return false
+    }
+
+    override fun onShowSchedule() {
+        super.onShowSchedule()
+        val fragmentTag = "fragment_schedule"
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.show(childFragmentManager, fragmentTag)
     }
 
     /**
