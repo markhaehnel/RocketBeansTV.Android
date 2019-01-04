@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="androidx.lifecycle.LiveData" />
-        <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.Resource" />
-        <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo" />
-        <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.Status" />
 
         <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback" />
-        <variable name="serviceInfo" type="LiveData&lt;Resource&lt;RbtvServiceInfo>>" />
-        <variable name="isServiceInfoVisible" type="LiveData&lt;Boolean>" />
-        <variable name="isScheduleVisible" type="LiveData&lt;Boolean>" />
+        <variable name="onScheduleClickCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -23,26 +17,15 @@
                 android:id="@+id/videoView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:useDefaultControls="false"/>
+                app:useDefaultControls="false">
 
-        <FrameLayout
-            android:layout_width="300dp"
-            android:layout_height="0dp"
-            android:id="@+id/scheduleContainer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/colorServiceInfoOverlay"
-            app:layout_constraintBottom_toTopOf="@+id/serviceInfoContainer"
-            app:visibleGone="@{isScheduleVisible}"/>
+        </com.devbrackets.android.exomedia.ui.widget.VideoView>
 
         <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="76dp"
+                android:layout_height="300dp"
                 android:id="@+id/serviceInfoContainer"
-                android:background="@color/colorServiceInfoOverlay"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:visibleGone="@{isServiceInfoVisible}"/>
-
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

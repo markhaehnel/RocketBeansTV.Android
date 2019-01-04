@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Rocket Beans TV</string>
+    <string name="retry">Erneut versuchen</string>
+    <string name="unknown_error">Unbekannter Fehler</string>
 </resources>

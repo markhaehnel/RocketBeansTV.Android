@@ -34,9 +34,6 @@ class PlayerViewModel
             }
         }
 
-    var isServiceInfoVisible = MutableLiveData<Boolean>().apply { postValue(false) }
-    var isScheduleVisible = MutableLiveData<Boolean>().apply { postValue(false) }
-
     fun retry() {
     //TODO: implement retry
     }

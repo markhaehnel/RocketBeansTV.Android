@@ -16,6 +16,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
 import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentPlayerBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
+import de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
@@ -49,8 +50,6 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface {
             }
         }
 
-        inflateFragments()
-
         binding = dataBinding
         return dataBinding.root
     }
@@ -59,9 +58,12 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface {
         playerViewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         binding.setLifecycleOwner(viewLifecycleOwner)
 
-        binding.serviceInfo = playerViewModel.rbtvServiceInfo
-        binding.isServiceInfoVisible = playerViewModel.isServiceInfoVisible
-        binding.isScheduleVisible = playerViewModel.isScheduleVisible
+        binding.onScheduleClickCallback = object : ClickCallback {
+            override fun click() {
+                val scheduleFragment = ScheduleFragment()
+                scheduleFragment.show(fragmentManager, "fragment_schedule")
+            }
+        }
 
         initStreamData()
         initPlayer()
@@ -78,22 +80,35 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         when(keyCode) {
-            KeyEvent.KEYCODE_DPAD_CENTER -> {
-                playerViewModel.isServiceInfoVisible.postValue(playerViewModel.isServiceInfoVisible.value == false)
-                return true
+            KeyEvent.KEYCODE_DPAD_CENTER,
+            KeyEvent.KEYCODE_DPAD_UP,
+            KeyEvent.KEYCODE_DPAD_RIGHT,
+            KeyEvent.KEYCODE_DPAD_DOWN,
+            KeyEvent.KEYCODE_DPAD_LEFT -> {
+                return inflateServiceInfoFragment()
             }
         }
         return false
     }
 
-    private fun inflateFragments() {
-        val scheduleFragment = ScheduleFragment()
-        val serviceInfoFragment = ServiceInfoFragment()
-        childFragmentManager.beginTransaction().apply {
-            replace(R.id.scheduleContainer, scheduleFragment)
-            replace(R.id.serviceInfoContainer, serviceInfoFragment)
-            commit()
+    /**
+     * Inflates [ServiceInfoFragment] into it's container if not already inflated
+     * @return if fragment was inflated
+     */
+    private fun inflateServiceInfoFragment() : Boolean {
+        val fragmentTag = "tagFragmentServiceInfo"
+
+        if (childFragmentManager.findFragmentByTag(fragmentTag) == null) {
+            val serviceInfoFragment = ServiceInfoFragment()
+            childFragmentManager.beginTransaction().apply {
+                replace(R.id.serviceInfoContainer, serviceInfoFragment, fragmentTag)
+                addToBackStack(null)
+                commit()
+            }
+            return true
         }
+
+        return false
     }
 
     private fun initStreamData() {

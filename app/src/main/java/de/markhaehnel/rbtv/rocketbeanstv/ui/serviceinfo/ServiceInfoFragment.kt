@@ -63,7 +63,12 @@ class ServiceInfoFragment : Fragment(), Injectable {
     fun initServiceInfo() {
         serviceInfoViewModel.serviceInfo.observe(viewLifecycleOwner, Observer { serviceInfo ->
             if (serviceInfo.data != null) {
-                progressBar.progress = serviceInfo.data.service.streamInfo.showInfo.progress.roundToInt()
+                progressBar.apply {
+                    isIndeterminate = false
+                    progress = serviceInfo.data.service.streamInfo.showInfo.progress.roundToInt()
+                }
+            } else {
+                progressBar.isIndeterminate = true
             }
         })
     }

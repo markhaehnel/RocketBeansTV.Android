@@ -1,12 +1,18 @@
 package de.markhaehnel.rbtv.rocketbeanstv.binding
 
-import androidx.databinding.BindingAdapter
 import android.view.View
+import androidx.databinding.BindingAdapter
 
 object BindingAdapters {
     @JvmStatic
     @BindingAdapter("visibleGone")
-    fun showHide(view: View, show: Boolean) {
+    fun visibleGone(view: View, show: Boolean) {
         view.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    @JvmStatic
+    @BindingAdapter("visibleHidden")
+    fun visibleHidden(view: View, show: Boolean) {
+        view.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 }
