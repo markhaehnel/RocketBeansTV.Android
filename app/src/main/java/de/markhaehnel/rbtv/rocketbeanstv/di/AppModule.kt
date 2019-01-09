@@ -6,6 +6,7 @@ import dagger.Provides
 import de.markhaehnel.rbtv.rocketbeanstv.BuildConfig
 import de.markhaehnel.rbtv.rocketbeanstv.api.RbtvService
 import de.markhaehnel.rbtv.rocketbeanstv.api.YouTubeService
+import de.markhaehnel.rbtv.rocketbeanstv.repository.ChatRepository
 import de.markhaehnel.rbtv.rocketbeanstv.util.LiveDataCallAdapterFactory
 import de.markhaehnel.rbtv.rocketbeanstv.util.UserAgentInterceptor
 import okhttp3.OkHttpClient
@@ -47,4 +48,9 @@ class AppModule {
             .create(YouTubeService::class.java)
     }
 
+   @Singleton
+   @Provides
+   fun provideChatRepository(): ChatRepository {
+       return ChatRepository()
+   }
 }

@@ -87,6 +87,14 @@ dependencies {
     def recycler_version = '1.0.0'
     implementation "androidx.recyclerview:recyclerview:$recycler_version"
 
+    def socket_version = "1.0.0"
+    implementation ("io.socket:socket.io-client:$socket_version") {
+        exclude group: 'org.json', module: 'json'
+    }
+
+    def gson_version = "2.8.5"
+    implementation "com.google.code.gson:gson:$gson_version"
+
 
     // TESTING
     def testing_core_version = '2.0.0'
