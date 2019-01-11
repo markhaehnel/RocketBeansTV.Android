@@ -5,6 +5,7 @@ import android.app.Application
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import de.markhaehnel.rbtv.rocketbeanstv.di.AppInjector
+import de.markhaehnel.rbtv.rocketbeanstv.util.DetailDebugTree
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -16,7 +17,7 @@ class RbtvApp : Application(), HasActivityInjector {
         super.onCreate()
 
         if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+            Timber.plant(DetailDebugTree())
         }
 
         AppInjector.init(this)

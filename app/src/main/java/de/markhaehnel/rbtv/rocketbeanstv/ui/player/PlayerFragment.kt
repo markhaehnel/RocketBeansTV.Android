@@ -60,7 +60,6 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
 
         initStreamData()
         initPlayer()
-        initChat()
     }
 
     override fun onResume() {
@@ -117,15 +116,6 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
         playerViewModel.streamPlaylist.observe(viewLifecycleOwner, Observer { streamPlaylist ->
             if (streamPlaylist?.data != null) {
                 videoView.setVideoURI(streamPlaylist.data.highestBandwith().uri().toUri())
-            }
-        })
-    }
-
-    private fun initChat() {
-        playerViewModel.chatMessages.observe(viewLifecycleOwner, Observer { chatMessages ->
-            if (chatMessages?.data != null) {
-                //TODO: Implement chat view
-                //Toast.makeText(context, chatMessages.data.last().message, Toast.LENGTH_SHORT).show()
             }
         })
     }

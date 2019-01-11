@@ -3,13 +3,11 @@ package de.markhaehnel.rbtv.rocketbeanstv.repository
 import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.api.RbtvService
 import de.markhaehnel.rbtv.rocketbeanstv.api.YouTubeService
-import de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo
-import de.markhaehnel.rbtv.rocketbeanstv.vo.Resource
-import de.markhaehnel.rbtv.rocketbeanstv.vo.Schedule
-import de.markhaehnel.rbtv.rocketbeanstv.vo.StreamManifest
+import de.markhaehnel.rbtv.rocketbeanstv.vo.*
 import io.lindstrom.m3u8.model.MasterPlaylist
 import io.lindstrom.m3u8.parser.MasterPlaylistParser
 import okhttp3.ResponseBody
@@ -49,8 +47,6 @@ class StreamRepository @Inject constructor(
                 val responseString = response.body()?.string()
 
                 if (responseString != null) {
-
-
                     val parameters = HashMap<String, String>()
                     for (param in responseString.split(Pattern.quote("&").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
                         val line =
@@ -59,9 +55,10 @@ class StreamRepository @Inject constructor(
                             parameters.put(line[0], URLDecoder.decode(line[1], "UTF-8"))
                     }
 
-                    val hlsUrl: String = parameters["hlsvp"] as String
+                    val gson = Gson()
+                    val playerResponse = gson.fromJson(parameters["player_response"], PlayerResponse::class.java)
 
-                    val dataRaw = StreamManifest(hlsUrl.toUri())
+                    val dataRaw = StreamManifest(playerResponse.streamingData.hlsManifestUrl.toUri())
                     data.value = Resource.success(dataRaw)
                 } else {
                     data.value = Resource.error("responseString is null")
