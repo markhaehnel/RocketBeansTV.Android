@@ -6,4 +6,7 @@
     <color name="colorAccentLight">#F41869</color>
     <color name="colorServiceInfoOverlay">#DE000000</color>
     <color name="colorSelection">#333333</color>
+
+    <color name="colorChatBackground">#111111</color>
+    <color name="colorChatEven">#222222</color>
 </resources>

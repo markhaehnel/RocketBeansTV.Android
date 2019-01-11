@@ -17,6 +17,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentChatBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
+import kotlinx.android.synthetic.main.fragment_chat.*
 import javax.inject.Inject
 
 class ChatFragment : Fragment(), Injectable {
@@ -34,7 +35,7 @@ class ChatFragment : Fragment(), Injectable {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val dataBinding = DataBindingUtil.inflate<FragmentChatBinding>(
             inflater,
-            R.layout.fragment_schedule,
+            R.layout.fragment_chat,
             container,
             false,
             dataBindingComponent
@@ -68,6 +69,7 @@ class ChatFragment : Fragment(), Injectable {
         chatViewModel.chatMessages.observe(viewLifecycleOwner, Observer { chatMessages ->
             if (chatMessages?.data != null) {
                 adapter.submitList(chatMessages.data)
+                chat_list.scrollToPosition(adapter.itemCount)
             }
         })
     }

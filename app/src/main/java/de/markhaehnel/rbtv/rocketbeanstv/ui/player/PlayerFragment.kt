@@ -16,6 +16,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
 import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentPlayerBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
+import de.markhaehnel.rbtv.rocketbeanstv.ui.chat.ChatFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
@@ -60,6 +61,19 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
 
         initStreamData()
         initPlayer()
+        inflateChat()
+    }
+
+    private fun inflateChat() {
+        val fragmentTag = "tagFragmentChat"
+
+        if (childFragmentManager.findFragmentByTag(fragmentTag) == null) {
+            val chatFragment = ChatFragment()
+            childFragmentManager.beginTransaction().apply {
+                replace(R.id.chatContainer, chatFragment, fragmentTag)
+                commit()
+            }
+        }
     }
 
     override fun onResume() {

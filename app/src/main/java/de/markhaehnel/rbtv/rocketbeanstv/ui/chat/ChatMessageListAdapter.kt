@@ -9,6 +9,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.databinding.ChatItemBinding
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.DataBoundListAdapter
+import de.markhaehnel.rbtv.rocketbeanstv.ui.common.DataBoundViewHolder
 import de.markhaehnel.rbtv.rocketbeanstv.vo.ChatMessage
 
 /**
@@ -35,7 +36,7 @@ class ChatMessageListAdapter(
     override fun createBinding(parent: ViewGroup): ChatItemBinding {
         val binding = DataBindingUtil.inflate<ChatItemBinding>(
             LayoutInflater.from(parent.context),
-            R.layout.schedule_item,
+            R.layout.chat_item,
             parent,
             false,
             dataBindingComponent
@@ -45,5 +46,10 @@ class ChatMessageListAdapter(
 
     override fun bind(binding: ChatItemBinding, item: ChatMessage) {
         binding.message = item
+    }
+
+    override fun onBindViewHolder(holder: DataBoundViewHolder<ChatItemBinding>, position: Int) {
+        super.onBindViewHolder(holder, position)
+        if(position % 2 == 0) holder.binding.root.setBackgroundResource(R.color.colorChatEven)
     }
 }

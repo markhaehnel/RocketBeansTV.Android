@@ -12,33 +12,43 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/messageIcon"
+                app:srcCompat="@{message.source == 0 ? @drawable/ic_twitch : @drawable/ic_youtube}"
+                tools:srcCompat="@drawable/ic_twitch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription"/>
 
         <TextView
                 android:text="@{message.user}"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/title"
-                tools:text="Moin Moin #123"
+                android:id="@+id/messageUser"
+                tools:text="EZTEQ"
                 android:singleLine="true"
                 android:ellipsize="end"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/messageIcon"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+                android:layout_marginStart="8dp"/>
 
         <TextView
                 android:text="@{message.message}"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:id="@+id/topic"
-                android:ellipsize="end"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="mit Etienne"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                android:layout_marginBottom="8dp"
+                android:layout_width="0dp"
+                android:id="@+id/messageContent"
+                app:layout_constraintStart_toEndOf="@+id/messageIcon"
+                tools:text="Hallo Welt!"
+                app:layout_constraintTop_toBottomOf="@+id/messageUser"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="8dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

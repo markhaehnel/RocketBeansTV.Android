@@ -9,6 +9,8 @@
 
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
+
+        <item name="android:colorBackground">@android:color/black</item>
     </style>
 
 </resources>

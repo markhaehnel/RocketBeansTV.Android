@@ -2,15 +2,15 @@ package de.markhaehnel.rbtv.rocketbeanstv.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import de.markhaehnel.rbtv.rocketbeanstv.ui.chat.ChatViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.ui.player.PlayerViewModel
-import de.markhaehnel.rbtv.rocketbeanstv.viewmodel.RbtvViewModelFactory
 import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.ui.startup.StartupViewModel
+import de.markhaehnel.rbtv.rocketbeanstv.viewmodel.RbtvViewModelFactory
 
 @Suppress("unused")
 @Module
@@ -34,6 +34,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ServiceInfoViewModel::class)
     abstract fun bindServiceInfoViewModel(serviceInfoViewModel: ServiceInfoViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ChatViewModel::class)
+    abstract fun bindChatViewModel(chatViewModel: ChatViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: RbtvViewModelFactory): ViewModelProvider.Factory
