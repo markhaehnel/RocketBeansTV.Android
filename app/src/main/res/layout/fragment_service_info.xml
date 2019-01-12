@@ -11,6 +11,7 @@
 
         <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback"/>
         <variable name="onScheduleClickCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback" />
+        <variable name="onChatClickCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback" />
         <variable name="serviceInfo" type="LiveData&lt;Resource&lt;RbtvServiceInfo>>"/>
     </data>
 
@@ -101,6 +102,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 style="@style/Widget.AppCompat.ImageButton"
                 android:layout_marginEnd="8dp"
+                android:onClick="@{() -> onChatClickCallback.click()}"
                 android:nextFocusRight="@+id/serviceInfoChatButton"
                 android:background="@drawable/selector_service_info_button"
                 android:padding="8dp"/>

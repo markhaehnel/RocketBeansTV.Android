@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
     <data>
         <import type="androidx.lifecycle.LiveData" />
 
         <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback" />
+        <variable name="isChatVisible" type="LiveData&lt;Boolean>"/>
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +36,9 @@
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:id="@+id/chatContainer"
-                app:layout_constraintRight_toRightOf="parent"/>
+                app:layout_constraintRight_toRightOf="parent"
+                app:visibleGone="@{isChatVisible}"
+                android:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

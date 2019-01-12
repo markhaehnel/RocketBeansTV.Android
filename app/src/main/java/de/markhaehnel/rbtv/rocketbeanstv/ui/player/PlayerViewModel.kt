@@ -1,6 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.ui.player
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.repository.StreamRepository
@@ -34,6 +35,8 @@ class PlayerViewModel
                 streamRepository.loadPlaylist(manifest.data.hlsUri.toString())
             }
         }
+
+    var isChatVisible = MutableLiveData<Boolean>().apply { value = false }
 
     fun retry() {
         //TODO: implement retry

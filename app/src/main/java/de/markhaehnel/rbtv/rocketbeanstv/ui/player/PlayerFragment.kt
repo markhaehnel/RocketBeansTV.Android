@@ -25,6 +25,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.util.FragmentInterface
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
 import kotlinx.android.synthetic.main.fragment_player.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFragmentInterface {
@@ -59,9 +60,10 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
         playerViewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         binding.setLifecycleOwner(viewLifecycleOwner)
 
+        binding.isChatVisible = playerViewModel.isChatVisible
+
         initStreamData()
         initPlayer()
-        inflateChat()
     }
 
     private fun inflateChat() {
@@ -106,6 +108,12 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
         scheduleFragment.show(childFragmentManager, fragmentTag)
     }
 
+    override fun onShowChat() {
+        super.onShowChat()
+        inflateChat()
+        playerViewModel.isChatVisible.postValue(playerViewModel.isChatVisible.value == false)
+    }
+
     /**
      * Inflates [ServiceInfoFragment] into it's container if not already inflated
      * @return wether the fragment was inflated
@@ -122,6 +130,8 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
             }
             return true
         }
+
+
 
         return false
     }

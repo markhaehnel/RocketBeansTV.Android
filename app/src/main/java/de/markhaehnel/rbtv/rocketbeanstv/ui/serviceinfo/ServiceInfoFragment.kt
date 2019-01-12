@@ -57,6 +57,15 @@ class ServiceInfoFragment : Fragment(), Injectable {
             }
         }
 
+        dataBinding.onChatClickCallback = object : ClickCallback {
+            override fun click() {
+                val parent = parentFragment
+                if (parent is ServiceInfoFragmentInterface) {
+                    parent.onShowChat()
+                }
+            }
+        }
+
         binding = dataBinding
         return dataBinding.root
     }
