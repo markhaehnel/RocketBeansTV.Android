@@ -24,12 +24,10 @@ class ChatRepository() {
         val gson = Gson()
 
         socket.on(Socket.EVENT_CONNECT) {
-            Timber.d("SOCKET: CONNECT")
             socket.emit("subscribeChatMessages")
         }
 
         socket.on("chatMessage") { args ->
-            Timber.d("SOCKET: CHATMESSAGE")
             val message = gson.fromJson(args[0].toString(), ChatMessage::class.java)
 
             messages.add(message)
@@ -37,10 +35,8 @@ class ChatRepository() {
         }
 
         socket.on(Socket.EVENT_ERROR) {
-            Timber.d("SOCKET: ERROR")
         }
         socket.on(Socket.EVENT_CONNECT_ERROR) {
-            Timber.d("SOCKET: CONNECT_ERROR")
         }
 
         socket.connect()
