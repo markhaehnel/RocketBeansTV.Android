@@ -50,7 +50,6 @@ class ChatMessageListAdapter(
             isClickable = false
             isFocusable = false
             isFocusableInTouchMode = false
-            isContextClickable = false
             isEnabled = false
         }
     }
