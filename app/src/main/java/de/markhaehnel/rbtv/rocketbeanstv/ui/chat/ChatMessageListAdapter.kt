@@ -46,6 +46,13 @@ class ChatMessageListAdapter(
 
     override fun bind(binding: ChatItemBinding, item: ChatMessage) {
         binding.message = item
+        binding.root.apply {
+            isClickable = false
+            isFocusable = false
+            isFocusableInTouchMode = false
+            isContextClickable = false
+            isEnabled = false
+        }
     }
 
     override fun onBindViewHolder(holder: DataBoundViewHolder<ChatItemBinding>, position: Int) {

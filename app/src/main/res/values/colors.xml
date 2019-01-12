@@ -9,4 +9,6 @@
 
     <color name="colorChatBackground">#111111</color>
     <color name="colorChatEven">#222222</color>
+
+    <color name="colorButtonSelectedTransparent">#33FFFFFF</color>
 </resources>

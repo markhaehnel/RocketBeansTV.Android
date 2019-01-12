@@ -68,6 +68,8 @@ class ServiceInfoFragment : Fragment(), Injectable {
         binding.serviceInfo = serviceInfoViewModel.serviceInfo
 
         initServiceInfo()
+
+        serviceInfoScheduleButton.requestFocus()
     }
 
     fun initServiceInfo() {

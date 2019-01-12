@@ -87,7 +87,9 @@
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 style="@style/Widget.AppCompat.ImageButton"
                 android:layout_marginEnd="8dp"
-                android:onClick="@{() -> onScheduleClickCallback.click()}"/>
+                android:onClick="@{() -> onScheduleClickCallback.click()}"
+                android:background="@drawable/selector_service_info_button"
+                android:padding="8dp"/>
 
         <ImageButton
                 android:src="@drawable/ic_chat"
@@ -98,6 +100,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"
                 style="@style/Widget.AppCompat.ImageButton"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp"
+                android:nextFocusRight="@+id/serviceInfoChatButton"
+                android:background="@drawable/selector_service_info_button"
+                android:padding="8dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
