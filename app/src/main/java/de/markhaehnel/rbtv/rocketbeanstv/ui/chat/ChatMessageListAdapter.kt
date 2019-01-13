@@ -54,6 +54,6 @@ class ChatMessageListAdapter(
 
     override fun onBindViewHolder(holder: DataBoundViewHolder<ChatItemBinding>, position: Int) {
         super.onBindViewHolder(holder, position)
-        if(position % 2 == 0) holder.binding.root.setBackgroundResource(R.color.colorChatEven)
+        //if(position % 2 == 0) holder.binding.root.setBackgroundResource(R.color.colorChatEven)
     }
 }
