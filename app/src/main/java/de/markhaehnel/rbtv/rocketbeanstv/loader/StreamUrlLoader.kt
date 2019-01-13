@@ -10,6 +10,7 @@ import java.util.HashMap
 import java.util.regex.Pattern
 
 import de.markhaehnel.rbtv.rocketbeanstv.events.StreamUrlChangeEvent
+import de.markhaehnel.rbtv.rocketbeanstv.objects.PlayerResponse
 import de.markhaehnel.rbtv.rocketbeanstv.objects.RBTV
 import de.markhaehnel.rbtv.rocketbeanstv.objects.Stream
 
@@ -43,8 +44,9 @@ class StreamUrlLoader(private val mResolution: String) : Thread() {
                             parameters.put(line[0], URLDecoder.decode(line[1], "UTF-8"))
                     }
 
-                    val hlsUrl: String = parameters["hlsvp"] as String
-                    val streams = PlaylistHelper.getStreamsFromM3U(NetworkHelper.getContentFromUrl(hlsUrl))
+                    val playerResponse = gson.fromJson(parameters["player_response"], PlayerResponse::class.java)
+
+                    val streams = PlaylistHelper.getStreamsFromM3U(NetworkHelper.getContentFromUrl(playerResponse.streamingData.hlsManifestUrl))
                     val stream = PlaylistHelper.getStreamByResolution(streams, mResolution)
 
                     stream.videoId = videoId
