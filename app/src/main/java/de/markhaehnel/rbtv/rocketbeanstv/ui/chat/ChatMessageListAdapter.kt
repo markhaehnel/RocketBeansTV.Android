@@ -22,13 +22,11 @@ class ChatMessageListAdapter(
     appExecutors = appExecutors,
     diffCallback = object : DiffUtil.ItemCallback<ChatMessage>() {
         override fun areItemsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-            return oldItem.dateFrom == newItem.dateFrom
-                    && oldItem.message == newItem.message
+            return oldItem.user == newItem.user && oldItem.message == newItem.message && oldItem.source == newItem.source
         }
 
         override fun areContentsTheSame(oldItem: ChatMessage, newItem: ChatMessage): Boolean {
-            return oldItem.user == newItem.user
-                    && oldItem.message == newItem.message
+            return oldItem.user == newItem.user && oldItem.message == newItem.message && oldItem.source == newItem.source
         }
     }
 ) {

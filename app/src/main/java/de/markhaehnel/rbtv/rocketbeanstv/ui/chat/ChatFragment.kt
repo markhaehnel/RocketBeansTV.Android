@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
@@ -66,10 +68,11 @@ class ChatFragment : Fragment(), Injectable {
     }
 
     private fun initChat() {
+
         chatViewModel.chatMessages.observe(viewLifecycleOwner, Observer { chatMessages ->
             if (chatMessages?.data != null) {
                 adapter.submitList(chatMessages.data)
-                chat_list.scrollToPosition(adapter.itemCount)
+                chat_list.smoothScrollToPosition(adapter.itemCount)
             }
         })
     }
