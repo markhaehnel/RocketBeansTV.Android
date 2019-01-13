@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
@@ -92,7 +93,7 @@ class ScheduleFragment : DialogFragment(), Injectable {
                     it.isCurrentlyRunning()
                 }
 
-                show_list.scrollToPosition(currentIndex)
+                show_list.smoothScrollToPosition(currentIndex)
             }
         })
     }
