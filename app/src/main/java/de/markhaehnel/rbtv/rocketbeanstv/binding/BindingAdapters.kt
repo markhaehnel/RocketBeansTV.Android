@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 
-
 object BindingAdapters {
     @JvmStatic
     @BindingAdapter("visibleGone")

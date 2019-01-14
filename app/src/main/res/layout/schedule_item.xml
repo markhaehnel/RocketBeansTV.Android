@@ -16,28 +16,57 @@
             android:background="@{show.isCurrentlyRunning() ? @drawable/selector_schedule_item_current : @drawable/selector_schedule_item}">
 
         <TextView
-                android:text="@{show.title}"
+                android:text="@{show.getShortTimeStart()}"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeStart"
+                tools:text="17:30"
+                android:singleLine="true"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+                app:srcCompat="@drawable/ic_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:id="@+id/type"
+                app:layout_constraintStart_toEndOf="@id/timeStart"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toTopOf="@id/timeStart"
+                app:layout_constraintBottom_toBottomOf="@id/timeStart"
+                tools:tint="@color/colorTypeLive"
+                android:tint="@color/colorTypeLive"
+                app:visibleHidden="@{show.type != `rerun`}"
+                tools:ignore="ContentDescription"/>
+
+        <TextView
+                android:text="@{show.title}"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/title"
                 tools:text="Moin Moin #123"
                 android:singleLine="true"
                 android:ellipsize="end"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toBottomOf="@id/timeStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textStyle="bold"/>
 
         <TextView
                 android:text="@{show.topic}"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:id="@+id/topic"
                 android:ellipsize="end"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="mit Etienne"
                 app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="8dp"/>

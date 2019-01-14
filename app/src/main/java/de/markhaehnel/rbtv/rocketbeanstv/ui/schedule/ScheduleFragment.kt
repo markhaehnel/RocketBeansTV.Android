@@ -93,7 +93,11 @@ class ScheduleFragment : DialogFragment(), Injectable {
                     it.isCurrentlyRunning()
                 }
 
-                show_list.smoothScrollToPosition(currentIndex)
+                if (currentIndex > 0) {
+                    val lm = show_list.layoutManager as LinearLayoutManager
+                    lm.scrollToPositionWithOffset(currentIndex, 0)
+                }
+
             }
         })
     }

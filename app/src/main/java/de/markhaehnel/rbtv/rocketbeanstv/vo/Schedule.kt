@@ -1,6 +1,8 @@
 package de.markhaehnel.rbtv.rocketbeanstv.vo
 
 import com.google.gson.annotations.SerializedName
+import de.markhaehnel.rbtv.rocketbeanstv.R
+import de.markhaehnel.rbtv.rocketbeanstv.util.Time
 import java.util.Date
 
 data class Schedule(
@@ -33,6 +35,16 @@ data class ScheduleItem(
     fun isCurrentlyRunning() : Boolean {
         val currentTime = System.currentTimeMillis()
         return this.timeStart.time <= currentTime && this.timeEnd.time > currentTime
+    }
+    fun getTypeBackgroundColor() : Int {
+        return when (type.toLowerCase()) {
+            "live" -> R.color.colorTypeLive
+            "premiere" -> R.color.colorTypePremiere
+            else -> android.R.color.transparent
+        }
+    }
+    fun getShortTimeStart() : String {
+        return Time.getShortTime(timeStart)
     }
 }
 
