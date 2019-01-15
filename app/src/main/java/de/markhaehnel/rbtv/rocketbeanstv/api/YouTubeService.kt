@@ -8,7 +8,7 @@ import retrofit2.http.Url
 
 interface YouTubeService {
     @GET("get_video_info")
-    fun getRawStreamData(@Query("video_id") videoId: String): Call<ResponseBody>
+    fun getVideoInfo(@Query("video_id") videoId: String): Call<ResponseBody>
 
     @GET("")
     fun getPlaylist(@Url url: String): Call<ResponseBody>

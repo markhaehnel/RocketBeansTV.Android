@@ -42,7 +42,8 @@ class StreamRepository @Inject constructor(
         val data = MutableLiveData<Resource<StreamManifest>>()
         data.value = Resource.loading(null)
 
-        youTubeService.getRawStreamData(videoId).enqueue(object : Callback<ResponseBody> {
+        //TODO: refactor this into a custom retrofit converter
+        youTubeService.getVideoInfo(videoId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val responseString = response.body()?.string()
 
@@ -77,6 +78,7 @@ class StreamRepository @Inject constructor(
         val data = MutableLiveData<Resource<MasterPlaylist>>()
         data.value = Resource.loading(null)
 
+        //TODO: refactor this into a custom retrofit converter
         youTubeService.getPlaylist(playlistUrl).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val responseString = response.body()?.string()
