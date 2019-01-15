@@ -12,6 +12,8 @@
 
     <color name="colorButtonSelectedTransparent">#33FFFFFF</color>
 
+    <color name="colorScheduleBackground">#66000000</color>
+
     <color name="colorTypeLive">#ff0000</color>
     <color name="colorTypePremiere">#1e90ff</color>
 </resources>

@@ -36,13 +36,11 @@ data class ScheduleItem(
         val currentTime = System.currentTimeMillis()
         return this.timeStart.time <= currentTime && this.timeEnd.time > currentTime
     }
-    fun getTypeBackgroundColor() : Int {
-        return when (type.toLowerCase()) {
-            "live" -> R.color.colorTypeLive
-            "premiere" -> R.color.colorTypePremiere
-            else -> android.R.color.transparent
-        }
-    }
+
+    fun isLive() : Boolean = type == "live"
+    fun isPremiere() : Boolean = type == "premiere"
+    fun isRerun() : Boolean = type == "rerun"
+
     fun getShortTimeStart() : String {
         return Time.getShortTime(timeStart)
     }

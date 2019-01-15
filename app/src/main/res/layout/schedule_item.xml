@@ -12,8 +12,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@{show.isCurrentlyRunning() ? @drawable/selector_schedule_item_current : @drawable/selector_schedule_item}">
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:id="@+id/live"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@color/colorAccent"
+                app:visibleHidden="@{ show.isCurrentlyRunning() }"
+                tools:ignore="ContentDescription"/>
 
         <TextView
                 android:text="@{show.getShortTimeStart()}"
@@ -37,8 +47,8 @@
                 app:layout_constraintTop_toTopOf="@id/timeStart"
                 app:layout_constraintBottom_toBottomOf="@id/timeStart"
                 tools:tint="@color/colorTypeLive"
-                android:tint="@color/colorTypeLive"
-                app:visibleHidden="@{show.type != `rerun`}"
+                android:tint="@{ show.isLive() ? @color/colorTypeLive : @color/colorTypePremiere }"
+                app:visibleHidden="@{ !show.isRerun() }"
                 tools:ignore="ContentDescription"/>
 
         <TextView

@@ -29,6 +29,8 @@ class ScheduleFragment : DialogFragment(), Injectable {
     @Inject
     lateinit var appExecutors: AppExecutors
 
+    val MAX_SCHEDULE_ITEMS = 7
+
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
     var binding by autoCleared<FragmentScheduleBinding>()
 
@@ -50,8 +52,6 @@ class ScheduleFragment : DialogFragment(), Injectable {
             }
         }
 
-
-
         binding = dataBinding
         return dataBinding.root
     }
@@ -59,7 +59,7 @@ class ScheduleFragment : DialogFragment(), Injectable {
     override fun onStart() {
         super.onStart()
         dialog.window?.apply {
-            setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.colorServiceInfoOverlay)))
+            setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.colorScheduleBackground)))
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
     }
@@ -87,16 +87,16 @@ class ScheduleFragment : DialogFragment(), Injectable {
             if (schedule.data !== null && schedule.data.days.isNotEmpty()) {
                 val items = schedule.data.days[0].items
 
-                adapter.submitList(items)
-
                 val currentIndex = items.indexOfFirst {
                     it.isCurrentlyRunning()
                 }
 
-                if (currentIndex > 0) {
+                adapter.submitList(items.subList(currentIndex, currentIndex + 7))
+
+                /*if (currentIndex > 0) {
                     val lm = show_list.layoutManager as LinearLayoutManager
                     lm.scrollToPositionWithOffset(currentIndex, 0)
-                }
+                }*/
 
             }
         })
