@@ -3,6 +3,7 @@ package de.markhaehnel.rbtv.rocketbeanstv.api
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import de.markhaehnel.rbtv.rocketbeanstv.util.LiveDataCallAdapterFactory
 import de.markhaehnel.rbtv.rocketbeanstv.util.LiveDataTestUtil.getValue
+import de.markhaehnel.rbtv.rocketbeanstv.util.Time
 import de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -84,12 +85,36 @@ class RbtvServiceTest {
     }
 
     @Test
-    fun getUpcomingShows() {
+    fun getScheduleWithStartDay() {
         enqueueResponse("scheduleSingleDay.json")
+
         val schedule = (getValue(service.getSchedule(1534024800)) as ApiSuccessResponse).body
 
         val request = mockWebServer.takeRequest()
-        assertThat(request.path, `is`("/v1/schedule/normalized?startDay=1534024800&endDay=1534024800"))
+        assertThat(request.path, `is`("/v1/schedule/normalized?startDay=1534024800&endDay=1534111200"))
+
+        assertThat(schedule.days.count(), `is`(1))
+        assertThat(schedule.days[0].items.count(), `is`(14))
+
+        val show = schedule.days[0].items[0]
+        assertThat(show.id, `is`(26610))
+        assertThat(show.title, `is`("Zocken mit Denzel #3"))
+        //TODO: test the time
+        //assertThat(show.timeStart, `is`("2018-08-12T10:40:00.000Z"))
+        assertThat(show.type, `is`("rerun"))
+
+        val show2 = schedule.days[0].items[1]
+        assertThat(show2.duration, `is`(5682))
+    }
+
+    @Test
+    fun getScheduleWithStartEndDay() {
+        enqueueResponse("scheduleSingleDay.json")
+
+        val schedule = (getValue(service.getSchedule(1534024800, 1612324800)) as ApiSuccessResponse).body
+
+        val request = mockWebServer.takeRequest()
+        assertThat(request.path, `is`("/v1/schedule/normalized?startDay=1534024800&endDay=1612324800"))
 
         assertThat(schedule.days.count(), `is`(1))
         assertThat(schedule.days[0].items.count(), `is`(14))

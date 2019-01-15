@@ -3,11 +3,11 @@ package de.markhaehnel.rbtv.rocketbeanstv.util
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.concurrent.TimeUnit
 
 object Time {
 
-    private val DAY_IN_SECONDS = 86400L
+
+    val DAY_IN_SECONDS = 86400L
 
     @SuppressLint("SimpleDateFormat")
     fun getShortTime(time: Date): String {
