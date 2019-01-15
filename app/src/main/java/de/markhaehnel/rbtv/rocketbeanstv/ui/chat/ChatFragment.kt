@@ -28,6 +28,8 @@ class ChatFragment : Fragment(), Injectable {
     @Inject
     lateinit var appExecutors: AppExecutors
 
+    val MAX_CHAT_ITEMS = 15
+
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
     var binding by autoCleared<FragmentChatBinding>()
 
@@ -71,7 +73,7 @@ class ChatFragment : Fragment(), Injectable {
 
         chatViewModel.chatMessages.observe(viewLifecycleOwner, Observer { chatMessages ->
             if (chatMessages?.data != null) {
-                adapter.submitList(chatMessages.data)
+                adapter.submitList(chatMessages.data.takeLast(MAX_CHAT_ITEMS))
                 chat_list.smoothScrollToPosition(adapter.itemCount)
             }
         })
