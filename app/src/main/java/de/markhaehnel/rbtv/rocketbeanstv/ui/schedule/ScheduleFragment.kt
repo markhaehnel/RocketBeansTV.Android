@@ -20,6 +20,8 @@ import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentScheduleBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
+import de.markhaehnel.rbtv.rocketbeanstv.vo.ScheduleDay
+import de.markhaehnel.rbtv.rocketbeanstv.vo.ScheduleItem
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import javax.inject.Inject
 
@@ -85,19 +87,15 @@ class ScheduleFragment : DialogFragment(), Injectable {
     private fun initSchedule() {
         scheduleViewModel.schedule.observe(viewLifecycleOwner, Observer { schedule ->
             if (schedule.data !== null && schedule.data.days.isNotEmpty()) {
-                val items = schedule.data.days[0].items
+
+                val items = mutableListOf<ScheduleItem>()
+                schedule.data.days.forEach { items.addAll(it.items) }
 
                 val currentIndex = items.indexOfFirst {
                     it.isCurrentlyRunning()
                 }
 
-                adapter.submitList(items.subList(currentIndex, currentIndex + 7))
-
-                /*if (currentIndex > 0) {
-                    val lm = show_list.layoutManager as LinearLayoutManager
-                    lm.scrollToPositionWithOffset(currentIndex, 0)
-                }*/
-
+                adapter.submitList(items.subList(currentIndex, Math.min( currentIndex + 7, items.lastIndex)))
             }
         })
     }

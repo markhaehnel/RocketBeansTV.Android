@@ -1,6 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.api
 
 import androidx.lifecycle.LiveData
+import de.markhaehnel.rbtv.rocketbeanstv.util.Time
 import de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo
 import de.markhaehnel.rbtv.rocketbeanstv.vo.Schedule
 import retrofit2.http.GET
@@ -12,7 +13,7 @@ interface RbtvService {
 
     @GET("v1/schedule/normalized")
     fun getSchedule(
-        @Query("startDay") startDay: Long = System.currentTimeMillis() / 1000L,
-        @Query("endDay") endDay: Long? = startDay
+        @Query("startDay") startDay: Long = Time.getDayBefore(Time.getUnixTime()),
+        @Query("endDay") endDay: Long? = Time.getDayAfter(Time.getUnixTime())
     ): LiveData<ApiResponse<Schedule>>
 }
