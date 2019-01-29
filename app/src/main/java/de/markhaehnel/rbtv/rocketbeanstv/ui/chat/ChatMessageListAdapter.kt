@@ -1,5 +1,6 @@
 package de.markhaehnel.rbtv.rocketbeanstv.ui.chat
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingComponent
@@ -30,7 +31,6 @@ class ChatMessageListAdapter(
         }
     }
 ) {
-
     override fun createBinding(parent: ViewGroup): ChatItemBinding {
         val binding = DataBindingUtil.inflate<ChatItemBinding>(
             LayoutInflater.from(parent.context),
