@@ -38,9 +38,9 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
-                app:srcCompat="@drawable/ic_circle"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                app:srcCompat="@drawable/shape_circle"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
                 android:id="@+id/type"
                 app:layout_constraintStart_toEndOf="@id/timeStart"
                 android:layout_marginStart="8dp"

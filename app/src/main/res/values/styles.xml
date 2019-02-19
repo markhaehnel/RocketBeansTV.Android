@@ -17,12 +17,13 @@
         <item name="android:fontFamily">@font/arvo</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/textHighlight</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="AppTextContent">
-        <item name="android:fontFamily">@font/arvo</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/rubik</item>
         <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="AppTextContentLight" parent="AppTextContent">

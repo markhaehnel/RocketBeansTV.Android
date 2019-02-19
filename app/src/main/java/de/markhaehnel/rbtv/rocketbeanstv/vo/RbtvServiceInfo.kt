@@ -1,7 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.vo
 
 import com.google.gson.annotations.SerializedName
-import java.util.Date
+import java.util.*
 
 data class RbtvServiceInfo(
     @field:SerializedName("data")
@@ -36,7 +36,10 @@ data class ShowInfo(
     val topic: String,
     val type: String,
     val viewers: Viewers
-)
+) {
+    fun isLive() : Boolean = type == "live"
+    fun isRerun() : Boolean = type == "rerun"
+}
 
 data class Viewers(
     val total: Int,

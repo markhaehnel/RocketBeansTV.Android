@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="colorAccentLight">#F41869</color>
+    <color name="colorPrimaryDark">#00574b</color>
+    <color name="colorAccent">#d81b60</color>
+    <color name="colorAccentLight">#f41869</color>
 
     <color name="buttonBackground">#e6e6e6</color>
-    <color name="panelBackground">#252525</color>
+    <color name="panelBackground">#dd000000</color>
 
     <color name="chatBackground">#111111</color>
     <color name="scheduleBackground">#66000000</color>
@@ -16,8 +16,8 @@
     <color name="textLight">#d0d0d0</color>
     <color name="textHighlight">#fff</color>
 
-
     <color name="showTypeLive">#ff0000</color>
     <color name="showTypePremiere">#1e90ff</color>
 
+    <color name="progressBar">#eb9b00</color>
 </resources>
