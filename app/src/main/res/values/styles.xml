@@ -12,5 +12,21 @@
 
         <item name="android:colorBackground">@android:color/black</item>
     </style>
+    
+    <style name="AppTextTitle">
+        <item name="android:fontFamily">@font/arvo</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textHighlight</item>
+    </style>
+
+    <style name="AppTextContent">
+        <item name="android:fontFamily">@font/arvo</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="AppTextContentLight" parent="AppTextContent">
+        <item name="android:text">@color/textLight</item>
+    </style>
 
 </resources>

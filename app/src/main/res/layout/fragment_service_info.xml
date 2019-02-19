@@ -1,129 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="androidx.lifecycle.LiveData"/>
-        <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.Resource"/>
-        <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo"/>
 
-        <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback"/>
-        <variable name="onScheduleClickCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback" />
-        <variable name="onChatClickCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback" />
-        <variable name="serviceInfo" type="LiveData&lt;Resource&lt;RbtvServiceInfo>>"/>
+        <import type="androidx.lifecycle.LiveData" />
+
+        <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.Resource" />
+
+        <import type="de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo" />
+
+        <variable
+            name="retryCallback"
+            type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback" />
+
+        <variable
+            name="onScheduleClickCallback"
+            type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback" />
+
+        <variable
+            name="onChatClickCallback"
+            type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback" />
+
+        <variable
+            name="serviceInfo"
+            type="LiveData&lt;Resource&lt;RbtvServiceInfo>>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/serviceInfoConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/panel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/serviceInfoTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{serviceInfo.data.service.streamInfo.showInfo.title}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/serviceInfoTopicText"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/serviceInfoConstraint"
-            android:background="@drawable/shape_gradient_transparent_to_gray"
-            android:animateLayoutChanges="true">
+            app:visibleHidden="@{serviceInfo.data != null}"
+            tools:text="Moin Moin #100"
+            tools:visibility="visible" />
 
         <TextView
-                android:text="@{serviceInfo.data.service.streamInfo.showInfo.title}"
-                tools:text="Moin Moin #100"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/serviceInfoTitleText"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:layout_marginStart="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/serviceInfoTopicText"
-                app:visibleHidden="@{serviceInfo.data != null}"
-                android:visibility="invisible"
-                tools:visibility="visible"/>
+            android:id="@+id/serviceInfoTopicText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{serviceInfo.data.service.streamInfo.showInfo.topic}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/serviceInfoViewerText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:visibleHidden="@{serviceInfo.data != null}"
+            tools:text="mit Etienne"
+            tools:visibility="visible" />
 
         <TextView
-                android:text="@{serviceInfo.data.service.streamInfo.showInfo.topic}"
-                tools:text="mit Etienne"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/serviceInfoTopicText"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                app:visibleHidden="@{serviceInfo.data != null}"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/serviceInfoViewerText"/>
-
-        <TextView
-                android:text="@{Integer.toString(serviceInfo.data.service.streamInfo.showInfo.viewers.total)}"
-                tools:text="1234"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/serviceInfoViewerText"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                app:visibleHidden="@{serviceInfo.data != null}"
-                app:layout_constraintBottom_toTopOf="@+id/progressBar"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:layout_constraintStart_toStartOf="parent"
-                android:drawableStart="@drawable/ic_viewer"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="4dp"
-                android:drawablePadding="2dp"/>
+            android:id="@+id/serviceInfoViewerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
+            android:drawableStart="@drawable/ic_viewer"
+            android:drawablePadding="2dp"
+            android:text="@{Integer.toString(serviceInfo.data.service.streamInfo.showInfo.viewers.total)}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/progressBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:visibleHidden="@{serviceInfo.data != null}"
+            tools:text="1234"
+            tools:visibility="visible" />
 
         <TextClock
-                android:id="@+id/textClock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:format24Hour="HH:mm"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:layout_marginEnd="8dp"
-                android:drawableStart="@drawable/ic_clock"
-                app:layout_constraintStart_toEndOf="@id/serviceInfoViewerText"
-                app:layout_constraintBottom_toTopOf="@id/progressBar"
-                android:layout_marginBottom="4dp"
-                android:layout_marginStart="8dp"
-                android:drawablePadding="2dp"/>
+            android:id="@+id/textClock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:drawableStart="@drawable/ic_clock"
+            android:drawablePadding="2dp"
+            android:format24Hour="HH:mm"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintBottom_toTopOf="@id/progressBar"
+            app:layout_constraintStart_toEndOf="@id/serviceInfoViewerText" />
 
         <ProgressBar
-                android:layout_width="0dp"
-                android:id="@+id/progressBar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:progress="33"
-                android:layout_height="4dp"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:progress="33"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
-                android:src="@drawable/ic_schedule"
-                android:contentDescription="@string/schedule"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/serviceInfoScheduleButton"
-                app:layout_constraintEnd_toStartOf="@+id/serviceInfoChatButton"
-                app:layout_constraintBottom_toTopOf="@+id/progressBar"
-                style="@style/Widget.AppCompat.ImageButton"
-                android:layout_marginEnd="8dp"
-                android:onClick="@{() -> onScheduleClickCallback.click()}"
-                android:background="@drawable/selector_service_info_button"
-                android:padding="8dp"
-                android:layout_marginBottom="4dp"/>
+            android:id="@+id/serviceInfoScheduleButton"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/schedule"
+            android:onClick="@{() -> onScheduleClickCallback.click()}"
+            android:padding="8dp"
+            android:src="@drawable/ic_schedule"
+            app:layout_constraintBottom_toTopOf="@+id/progressBar"
+            app:layout_constraintEnd_toStartOf="@+id/serviceInfoChatButton" />
 
         <ImageButton
-                android:src="@drawable/ic_chat"
-                android:contentDescription="@string/chat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/serviceInfoChatButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/progressBar"
-                style="@style/Widget.AppCompat.ImageButton"
-                android:layout_marginEnd="8dp"
-                android:onClick="@{() -> onChatClickCallback.click()}"
-                android:nextFocusRight="@+id/serviceInfoChatButton"
-                android:background="@drawable/selector_service_info_button"
-                android:padding="8dp"
-                android:layout_marginBottom="4dp"/>
+            android:id="@+id/serviceInfoChatButton"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/chat"
+            android:nextFocusRight="@+id/serviceInfoChatButton"
+            android:onClick="@{() -> onChatClickCallback.click()}"
+            android:padding="8dp"
+            android:src="@drawable/ic_chat"
+            app:layout_constraintBottom_toTopOf="@+id/progressBar"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

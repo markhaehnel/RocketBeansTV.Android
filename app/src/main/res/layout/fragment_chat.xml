@@ -22,6 +22,6 @@
             tools:listitem="@layout/chat_item"
             app:stackFromEnd="true"
             android:scrollbarSize="0dp"
-            android:background="@color/colorChatBackground"/>
+            android:background="@color/chatBackground"/>
 
 </layout>

@@ -46,8 +46,8 @@
                 android:layout_marginStart="8dp"
                 app:layout_constraintTop_toTopOf="@id/timeStart"
                 app:layout_constraintBottom_toBottomOf="@id/timeStart"
-                tools:tint="@color/colorTypeLive"
-                android:tint="@{ show.isLive() ? @color/colorTypeLive : @color/colorTypePremiere }"
+                tools:tint="@color/showTypeLive"
+                android:tint="@{ show.isLive() ? @color/showTypeLive : @color/showTypePremiere }"
                 app:visibleHidden="@{ !show.isRerun() }"
                 tools:ignore="ContentDescription"/>
 

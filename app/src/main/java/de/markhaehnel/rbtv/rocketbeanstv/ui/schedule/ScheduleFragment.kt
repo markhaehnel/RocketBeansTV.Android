@@ -61,7 +61,7 @@ class ScheduleFragment : DialogFragment(), Injectable {
     override fun onStart() {
         super.onStart()
         dialog.window?.apply {
-            setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.colorScheduleBackground)))
+            setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(context, R.color.scheduleBackground)))
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
     }
