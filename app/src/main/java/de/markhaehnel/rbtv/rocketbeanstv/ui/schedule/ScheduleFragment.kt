@@ -95,7 +95,7 @@ class ScheduleFragment : DialogFragment(), Injectable {
                     it.isCurrentlyRunning()
                 }
 
-                adapter.submitList(items.subList(currentIndex, Math.min( currentIndex + 7, items.lastIndex)))
+                adapter.submitList(items.subList(currentIndex, Math.min( currentIndex + MAX_SCHEDULE_ITEMS, items.lastIndex)))
             }
         })
     }
