@@ -26,8 +26,10 @@ ext {
     gitVersionCodeTime = git.head().time
 }
 
-task printVersion() << {
-    println("Version Name: $gitVersionName")
-    println("Version Code: $gitVersionCode")
-    println("Version Code Time: $gitVersionCodeTime")
+task printVersion() {
+    doLast {
+        println("Version Name: $gitVersionName")
+        println("Version Code: $gitVersionCode")
+        println("Version Code Time: $gitVersionCodeTime")
+    }
 }
