@@ -20,4 +20,5 @@
     <color name="showTypePremiere">#1e90ff</color>
 
     <color name="progressBar">#eb9b00</color>
+    <color name="progressBarBackground">#262626</color>
 </resources>

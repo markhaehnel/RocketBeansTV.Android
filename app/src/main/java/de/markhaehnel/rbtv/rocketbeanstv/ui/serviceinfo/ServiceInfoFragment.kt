@@ -20,6 +20,8 @@ import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import kotlinx.android.synthetic.main.fragment_service_info.*
 import javax.inject.Inject
+import android.animation.ObjectAnimator
+import android.view.animation.DecelerateInterpolator
 import kotlin.math.roundToInt
 
 class ServiceInfoFragment : Fragment(), Injectable {
@@ -86,8 +88,12 @@ class ServiceInfoFragment : Fragment(), Injectable {
             if (serviceInfo.data != null) {
                 progressBar.apply {
                     isIndeterminate = false
-                    progress = serviceInfo.data.service.streamInfo.showInfo.progress.roundToInt()
                 }
+                val prog = serviceInfo.data.service.streamInfo.showInfo.progress.roundToInt()
+                val progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, prog)
+                progressAnimator.setDuration(1000)
+                progressAnimator.interpolator = DecelerateInterpolator()
+                progressAnimator.start()
             } else {
                 progressBar.isIndeterminate = true
             }
