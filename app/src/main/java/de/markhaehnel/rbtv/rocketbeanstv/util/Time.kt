@@ -16,8 +16,8 @@ object Time {
 
     fun getUnixTime() : Long = System.currentTimeMillis() / 1000L
 
-    fun getDayBefore(timestamp: Long) = timestamp - DAY_IN_SECONDS
+    fun getDayBefore(timestamp: Long = getUnixTime()) = timestamp - DAY_IN_SECONDS
 
-    fun getDayAfter(timestamp: Long) = timestamp + DAY_IN_SECONDS
+    fun getDayAfter(timestamp: Long = getUnixTime()) = timestamp + DAY_IN_SECONDS
 
 }

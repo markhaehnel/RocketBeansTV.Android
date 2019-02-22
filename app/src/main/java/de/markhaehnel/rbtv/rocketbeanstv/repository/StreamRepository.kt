@@ -31,9 +31,9 @@ class StreamRepository @Inject constructor(
         }.asLiveData()
     }
 
-    fun loadSchedule(): LiveData<Resource<Schedule>> {
+    fun loadSchedule(timeStart: Long, timeEnd: Long): LiveData<Resource<Schedule>> {
         return object : NetworkBoundResource<Schedule>(appExecutors) {
-            override fun createCall() = rbtvService.getSchedule()
+            override fun createCall() = rbtvService.getSchedule(timeStart, timeEnd)
         }.asLiveData()
     }
 
