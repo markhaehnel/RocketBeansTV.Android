@@ -89,13 +89,11 @@ class ServiceInfoFragment : Fragment(), Injectable {
                 progressBar.apply {
                     isIndeterminate = false
                 }
-                val prog = serviceInfo.data.service.streamInfo.showInfo.progress.roundToInt()
+                val prog = serviceInfo.data.service.streamInfo.showInfo.progress.roundToInt() * 100
                 val progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, prog)
                 progressAnimator.setDuration(1000)
                 progressAnimator.interpolator = DecelerateInterpolator()
                 progressAnimator.start()
-            } else {
-                progressBar.isIndeterminate = true
             }
         })
     }

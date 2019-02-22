@@ -37,7 +37,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:animateLayoutChanges="true">
 
         <ProgressBar
                 android:id="@+id/progressBar"
@@ -45,126 +46,125 @@
                 android:layout_width="0dp"
                 android:layout_height="8dp"
                 android:progress="0"
-                tools:progress="33"
+                android:max="10000"
+                tools:progress="3333"
                 android:progressDrawable="@drawable/shape_progressbar"
                 android:indeterminateDrawable="@drawable/shape_progressbar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:animateLayoutChanges="true"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/serviceInfoDataContainer"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:paddingTop="@dimen/smallestMargin"
-                android:visibility="invisible"
-                app:visibleHidden="@{serviceInfo.data != null}"
-                tools:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/progressBar">
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/showTypeContainer"
-                    android:layout_height="match_parent"
-                    android:layout_width="wrap_content"
-                    android:paddingEnd="@dimen/smallestMargin"
-                    app:visibleGone="@{ !serviceInfo.data.service.streamInfo.showInfo.isRerun() }"
-                    tools:ignore="RtlSymmetry"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/serviceInfoTopicText"
-                    app:layout_constraintStart_toStartOf="parent">
+                    android:id="@+id/serviceInfoDataContainer"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:paddingTop="@dimen/smallestMargin"
+                    android:visibility="invisible"
+                    app:visibleHidden="@{serviceInfo.data != null}"
+                    tools:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/progressBar">
 
-                <ImageView
-                        app:srcCompat="@drawable/shape_circle"
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:id="@+id/type"
-                        tools:tint="@color/showTypeLive"
-                        android:tint="@{ serviceInfo.data.service.streamInfo.showInfo.isLive() ? @color/showTypeLive : @color/showTypePremiere }"
-                        tools:ignore="ContentDescription"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/showTypeContainer"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:paddingEnd="@dimen/smallestMargin"
+                        app:visibleGone="@{ !serviceInfo.data.service.streamInfo.showInfo.isRerun() }"
+                        tools:ignore="RtlSymmetry"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/serviceInfoTopicText"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                    <ImageView
+                            app:srcCompat="@drawable/shape_circle"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:id="@+id/type"
+                            tools:tint="@color/showTypeLive"
+                            android:tint="@{ serviceInfo.data.service.streamInfo.showInfo.isLive() ? @color/showTypeLive : @color/showTypePremiere }"
+                            tools:ignore="ContentDescription"
+                            android:layout_marginEnd="@dimen/smallMargin"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <TextView
+                        android:id="@+id/serviceInfoTitleText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@{serviceInfo.data.service.streamInfo.showInfo.title}"
+                        android:textAppearance="@style/AppTextTitle"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        tools:text="Bohndesliga #17"
+                        android:layout_marginEnd="@dimen/smallMargin"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/serviceInfoViewerText"
+                        app:layout_constraintStart_toEndOf="@+id/showTypeContainer"/>
+
+                <TextView
+                        android:id="@+id/serviceInfoTopicText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@{serviceInfo.data.service.streamInfo.showInfo.topic}"
+                        android:textAppearance="@style/AppTextContent"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        tools:text="21. Spieltag der Fußball-Bundesliga in der Analyse"
                         android:layout_marginEnd="@dimen/smallMargin"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/serviceInfoTitleText"
+                        app:layout_constraintEnd_toStartOf="@+id/serviceInfoViewerText"/>
+
+                <TextView
+                        android:id="@+id/serviceInfoViewerText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_viewers"
+                        android:text="@{java.text.NumberFormat.getInstance().format(serviceInfo.data.service.streamInfo.showInfo.viewers.total)}"
+                        android:textAppearance="@style/AppTextContent"
+                        tools:text="3.142"
+                        android:gravity="center"
+                        android:layout_marginEnd="@dimen/largeMargin"
+                        app:layout_constraintEnd_toStartOf="@+id/serviceInfoScheduleButton"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageButton
+                        android:id="@+id/serviceInfoScheduleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/schedule"
+                        android:onClick="@{() -> onScheduleClickCallback.click()}"
+                        android:src="@drawable/ic_clock"
+                        android:tint="@drawable/selector_image_button"
+                        android:layout_marginEnd="@dimen/smallMargin"
+                        app:layout_constraintEnd_toStartOf="@+id/serviceInfoChatButton"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageButton
+                        android:id="@+id/serviceInfoChatButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/chat"
+                        android:nextFocusRight="@+id/serviceInfoChatButton"
+                        android:onClick="@{() -> onChatClickCallback.click()}"
+                        android:src="@drawable/ic_chat"
+                        android:tint="@drawable/selector_image_button"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-            <TextView
-                    android:id="@+id/serviceInfoTitleText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@{serviceInfo.data.service.streamInfo.showInfo.title}"
-                    android:textAppearance="@style/AppTextTitle"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    tools:text="Bohndesliga #17"
-                    android:layout_marginEnd="@dimen/smallMargin"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/serviceInfoViewerText"
-                    app:layout_constraintStart_toEndOf="@+id/showTypeContainer"/>
-
-            <TextView
-                    android:id="@+id/serviceInfoTopicText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@{serviceInfo.data.service.streamInfo.showInfo.topic}"
-                    android:textAppearance="@style/AppTextContent"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    tools:text="21. Spieltag der Fußball-Bundesliga in der Analyse"
-                    android:layout_marginEnd="@dimen/smallMargin"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/serviceInfoTitleText"
-                    app:layout_constraintEnd_toStartOf="@+id/serviceInfoViewerText"/>
-
-            <TextView
-                    android:id="@+id/serviceInfoViewerText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_viewers"
-                    android:text="@{java.text.NumberFormat.getInstance().format(serviceInfo.data.service.streamInfo.showInfo.viewers.total)}"
-                    android:textAppearance="@style/AppTextContent"
-                    tools:text="3.142"
-                    android:gravity="center"
-                    android:layout_marginEnd="@dimen/largeMargin"
-                    app:layout_constraintEnd_toStartOf="@+id/serviceInfoScheduleButton"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-            <ImageButton
-                    android:id="@+id/serviceInfoScheduleButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/schedule"
-                    android:onClick="@{() -> onScheduleClickCallback.click()}"
-                    android:src="@drawable/ic_clock"
-                    android:tint="@drawable/selector_image_button"
-                    android:layout_marginEnd="@dimen/smallMargin"
-                    app:layout_constraintEnd_toStartOf="@+id/serviceInfoChatButton"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-            <ImageButton
-                    android:id="@+id/serviceInfoChatButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/chat"
-                    android:nextFocusRight="@+id/serviceInfoChatButton"
-                    android:onClick="@{() -> onChatClickCallback.click()}"
-                    android:src="@drawable/ic_chat"
-                    android:tint="@drawable/selector_image_button"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
