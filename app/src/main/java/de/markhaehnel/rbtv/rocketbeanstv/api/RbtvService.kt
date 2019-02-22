@@ -14,6 +14,6 @@ interface RbtvService {
     @GET("v1/schedule/normalized")
     fun getSchedule(
         @Query("startDay") startDay: Long = Time.getDayBefore(Time.getUnixTime()),
-        @Query("endDay") endDay: Long? = Time.getDayAfter(startDay)
+        @Query("endDay") endDay: Long? = Time.getDayAfter(Time.getUnixTime())
     ): LiveData<ApiResponse<Schedule>>
 }
