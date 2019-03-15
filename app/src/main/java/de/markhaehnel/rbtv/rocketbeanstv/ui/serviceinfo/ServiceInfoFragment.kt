@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_service_info.*
 import javax.inject.Inject
 import android.animation.ObjectAnimator
 import android.view.animation.DecelerateInterpolator
+import androidx.navigation.fragment.findNavController
 import kotlin.math.roundToInt
 
 class ServiceInfoFragment : Fragment(), Injectable {

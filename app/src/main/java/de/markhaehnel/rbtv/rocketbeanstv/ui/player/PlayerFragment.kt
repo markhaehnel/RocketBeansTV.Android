@@ -25,7 +25,6 @@ import de.markhaehnel.rbtv.rocketbeanstv.util.FragmentInterface
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
 import kotlinx.android.synthetic.main.fragment_player.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFragmentInterface {

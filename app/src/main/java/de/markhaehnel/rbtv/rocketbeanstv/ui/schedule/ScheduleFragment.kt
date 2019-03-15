@@ -12,7 +12,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
@@ -20,9 +19,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentScheduleBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
-import de.markhaehnel.rbtv.rocketbeanstv.vo.ScheduleDay
 import de.markhaehnel.rbtv.rocketbeanstv.vo.ScheduleItem
-import kotlinx.android.synthetic.main.fragment_schedule.*
 import javax.inject.Inject
 
 class ScheduleFragment : DialogFragment(), Injectable {
@@ -31,7 +28,7 @@ class ScheduleFragment : DialogFragment(), Injectable {
     @Inject
     lateinit var appExecutors: AppExecutors
 
-    val MAX_SCHEDULE_ITEMS = 7
+    val MAX_SCHEDULE_ITEMS = 6
 
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
     var binding by autoCleared<FragmentScheduleBinding>()

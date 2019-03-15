@@ -11,75 +11,81 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/largeMargin"
+        android:layout_marginTop="@dimen/smallestMargin"
+        android:layout_marginRight="@dimen/largeMargin"
+        android:layout_marginBottom="@dimen/smallestMargin"
+        android:background="@drawable/shape_panel">
+
+        <TextView
+            android:id="@+id/timeStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@{show.getShortTimeStart()}"
+            android:textAppearance="@style/AppTextContent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="17:30" />
+
+        <View
+            android:id="@+id/spacerIndicator"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/normalMargin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/timeStart" />
 
         <ImageView
-                android:layout_width="2dp"
-                android:layout_height="0dp"
-                android:id="@+id/live"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:background="@color/colorAccent"
-                app:visibleHidden="@{ show.isCurrentlyRunning() }"
-                tools:ignore="ContentDescription"/>
+            android:id="@+id/type"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="8dp"
+            android:tint="@{ show.isLive() ? @color/showTypeLive : @color/showTypePremiere }"
+            app:layout_constraintStart_toEndOf="@+id/spacerIndicator"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/shape_circle"
+            app:visibleGone="@{ !show.isRerun() }"
+            tools:ignore="ContentDescription"
+            tools:tint="@color/showTypeLive" />
+
+        <View
+            android:id="@+id/spacerTitle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/smallMargin"
+            app:visibleGone="@{ !show.isRerun() }"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/type" />
+
 
         <TextView
-                android:text="@{show.getShortTimeStart()}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/timeStart"
-                tools:text="17:30"
-                android:singleLine="true"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
-                app:srcCompat="@drawable/shape_circle"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:id="@+id/type"
-                app:layout_constraintStart_toEndOf="@id/timeStart"
-                android:layout_marginStart="8dp"
-                app:layout_constraintTop_toTopOf="@id/timeStart"
-                app:layout_constraintBottom_toBottomOf="@id/timeStart"
-                tools:tint="@color/showTypeLive"
-                android:tint="@{ show.isLive() ? @color/showTypeLive : @color/showTypePremiere }"
-                app:visibleHidden="@{ !show.isRerun() }"
-                tools:ignore="ContentDescription"/>
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@{show.title}"
+            android:textAppearance="@style/AppTextTitle"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/spacerTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Moin Moin #123" />
 
         <TextView
-                android:text="@{show.title}"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/title"
-                tools:text="Moin Moin #123"
-                android:singleLine="true"
-                android:ellipsize="end"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toBottomOf="@id/timeStart"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                android:textStyle="bold"/>
-
-        <TextView
-                android:text="@{show.topic}"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:id="@+id/topic"
-                android:ellipsize="end"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="mit Etienne"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="8dp"/>
+            android:id="@+id/topic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/normalMargin"
+            android:text="@{show.topic}"
+            android:textAppearance="@style/AppTextContent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/timeStart"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:text="mit Etienne" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
