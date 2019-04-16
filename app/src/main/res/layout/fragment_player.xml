@@ -3,9 +3,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="androidx.lifecycle.LiveData" />
+        <import type="androidx.lifecycle.LiveData"/>
 
-        <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback" />
+        <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback"/>
         <variable name="isChatVisible" type="LiveData&lt;Boolean>"/>
 
     </data>
