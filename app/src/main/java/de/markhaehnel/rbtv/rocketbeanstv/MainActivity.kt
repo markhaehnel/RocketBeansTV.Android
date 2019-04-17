@@ -34,5 +34,11 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         return super.onKeyDown(keyCode, event)
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        System.exit(0)
+    }
+
     override fun supportFragmentInjector() = dispatchingAndroidInjector
 }
