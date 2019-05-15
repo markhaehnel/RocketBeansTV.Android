@@ -7,6 +7,7 @@
 
         <variable name="retryCallback" type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback"/>
         <variable name="isChatVisible" type="LiveData&lt;Boolean>"/>
+        <variable name="isBuffering" type="LiveData&lt;Boolean>"/>
 
     </data>
 
@@ -22,7 +23,42 @@
                 android:layout_height="match_parent"
                 app:useDefaultControls="false"
                 app:layout_constraintRight_toLeftOf="@+id/chatContainer"
-                app:layout_constraintLeft_toLeftOf="parent"/>
+                app:layout_constraintLeft_toLeftOf="parent">
+        </com.devbrackets.android.exomedia.ui.widget.VideoView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bufferingContainer"
+                android:animateLayoutChanges="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:visibleHidden="@{isBuffering}">
+
+            <ProgressBar
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/progressBuffering"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:indeterminateTint="@color/progressBar"/>
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_logo"
+                    android:id="@+id/logoBuffering"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
                 android:layout_width="0dp"
@@ -37,7 +73,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/chatContainer"
                 app:layout_constraintRight_toRightOf="parent"
-                app:visibleGone="@{safeUnbox(isChatVisible)}"
+                app:visibleGone="@{isChatVisible}"
                 android:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

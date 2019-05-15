@@ -38,6 +38,8 @@ class PlayerViewModel
 
     var isChatVisible = MutableLiveData<Boolean>().apply { value = false }
 
+    var isBuffering = MutableLiveData<Boolean>().apply { value = true }
+
     fun retry() {
         //TODO: implement retry
     }

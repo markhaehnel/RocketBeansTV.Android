@@ -22,6 +22,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragmentInterface
 import de.markhaehnel.rbtv.rocketbeanstv.util.FragmentInterface
+import de.markhaehnel.rbtv.rocketbeanstv.util.IntervalTask
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
 import kotlinx.android.synthetic.main.fragment_player.*
@@ -35,11 +36,12 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
     var binding by autoCleared<FragmentPlayerBinding>()
 
     private lateinit var playerViewModel: PlayerViewModel
+    private lateinit var playStateObserver: IntervalTask
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val dataBinding = DataBindingUtil.inflate<FragmentPlayerBinding>(
             inflater,
-            de.markhaehnel.rbtv.rocketbeanstv.R.layout.fragment_player,
+            R.layout.fragment_player,
             container,
             false,
             dataBindingComponent
@@ -60,21 +62,10 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
         binding.setLifecycleOwner(viewLifecycleOwner)
 
         binding.isChatVisible = playerViewModel.isChatVisible
+        binding.isBuffering = playerViewModel.isBuffering
 
-        initStreamData()
+        initObservers()
         initPlayer()
-    }
-
-    private fun inflateChat() {
-        val fragmentTag = "tagFragmentChat"
-
-        if (childFragmentManager.findFragmentByTag(fragmentTag) == null) {
-            val chatFragment = ChatFragment()
-            childFragmentManager.beginTransaction().apply {
-                replace(R.id.chatContainer, chatFragment, fragmentTag)
-                commit()
-            }
-        }
     }
 
     override fun onResume() {
@@ -98,6 +89,18 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
             }
         }
         return false
+    }
+
+    private fun inflateChat() {
+        val fragmentTag = "tagFragmentChat"
+
+        if (childFragmentManager.findFragmentByTag(fragmentTag) == null) {
+            val chatFragment = ChatFragment()
+            childFragmentManager.beginTransaction().apply {
+                replace(R.id.chatContainer, chatFragment, fragmentTag)
+                commit()
+            }
+        }
     }
 
     override fun onShowSchedule() {
@@ -130,12 +133,10 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
             return true
         }
 
-
-
         return false
     }
 
-    private fun initStreamData() {
+    private fun initObservers() {
         playerViewModel.streamPlaylist.observe(viewLifecycleOwner, Observer { streamPlaylist ->
             if (streamPlaylist?.data != null) {
                 videoView.setVideoURI(streamPlaylist.data.highestBandwith().uri().toUri())
@@ -146,6 +147,9 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
     private fun initPlayer() {
         videoView.setOnPreparedListener {
             videoView.start()
+            playStateObserver = IntervalTask(lifecycle, 2000, Runnable {
+                playerViewModel.isBuffering.postValue(!videoView.isPlaying)
+            })
         }
     }
 }
