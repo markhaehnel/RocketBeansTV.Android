@@ -11,7 +11,7 @@ import javax.inject.Inject
 class ScheduleViewModel
 @Inject constructor(streamRepository: StreamRepository) : ViewModel() {
 
-    val schedule: LiveData<Resource<Schedule>> = streamRepository.loadSchedule(Time.getDayBefore(), Time.getDayAfter())
+    val schedule: LiveData<Resource<Schedule>> = streamRepository.loadSchedule(Time.getDaysBefore(n = 3), Time.getDaysAfter(n = 3))
 
     fun retry() {
     //TODO: implement retry

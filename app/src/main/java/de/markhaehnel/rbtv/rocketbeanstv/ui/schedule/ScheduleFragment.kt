@@ -28,7 +28,7 @@ class ScheduleFragment : DialogFragment(), Injectable {
     @Inject
     lateinit var appExecutors: AppExecutors
 
-    val MAX_SCHEDULE_ITEMS = 6
+    val MAX_SCHEDULE_ITEMS = 7
 
     var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
     var binding by autoCleared<FragmentScheduleBinding>()

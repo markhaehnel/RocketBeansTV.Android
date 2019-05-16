@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="largestMargin">48dp</dimen>
     <dimen name="largeMargin">32dp</dimen>
     <dimen name="normalMargin">16dp</dimen>
     <dimen name="smallMargin">8dp</dimen>
     <dimen name="smallestMargin">4dp</dimen>
 
+    <dimen name="largestPadding">48dp</dimen>
     <dimen name="largePadding">32dp</dimen>
     <dimen name="normalPadding">16dp</dimen>
     <dimen name="smallPadding">8dp</dimen>

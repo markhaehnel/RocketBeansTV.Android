@@ -2,7 +2,7 @@ package de.markhaehnel.rbtv.rocketbeanstv.util
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 
 object Time {
 
@@ -17,7 +17,9 @@ object Time {
     fun getUnixTime() : Long = System.currentTimeMillis() / 1000L
 
     fun getDayBefore(timestamp: Long = getUnixTime()) = timestamp - DAY_IN_SECONDS
+    fun getDaysBefore(timestamp: Long = getUnixTime(), n: Int) = timestamp - (n * DAY_IN_SECONDS)
 
     fun getDayAfter(timestamp: Long = getUnixTime()) = timestamp + DAY_IN_SECONDS
+    fun getDaysAfter(timestamp: Long = getUnixTime(), n: Int) = timestamp + (n * DAY_IN_SECONDS)
 
 }

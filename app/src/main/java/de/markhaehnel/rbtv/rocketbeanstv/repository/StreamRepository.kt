@@ -47,22 +47,26 @@ class StreamRepository @Inject constructor(
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val responseString = response.body()?.string()
 
-                if (responseString != null) {
-                    val parameters = HashMap<String, String>()
-                    for (param in responseString.split(Pattern.quote("&").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
-                        val line =
-                            param.split(Pattern.quote("=").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                        if (line.size == 2)
-                            parameters.put(line[0], URLDecoder.decode(line[1], "UTF-8"))
+                try {
+                    if (responseString != null) {
+                        val parameters = HashMap<String, String>()
+                        for (param in responseString.split(Pattern.quote("&").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
+                            val line =
+                                param.split(Pattern.quote("=").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                            if (line.size == 2)
+                                parameters.put(line[0], URLDecoder.decode(line[1], "UTF-8"))
+                        }
+
+                        val gson = Gson()
+                        val playerResponse = gson.fromJson(parameters["player_response"], PlayerResponse::class.java)
+
+                        val dataRaw = StreamManifest(playerResponse.streamingData.hlsManifestUrl.toUri())
+                        data.value = Resource.success(dataRaw)
+                    } else {
+                        data.value = Resource.error("responseString is null")
                     }
-
-                    val gson = Gson()
-                    val playerResponse = gson.fromJson(parameters["player_response"], PlayerResponse::class.java)
-
-                    val dataRaw = StreamManifest(playerResponse.streamingData.hlsManifestUrl.toUri())
-                    data.value = Resource.success(dataRaw)
-                } else {
-                    data.value = Resource.error("responseString is null")
+                } catch (e: Exception) {
+                    data.value = Resource.error("Error while fetching stream manifest")
                 }
             }
 

@@ -11,80 +11,85 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/largeMargin"
-        android:layout_marginTop="@dimen/smallestMargin"
-        android:layout_marginRight="@dimen/largeMargin"
-        android:layout_marginBottom="@dimen/smallestMargin"
-        android:background="@drawable/shape_panel">
-
-        <TextView
-            android:id="@+id/timeStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="@{show.getShortTimeStart()}"
-            android:textAppearance="@style/AppTextContent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="17:30" />
+            android:layout_marginStart="@dimen/largeMargin"
+            android:layout_marginTop="@dimen/smallestMargin"
+            android:layout_marginEnd="@dimen/largeMargin"
+            android:layout_marginBottom="@dimen/smallestMargin"
+            android:paddingEnd="@dimen/largestPadding"
+            android:paddingTop="@dimen/smallPadding"
+            android:paddingBottom="@dimen/smallPadding"
+            android:background="@drawable/shape_panel">
+
+        <TextView
+                android:id="@+id/timeStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@{show.getShortTimeStart()}"
+                android:textAppearance="@style/AppTextContent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:paddingStart="@dimen/normalPadding"
+                android:paddingEnd="@dimen/normalPadding"
+                tools:text="17:30"/>
 
         <View
-            android:id="@+id/spacerIndicator"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/normalMargin"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/timeStart" />
+                android:id="@+id/spacerIndicator"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/normalMargin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/timeStart"/>
 
         <ImageView
-            android:id="@+id/type"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_marginTop="8dp"
-            android:tint="@{ show.isLive() ? @color/showTypeLive : @color/showTypePremiere }"
-            app:layout_constraintStart_toEndOf="@+id/spacerIndicator"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/shape_circle"
-            app:visibleGone="@{ !show.isRerun() }"
-            tools:ignore="ContentDescription"
-            tools:tint="@color/showTypeLive" />
+                android:id="@+id/type"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_marginTop="8dp"
+                android:tint="@{ show.isLive() ? @color/showTypeLive : @color/showTypePremiere }"
+                app:layout_constraintStart_toEndOf="@+id/spacerIndicator"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/shape_circle"
+                app:visibleGone="@{ !show.isRerun() }"
+                tools:ignore="ContentDescription"
+                tools:tint="@color/showTypeLive"/>
 
         <View
-            android:id="@+id/spacerTitle"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/smallMargin"
-            app:visibleGone="@{ !show.isRerun() }"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/type" />
+                android:id="@+id/spacerTitle"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/smallMargin"
+                app:visibleGone="@{ !show.isRerun() }"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/type"/>
 
 
         <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="@{show.title}"
-            android:textAppearance="@style/AppTextTitle"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/spacerTitle"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Moin Moin #123" />
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@{show.title}"
+                android:textAppearance="@style/AppTextTitle"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/spacerTitle"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Moin Moin #123"/>
 
         <TextView
-            android:id="@+id/topic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/normalMargin"
-            android:text="@{show.topic}"
-            android:textAppearance="@style/AppTextContent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/timeStart"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:text="mit Etienne" />
+                android:id="@+id/topic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normalMargin"
+                android:text="@{show.topic}"
+                android:textAppearance="@style/AppTextContent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/timeStart"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:text="mit Etienne"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
