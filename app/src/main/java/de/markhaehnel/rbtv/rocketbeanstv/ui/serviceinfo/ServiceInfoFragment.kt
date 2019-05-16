@@ -57,7 +57,7 @@ class ServiceInfoFragment : Fragment(), Injectable {
             override fun click () {
                 val parent = parentFragment
                 if (parent is ServiceInfoFragmentInterface) {
-                    parent.onShowSchedule()
+                    parent.onShowSchedule(popBackStack = true)
                 }
             }
         }
