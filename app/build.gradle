@@ -38,13 +38,13 @@ dependencies {
     def exomedia_version = "4.3.0"
     implementation "com.devbrackets.android:exomedia:$exomedia_version"
 
-    def firebase_version = "16.0.7"
+    def firebase_version = "16.0.9"
     implementation "com.google.firebase:firebase-core:$firebase_version"
 
-    def crashlytics_version = "2.9.9"
+    def crashlytics_version = "2.10.0"
     implementation "com.crashlytics.sdk.android:crashlytics:$crashlytics_version"
 
-    def dagger_version = "2.21"
+    def dagger_version = "2.22.1"
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.google.dagger:dagger-android:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
@@ -62,10 +62,10 @@ dependencies {
     def support_version = "1.0.2"
     implementation "androidx.appcompat:appcompat:$support_version"
 
-    def contstraint_version = "2.0.0-alpha3"
+    def contstraint_version = "2.0.0-beta1"
     implementation "androidx.constraintlayout:constraintlayout:$contstraint_version"
 
-    def ktx_version = "1.0.1"
+    def ktx_version = "1.0.2"
     implementation "androidx.core:core-ktx:$ktx_version"
 
     def lifecycle_version = "2.0.0"
