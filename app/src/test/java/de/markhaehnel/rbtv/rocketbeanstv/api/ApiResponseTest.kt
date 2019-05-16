@@ -32,6 +32,6 @@ class ApiResponseTest {
             ResponseBody.create(MediaType.parse("application/txt"), "blah")
         )
         val (errorMessage) = ApiResponse.create<String>(errorResponse) as ApiErrorResponse<String>
-        assertThat<String>(errorMessage, `is`("blah"))
+        assertThat<String>(errorMessage, `is`("Error while fetching resource (400)"))
     }
 }
