@@ -113,8 +113,9 @@ class PlayerFragment : Fragment(), Injectable, ServiceInfoFragmentInterface {
         }
     }
 
-    override fun onShowSchedule() {
-        super.onShowSchedule()
+    override fun onShowSchedule(popBackStack: Boolean) {
+        super.onShowSchedule(popBackStack)
+        if (popBackStack) fragmentManager?.popBackStack()
         val fragmentTag = "fragment_schedule"
         val scheduleFragment = ScheduleFragment()
         scheduleFragment.show(childFragmentManager, fragmentTag)
