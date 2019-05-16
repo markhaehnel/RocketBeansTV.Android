@@ -22,13 +22,7 @@ sealed class ApiResponse<T> {
                     ApiSuccessResponse(body = body)
                 }
             } else {
-                val msg = response.errorBody()?.string()
-                val errorMsg = if (msg.isNullOrEmpty()) {
-                    response.message()
-                } else {
-                    msg
-                }
-                ApiErrorResponse(errorMsg ?: "unknown error")
+                ApiErrorResponse("Error while fetching resource (${response.code()})")
             }
         }
     }

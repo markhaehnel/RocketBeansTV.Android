@@ -45,9 +45,9 @@ class StreamRepository @Inject constructor(
         //TODO: refactor this into a custom retrofit converter
         youTubeService.getVideoInfo(videoId).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                val responseString = response.body()?.string()
-
                 try {
+                    val responseString = response.body()?.string()
+
                     if (responseString != null) {
                         val parameters = HashMap<String, String>()
                         for (param in responseString.split(Pattern.quote("&").toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
@@ -63,7 +63,7 @@ class StreamRepository @Inject constructor(
                         val dataRaw = StreamManifest(playerResponse.streamingData.hlsManifestUrl.toUri())
                         data.value = Resource.success(dataRaw)
                     } else {
-                        data.value = Resource.error("responseString is null")
+                        data.value = Resource.error("Error: Stream manifest is empty")
                     }
                 } catch (e: Exception) {
                     data.value = Resource.error("Error while fetching stream manifest")
@@ -85,15 +85,18 @@ class StreamRepository @Inject constructor(
         //TODO: refactor this into a custom retrofit converter
         youTubeService.getPlaylist(playlistUrl).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                val responseString = response.body()?.string()
-
-                if (responseString != null) {
-                    val playlist = MasterPlaylistParser().readPlaylist(responseString)
-
-                    data.value = Resource.success(playlist)
-                } else {
-                    data.value = Resource.error("responseString is null")
+                try {
+                    val responseString = response.body()?.string()
+                    if (responseString != null) {
+                        val playlist = MasterPlaylistParser().readPlaylist(responseString)
+                        data.value = Resource.success(playlist)
+                    } else {
+                        data.value = Resource.error("Error: Playlist is empty")
+                    }
+                } catch (e: Exception) {
+                    data.value = Resource.error("Error while fetching playlist")
                 }
+
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
