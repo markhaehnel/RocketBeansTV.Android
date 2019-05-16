@@ -1,9 +1,12 @@
 package de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -20,9 +23,6 @@ import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import kotlinx.android.synthetic.main.fragment_service_info.*
 import javax.inject.Inject
-import android.animation.ObjectAnimator
-import android.view.animation.DecelerateInterpolator
-import androidx.navigation.fragment.findNavController
 import kotlin.math.roundToInt
 
 class ServiceInfoFragment : Fragment(), Injectable {
@@ -35,6 +35,8 @@ class ServiceInfoFragment : Fragment(), Injectable {
     var binding by autoCleared<FragmentServiceInfoBinding>()
 
     private lateinit var serviceInfoViewModel: ServiceInfoViewModel
+    private var autoCloseHandler = Handler()
+    private lateinit var autoCloseRunnable: Runnable
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val dataBinding = DataBindingUtil.inflate<FragmentServiceInfoBinding>(
@@ -79,10 +81,15 @@ class ServiceInfoFragment : Fragment(), Injectable {
 
         binding.serviceInfo = serviceInfoViewModel.serviceInfo
 
-        initServiceInfo()
+        autoCloseRunnable = Runnable {
+            fragmentManager?.popBackStack()
+        }
 
+        initServiceInfo()
         serviceInfoScheduleButton.requestFocus()
     }
+
+
 
     fun initServiceInfo() {
         serviceInfoViewModel.serviceInfo.observe(viewLifecycleOwner, Observer { serviceInfo ->

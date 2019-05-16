@@ -1,13 +1,15 @@
 package de.markhaehnel.rbtv.rocketbeanstv
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import de.markhaehnel.rbtv.rocketbeanstv.util.FragmentInterface
+import de.markhaehnel.rbtv.rocketbeanstv.util.Constants
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
@@ -24,13 +26,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navContainer)
-        val currentFragment = navHostFragment?.getChildFragmentManager()?.fragments?.get(0)
-        if (currentFragment is FragmentInterface){
-            val res = currentFragment.onKeyDown(keyCode, event)
-            if (res) return res;
-        }
-
+        val intent = Intent(Constants.BROADCAST_KEYDOWN).apply { putExtra(Constants.BROADCAST_KEYDOWN_KEY_CODE, keyCode) }
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
         return super.onKeyDown(keyCode, event)
     }
 

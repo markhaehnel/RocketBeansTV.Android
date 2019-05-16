@@ -1,5 +1,9 @@
 package de.markhaehnel.rbtv.rocketbeanstv.ui.player
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -12,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
 import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentPlayerBinding
@@ -21,14 +26,14 @@ import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragmentInterface
-import de.markhaehnel.rbtv.rocketbeanstv.util.FragmentInterface
+import de.markhaehnel.rbtv.rocketbeanstv.util.Constants
 import de.markhaehnel.rbtv.rocketbeanstv.util.IntervalTask
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
 import kotlinx.android.synthetic.main.fragment_player.*
 import javax.inject.Inject
 
-class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFragmentInterface {
+class PlayerFragment : Fragment(), Injectable, ServiceInfoFragmentInterface {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -37,6 +42,20 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
 
     private lateinit var playerViewModel: PlayerViewModel
     private lateinit var playStateObserver: IntervalTask
+
+    private val keyDownBroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when(intent.getIntExtra(Constants.BROADCAST_KEYDOWN_KEY_CODE, 0)) {
+                KeyEvent.KEYCODE_DPAD_CENTER,
+                KeyEvent.KEYCODE_DPAD_UP,
+                KeyEvent.KEYCODE_DPAD_RIGHT,
+                KeyEvent.KEYCODE_DPAD_DOWN,
+                KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    inflateServiceInfoFragment()
+                }
+            }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val dataBinding = DataBindingUtil.inflate<FragmentPlayerBinding>(
@@ -64,6 +83,10 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
         binding.isChatVisible = playerViewModel.isChatVisible
         binding.isBuffering = playerViewModel.isBuffering
 
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(keyDownBroadcastReceiver, IntentFilter(Constants.BROADCAST_KEYDOWN))
+
+
         initObservers()
         initPlayer()
     }
@@ -76,19 +99,6 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
     override fun onPause() {
         super.onPause()
         videoView.pause()
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        when(keyCode) {
-            KeyEvent.KEYCODE_DPAD_CENTER,
-            KeyEvent.KEYCODE_DPAD_UP,
-            KeyEvent.KEYCODE_DPAD_RIGHT,
-            KeyEvent.KEYCODE_DPAD_DOWN,
-            KeyEvent.KEYCODE_DPAD_LEFT -> {
-                return inflateServiceInfoFragment()
-            }
-        }
-        return false
     }
 
     private fun inflateChat() {
@@ -124,9 +134,8 @@ class PlayerFragment : Fragment(), Injectable, FragmentInterface, ServiceInfoFra
         val fragmentTag = "tagFragmentServiceInfo"
 
         if (childFragmentManager.findFragmentByTag(fragmentTag) == null) {
-            val serviceInfoFragment = ServiceInfoFragment()
             childFragmentManager.beginTransaction().apply {
-                replace(R.id.serviceInfoContainer, serviceInfoFragment, fragmentTag)
+                replace(R.id.serviceInfoContainer, ServiceInfoFragment(), fragmentTag)
                 addToBackStack(null)
                 commit()
             }
