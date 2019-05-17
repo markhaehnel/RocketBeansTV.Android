@@ -20,6 +20,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentServiceInfoBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
+import de.markhaehnel.rbtv.rocketbeanstv.ui.common.SharedViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
 import kotlinx.android.synthetic.main.fragment_service_info.*
 import javax.inject.Inject
@@ -35,6 +36,8 @@ class ServiceInfoFragment : Fragment(), Injectable {
     var binding by autoCleared<FragmentServiceInfoBinding>()
 
     private lateinit var serviceInfoViewModel: ServiceInfoViewModel
+    private lateinit var sharedViewModel: SharedViewModel
+
     private var autoCloseHandler = Handler()
     private lateinit var autoCloseRunnable: Runnable
 
@@ -55,19 +58,14 @@ class ServiceInfoFragment : Fragment(), Injectable {
 
         dataBinding.onScheduleClickCallback = object : ClickCallback {
             override fun click () {
-                val parent = parentFragment
-                if (parent is ServiceInfoFragmentInterface) {
-                    parent.onShowSchedule(popBackStack = true)
-                }
+                fragmentManager?.popBackStack()
+                sharedViewModel.showSchedule()
             }
         }
 
         dataBinding.onChatClickCallback = object : ClickCallback {
             override fun click() {
-                val parent = parentFragment
-                if (parent is ServiceInfoFragmentInterface) {
-                    parent.onShowChat()
-                }
+                sharedViewModel.toggleChat()
             }
         }
 
@@ -79,6 +77,10 @@ class ServiceInfoFragment : Fragment(), Injectable {
         serviceInfoViewModel = ViewModelProviders.of(this, viewModelFactory).get(ServiceInfoViewModel::class.java)
         binding.setLifecycleOwner(viewLifecycleOwner)
 
+        sharedViewModel = activity?.run {
+            ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+
         binding.serviceInfo = serviceInfoViewModel.serviceInfo
 
         autoCloseRunnable = Runnable {
@@ -88,8 +90,6 @@ class ServiceInfoFragment : Fragment(), Injectable {
         initServiceInfo()
         serviceInfoScheduleButton.requestFocus()
     }
-
-
 
     fun initServiceInfo() {
         serviceInfoViewModel.serviceInfo.observe(viewLifecycleOwner, Observer { serviceInfo ->

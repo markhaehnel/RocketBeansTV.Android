@@ -23,9 +23,9 @@ import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentPlayerBinding
 import de.markhaehnel.rbtv.rocketbeanstv.di.Injectable
 import de.markhaehnel.rbtv.rocketbeanstv.ui.chat.ChatFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.common.RetryCallback
+import de.markhaehnel.rbtv.rocketbeanstv.ui.common.SharedViewModel
 import de.markhaehnel.rbtv.rocketbeanstv.ui.schedule.ScheduleFragment
 import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
-import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragmentInterface
 import de.markhaehnel.rbtv.rocketbeanstv.util.Constants
 import de.markhaehnel.rbtv.rocketbeanstv.util.IntervalTask
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
@@ -33,7 +33,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
 import kotlinx.android.synthetic.main.fragment_player.*
 import javax.inject.Inject
 
-class PlayerFragment : Fragment(), Injectable, ServiceInfoFragmentInterface {
+class PlayerFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -41,6 +41,8 @@ class PlayerFragment : Fragment(), Injectable, ServiceInfoFragmentInterface {
     var binding by autoCleared<FragmentPlayerBinding>()
 
     private lateinit var playerViewModel: PlayerViewModel
+    private lateinit var sharedViewModel: SharedViewModel
+
     private lateinit var playStateObserver: IntervalTask
 
     private val keyDownBroadcastReceiver = object : BroadcastReceiver() {
@@ -51,7 +53,7 @@ class PlayerFragment : Fragment(), Injectable, ServiceInfoFragmentInterface {
                 KeyEvent.KEYCODE_DPAD_RIGHT,
                 KeyEvent.KEYCODE_DPAD_DOWN,
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    inflateServiceInfoFragment()
+                    sharedViewModel.showServiceInfo()
                 }
             }
         }
@@ -80,15 +82,19 @@ class PlayerFragment : Fragment(), Injectable, ServiceInfoFragmentInterface {
         playerViewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         binding.setLifecycleOwner(viewLifecycleOwner)
 
-        binding.isChatVisible = playerViewModel.isChatVisible
+        sharedViewModel = activity?.run {
+            ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+
+        binding.isChatVisible = sharedViewModel.chatVisible
         binding.isBuffering = playerViewModel.isBuffering
 
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(keyDownBroadcastReceiver, IntentFilter(Constants.BROADCAST_KEYDOWN))
 
-
         initObservers()
         initPlayer()
+        inflateChat()
     }
 
     override fun onResume() {
@@ -101,6 +107,12 @@ class PlayerFragment : Fragment(), Injectable, ServiceInfoFragmentInterface {
         videoView.pause()
     }
 
+    private fun showSchedule() {
+        val fragmentTag = "fragment_schedule"
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.show(childFragmentManager, fragmentTag)
+    }
+
     private fun inflateChat() {
         val fragmentTag = "tagFragmentChat"
 
@@ -111,20 +123,6 @@ class PlayerFragment : Fragment(), Injectable, ServiceInfoFragmentInterface {
                 commit()
             }
         }
-    }
-
-    override fun onShowSchedule(popBackStack: Boolean) {
-        super.onShowSchedule(popBackStack)
-        if (popBackStack) fragmentManager?.popBackStack()
-        val fragmentTag = "fragment_schedule"
-        val scheduleFragment = ScheduleFragment()
-        scheduleFragment.show(childFragmentManager, fragmentTag)
-    }
-
-    override fun onShowChat() {
-        super.onShowChat()
-        inflateChat()
-        playerViewModel.isChatVisible.postValue(playerViewModel.isChatVisible.value == false)
     }
 
     /**
@@ -150,6 +148,20 @@ class PlayerFragment : Fragment(), Injectable, ServiceInfoFragmentInterface {
         playerViewModel.streamPlaylist.observe(viewLifecycleOwner, Observer { streamPlaylist ->
             if (streamPlaylist?.data != null) {
                 videoView.setVideoURI(streamPlaylist.data.highestBandwith().uri().toUri())
+            }
+        })
+
+        sharedViewModel.scheduleTrigger.observe(viewLifecycleOwner, Observer { scheduleTrigger ->
+            if (scheduleTrigger == true) {
+                showSchedule()
+                sharedViewModel.resetSchedule()
+            }
+        })
+
+        sharedViewModel.serviceInfoTrigger.observe(viewLifecycleOwner, Observer { serviceInfoTrigger ->
+            if (serviceInfoTrigger == true) {
+                inflateServiceInfoFragment()
+                sharedViewModel.resetServiceInfo()
             }
         })
     }
