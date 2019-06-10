@@ -1,9 +1,8 @@
 package de.markhaehnel.rbtv.rocketbeanstv.vo
 
 import com.google.gson.annotations.SerializedName
-import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.util.Time
-import java.util.Date
+import java.util.*
 
 data class Schedule(
     @field:SerializedName("data")

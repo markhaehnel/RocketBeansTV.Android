@@ -7,15 +7,14 @@ import de.markhaehnel.rbtv.rocketbeanstv.vo.ChatMessage
 import de.markhaehnel.rbtv.rocketbeanstv.vo.Resource
 import io.socket.client.IO
 import io.socket.client.Socket
-import timber.log.Timber
 import javax.inject.Singleton
 
 @Singleton
-class ChatRepository() {
-    val messages = mutableListOf<ChatMessage>()
-    val opts = IO.Options().apply { transports = arrayOf("websocket") }
-    var socket : Socket? = null
-    val gson = Gson()
+class ChatRepository {
+    private val messages = mutableListOf<ChatMessage>()
+    private val opts = IO.Options().apply { transports = arrayOf("websocket") }
+    private var socket : Socket? = null
+    private val gson = Gson()
 
     fun loadChatMessages(endpoint: String): LiveData<Resource<List<ChatMessage>>> {
         val data = MutableLiveData<Resource<List<ChatMessage>>>()

@@ -7,7 +7,7 @@ import java.util.*
 object Time {
 
 
-    val DAY_IN_SECONDS = 86400L
+    private const val DAY_IN_SECONDS = 86400L
 
     @SuppressLint("SimpleDateFormat")
     fun getShortTime(time: Date): String {

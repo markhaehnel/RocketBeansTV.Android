@@ -17,10 +17,10 @@ package de.markhaehnel.rbtv.rocketbeanstv.vo
  *  }
  */
 
-private val DELIMITER_EMOTELIST = "/"
-private val DELIMITER_EMOTEINFO = ":"
-private val DELIMITER_EMOTESPAN = ","
-private val DELIMITER_EMOTESPANINFO = ","
+private const val DELIMITER_EMOTELIST = "/"
+private const val DELIMITER_EMOTEINFO = ":"
+private const val DELIMITER_EMOTESPAN = ","
+private const val DELIMITER_EMOTESPANINFO = ","
 
 data class ChatMessage(
     val dateFrom: String,

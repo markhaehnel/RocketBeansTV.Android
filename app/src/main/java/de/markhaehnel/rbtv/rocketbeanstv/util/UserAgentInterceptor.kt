@@ -8,7 +8,7 @@ import java.util.*
 /**
  * Adds a custom `User-Agent` header to OkHttp requests.
  */
-class UserAgentInterceptor(val userAgent: String) : Interceptor {
+class UserAgentInterceptor(private val userAgent: String) : Interceptor {
 
     constructor(appName: String, appVersion: String) : this(
         String.format(

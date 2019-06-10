@@ -32,7 +32,7 @@ class ServiceInfoFragment : Fragment(), Injectable {
     @Inject
     lateinit var appExecutors: AppExecutors
 
-    var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
+    private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
     var binding by autoCleared<FragmentServiceInfoBinding>()
 
     private lateinit var serviceInfoViewModel: ServiceInfoViewModel
@@ -75,7 +75,7 @@ class ServiceInfoFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         serviceInfoViewModel = ViewModelProviders.of(this, viewModelFactory).get(ServiceInfoViewModel::class.java)
-        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         sharedViewModel = activity?.run {
             ViewModelProviders.of(this).get(SharedViewModel::class.java)
@@ -91,7 +91,7 @@ class ServiceInfoFragment : Fragment(), Injectable {
         serviceInfoScheduleButton.requestFocus()
     }
 
-    fun initServiceInfo() {
+    private fun initServiceInfo() {
         serviceInfoViewModel.serviceInfo.observe(viewLifecycleOwner, Observer { serviceInfo ->
             if (serviceInfo.data != null) {
                 progressBar.apply {
@@ -99,7 +99,7 @@ class ServiceInfoFragment : Fragment(), Injectable {
                 }
                 val prog = serviceInfo.data.service.streamInfo.showInfo.progress.roundToInt() * 100
                 val progressAnimator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.progress, prog)
-                progressAnimator.setDuration(1000)
+                progressAnimator.duration = 1000
                 progressAnimator.interpolator = DecelerateInterpolator()
                 progressAnimator.start()
             }

@@ -25,7 +25,7 @@ class StartupFragment : Fragment(), Injectable {
 
     // mutable for testing
     var binding by autoCleared<FragmentStartupBinding>()
-    var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
+    private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
 
     private lateinit var startupViewModel: StartupViewModel
 
@@ -43,7 +43,7 @@ class StartupFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         startupViewModel = ViewModelProviders.of(this, viewModelFactory).get(StartupViewModel::class.java)
-        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     override fun onStart() {

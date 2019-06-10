@@ -16,9 +16,9 @@ class PlayerViewModel
     streamRepository: StreamRepository
 ) : ViewModel() {
 
-    var rbtvServiceInfo = streamRepository.loadServiceInfo()
+    private var rbtvServiceInfo = streamRepository.loadServiceInfo()
 
-    var streamManifest: LiveData<Resource<StreamManifest>> = Transformations
+    private var streamManifest: LiveData<Resource<StreamManifest>> = Transformations
         .switchMap(rbtvServiceInfo) { serviceInfo ->
             if (serviceInfo.data === null) {
                 AbsentLiveData.create()

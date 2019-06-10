@@ -2,8 +2,6 @@ package de.markhaehnel.rbtv.rocketbeanstv.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import de.markhaehnel.rbtv.rocketbeanstv.util.LiveDataCallAdapterFactory
-import de.markhaehnel.rbtv.rocketbeanstv.util.LiveDataTestUtil.getValue
-import de.markhaehnel.rbtv.rocketbeanstv.vo.RbtvServiceInfo
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.Okio
@@ -18,8 +16,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.text.SimpleDateFormat
-import java.util.*
 
 @RunWith(JUnit4::class)
 class YouTubeServiceTest {

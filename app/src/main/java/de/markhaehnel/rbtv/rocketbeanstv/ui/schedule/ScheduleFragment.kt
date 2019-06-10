@@ -28,9 +28,9 @@ class ScheduleFragment : DialogFragment(), Injectable {
     @Inject
     lateinit var appExecutors: AppExecutors
 
-    val MAX_SCHEDULE_ITEMS = 7
+    private val MAX_SCHEDULE_ITEMS = 7
 
-    var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
+    private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
     var binding by autoCleared<FragmentScheduleBinding>()
 
     private lateinit var scheduleViewModel: ScheduleViewModel
@@ -66,7 +66,7 @@ class ScheduleFragment : DialogFragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         scheduleViewModel = ViewModelProviders.of(this, viewModelFactory).get(ScheduleViewModel::class.java)
-        binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val rvAdapter = ScheduleItemListAdapter(
             dataBindingComponent = dataBindingComponent,

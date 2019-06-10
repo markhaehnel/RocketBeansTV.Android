@@ -17,7 +17,7 @@ class ChatViewModel
     chatRepository: ChatRepository
 ) : ViewModel() {
 
-    val rbtvServiceInfo: LiveData<Resource<RbtvServiceInfo>> = streamRepository.loadServiceInfo()
+    private val rbtvServiceInfo: LiveData<Resource<RbtvServiceInfo>> = streamRepository.loadServiceInfo()
 
     var chatMessages: LiveData<Resource<List<ChatMessage>>> = Transformations
         .switchMap(rbtvServiceInfo) { serviceInfo ->
