@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
 import de.markhaehnel.rbtv.rocketbeanstv.databinding.FragmentPlayerBinding
@@ -123,6 +124,10 @@ class PlayerFragment : Fragment(), Injectable {
                 commit()
             }
         }
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val showChatOnLaunch = sharedPreferences.getBoolean("showChatOnLaunch", false)
+        sharedViewModel.chatVisible.postValue(showChatOnLaunch)
     }
 
     /**

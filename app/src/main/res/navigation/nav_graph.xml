@@ -11,4 +11,7 @@
 
     <fragment android:id="@+id/playerFragment" android:name="de.markhaehnel.rbtv.rocketbeanstv.ui.player.PlayerFragment"
               android:label="fragment_player" tools:layout="@layout/fragment_player"/>
+    <fragment android:id="@+id/preferencesFragment"
+              android:name="de.markhaehnel.rbtv.rocketbeanstv.ui.preferences.PreferencesFragment"
+              android:label="PreferencesFragment"/><action android:id="@+id/action_global_preferencesFragment" app:destination="@id/preferencesFragment"/>
 </navigation>

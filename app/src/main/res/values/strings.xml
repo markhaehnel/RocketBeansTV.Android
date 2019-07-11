@@ -4,4 +4,12 @@
     <string name="unknown_error">Unbekannter Fehler</string>
     <string name="schedule">Sendeplan</string>
     <string name="chat">Chat</string>
+    <string name="privacypolicy">Datenschutzerklärung</string>
+    <string name="aboutapp">Über diese App</string>
+    <string name="developer">Entwickler</string>
+    <string name="developer_details" translatable="false">Mark Hähnel (EZTEQ)</string>
+    <string name="contact">Kontakt</string>
+    <string name="contact_details">rbtvapp@markhaehnel.de</string>
+    <string name="general">Allgemein</string>
+    <string name="showChatOnLaunch">Chat beim Start anzeigen</string>
 </resources>

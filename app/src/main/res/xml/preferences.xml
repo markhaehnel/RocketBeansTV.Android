@@ -1,0 +1,27 @@
+<PreferenceScreen
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+            app:key="general_category"
+            app:title="@string/general">
+        <SwitchPreference
+                app:key="showChatOnLaunch"
+                app:title="@string/showChatOnLaunch"
+                app:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:key="about_category"
+            app:title="@string/aboutapp">
+        <Preference
+                app:title="@string/developer"
+                app:summary="@string/developer_details"/>
+        <Preference
+                app:title="@string/contact"
+                app:summary="@string/contact_details"/>
+        <Preference
+                app:key="privacypolicy"
+                app:title="@string/privacypolicy" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

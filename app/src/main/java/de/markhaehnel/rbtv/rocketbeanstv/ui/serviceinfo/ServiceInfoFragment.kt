@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
@@ -66,6 +67,12 @@ class ServiceInfoFragment : Fragment(), Injectable {
         dataBinding.onChatClickCallback = object : ClickCallback {
             override fun click() {
                 sharedViewModel.toggleChat()
+            }
+        }
+
+        dataBinding.onSettingsClickCallback = object : ClickCallback {
+            override fun click() {
+                findNavController().navigate(R.id.action_global_preferencesFragment)
             }
         }
 

@@ -24,6 +24,10 @@
                 type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback"/>
 
         <variable
+                name="onSettingsClickCallback"
+                type="de.markhaehnel.rbtv.rocketbeanstv.ui.common.ClickCallback"/>
+
+        <variable
                 name="serviceInfo"
                 type="LiveData&lt;Resource&lt;RbtvServiceInfo>>"/>
     </data>
@@ -156,9 +160,23 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:contentDescription="@string/chat"
-                        android:nextFocusRight="@+id/serviceInfoChatButton"
                         android:onClick="@{() -> onChatClickCallback.click()}"
                         android:src="@drawable/ic_chat"
+                        android:tint="@drawable/selector_image_button"
+                        android:layout_marginEnd="@dimen/smallMargin"
+                        app:layout_constraintEnd_toStartOf="@id/serviceInfoSettingsButton"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageButton
+                        android:id="@+id/serviceInfoSettingsButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/chat"
+                        android:nextFocusRight="@+id/serviceInfoSettingsButton"
+                        android:onClick="@{() -> onSettingsClickCallback.click()}"
+                        android:src="@drawable/ic_settings"
                         android:tint="@drawable/selector_image_button"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
