@@ -6,10 +6,10 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import de.markhaehnel.rbtv.rocketbeanstv.RbtvApp
 import dagger.android.AndroidInjection
+import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
+import de.markhaehnel.rbtv.rocketbeanstv.RbtvApp
 
 object AppInjector {
     fun init(app: RbtvApp) {
@@ -49,7 +49,7 @@ object AppInjector {
     }
 
     private fun handleActivity(activity: Activity) {
-        if (activity is HasSupportFragmentInjector) {
+        if (activity is HasAndroidInjector) {
             AndroidInjection.inject(activity)
         }
         if (activity is FragmentActivity) {
