@@ -68,7 +68,7 @@ dependencies {
     def ktx_version = "1.1.0"
     implementation "androidx.core:core-ktx:$ktx_version"
 
-    def lifecycle_version = "2.2.0-alpha05"
+    def lifecycle_version = "2.2.0-beta01"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
