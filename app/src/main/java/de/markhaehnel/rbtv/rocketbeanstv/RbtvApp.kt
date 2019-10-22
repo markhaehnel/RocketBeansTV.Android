@@ -1,17 +1,16 @@
 package de.markhaehnel.rbtv.rocketbeanstv
 
-import android.app.Activity
 import android.app.Application
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.HasAndroidInjector
 import de.markhaehnel.rbtv.rocketbeanstv.di.AppInjector
 import de.markhaehnel.rbtv.rocketbeanstv.util.DetailDebugTree
 import timber.log.Timber
 import javax.inject.Inject
 
-class RbtvApp : Application(), HasActivityInjector {
+class RbtvApp : Application(), HasAndroidInjector {
     @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
     override fun onCreate() {
         super.onCreate()
@@ -23,5 +22,5 @@ class RbtvApp : Application(), HasActivityInjector {
         AppInjector.init(this)
     }
 
-    override fun activityInjector() = dispatchingAndroidInjector
+    override fun androidInjector() = dispatchingAndroidInjector
 }
