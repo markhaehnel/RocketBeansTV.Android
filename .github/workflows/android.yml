@@ -13,7 +13,9 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Create dummy files
-      run: touch app/google-services.json
+    - name: Create google-services.json from secrets
+      env: # Or as an environment variable
+        GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      run: echo $GOOGLE_SERVICES_JSON | base64 --decode - > app/google-services.json
     - name: Build with Gradle
       run: ./gradlew build
