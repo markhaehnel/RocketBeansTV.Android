@@ -1,20 +1,18 @@
-name: Android CI
+name: CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
-    - name: set up JDK 1.8git
+    - name: Setup JDK
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
     - name: Create google-services.json from secrets
-      env: # Or as an environment variable
+      env:
         GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       run: echo $GOOGLE_SERVICES_JSON | base64 --decode - > app/google-services.json
     - name: Build with Gradle
