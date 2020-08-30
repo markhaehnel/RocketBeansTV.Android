@@ -22,7 +22,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         privacyPolicyPreference?.setOnPreferenceClickListener {
             val alert = AlertDialog.Builder(requireContext())
 
-            val wv = WebView(context).apply {
+            val wv = WebView(requireContext()).apply {
                 loadUrl("https://sites.google.com/view/rbtv-firetv-privacy-policy")
                 settings.apply {
                     @SuppressLint("SetJavaScriptEnabled")

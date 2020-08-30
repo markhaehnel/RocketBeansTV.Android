@@ -2,7 +2,6 @@ package de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.R
@@ -39,7 +37,6 @@ class ServiceInfoFragment : Fragment(), Injectable {
     private lateinit var serviceInfoViewModel: ServiceInfoViewModel
     private lateinit var sharedViewModel: SharedViewModel
 
-    private var autoCloseHandler = Handler()
     private lateinit var autoCloseRunnable: Runnable
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,7 +56,7 @@ class ServiceInfoFragment : Fragment(), Injectable {
 
         dataBinding.onScheduleClickCallback = object : ClickCallback {
             override fun click () {
-                fragmentManager?.popBackStack()
+                parentFragmentManager.popBackStack()
                 sharedViewModel.showSchedule()
             }
         }
@@ -81,17 +78,17 @@ class ServiceInfoFragment : Fragment(), Injectable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        serviceInfoViewModel = ViewModelProviders.of(this, viewModelFactory).get(ServiceInfoViewModel::class.java)
+        serviceInfoViewModel = ViewModelProvider(this, viewModelFactory).get(ServiceInfoViewModel::class.java)
         binding.lifecycleOwner = viewLifecycleOwner
 
         sharedViewModel = activity?.run {
-            ViewModelProviders.of(this).get(SharedViewModel::class.java)
+            ViewModelProvider(this).get(SharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         binding.serviceInfo = serviceInfoViewModel.serviceInfo
 
         autoCloseRunnable = Runnable {
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         initServiceInfo()
