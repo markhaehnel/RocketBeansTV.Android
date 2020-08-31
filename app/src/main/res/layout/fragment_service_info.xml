@@ -88,7 +88,7 @@
                             android:layout_height="12dp"
                             android:id="@+id/type"
                             tools:tint="@color/showTypeLive"
-                            app:tint="@{ serviceInfo.data.service.streamInfo.showInfo.isLive() ? @color/showTypeLive : @color/showTypePremiere }"
+                            android:tint="@{ serviceInfo.data.service.streamInfo.showInfo.isLive() ? @color/showTypeLive : @color/showTypePremiere }"
                             tools:ignore="ContentDescription"
                             android:layout_marginEnd="@dimen/smallMargin"
                             app:layout_constraintStart_toStartOf="parent"
