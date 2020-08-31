@@ -3,8 +3,8 @@ package de.markhaehnel.rbtv.rocketbeanstv
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -19,9 +19,7 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        window.decorView.apply {
-            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
-        }
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

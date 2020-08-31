@@ -15,7 +15,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import de.markhaehnel.rbtv.rocketbeanstv.R
@@ -30,7 +29,7 @@ import de.markhaehnel.rbtv.rocketbeanstv.ui.serviceinfo.ServiceInfoFragment
 import de.markhaehnel.rbtv.rocketbeanstv.util.Constants
 import de.markhaehnel.rbtv.rocketbeanstv.util.IntervalTask
 import de.markhaehnel.rbtv.rocketbeanstv.util.autoCleared
-import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwith
+import de.markhaehnel.rbtv.rocketbeanstv.util.highestBandwidth
 import kotlinx.android.synthetic.main.fragment_player.*
 import javax.inject.Inject
 
@@ -80,11 +79,11 @@ class PlayerFragment : Fragment(), Injectable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        playerViewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
+        playerViewModel = ViewModelProvider(this, viewModelFactory).get(PlayerViewModel::class.java)
         binding.lifecycleOwner = viewLifecycleOwner
 
         sharedViewModel = activity?.run {
-            ViewModelProviders.of(this).get(SharedViewModel::class.java)
+            ViewModelProvider(this).get(SharedViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         binding.isChatVisible = sharedViewModel.chatVisible
@@ -152,7 +151,7 @@ class PlayerFragment : Fragment(), Injectable {
     private fun initObservers() {
         playerViewModel.streamPlaylist.observe(viewLifecycleOwner, Observer { streamPlaylist ->
             if (streamPlaylist?.data != null) {
-                videoView.setVideoURI(streamPlaylist.data.highestBandwith().uri().toUri())
+                videoView.setVideoURI(streamPlaylist.data.highestBandwidth().uri().toUri())
             }
         })
 

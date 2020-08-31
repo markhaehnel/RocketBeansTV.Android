@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
@@ -42,7 +41,7 @@ class StartupFragment : Fragment(), Injectable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        startupViewModel = ViewModelProviders.of(this, viewModelFactory).get(StartupViewModel::class.java)
+        startupViewModel = ViewModelProvider(this, viewModelFactory).get(StartupViewModel::class.java)
         binding.lifecycleOwner = viewLifecycleOwner
     }
 

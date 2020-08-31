@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
@@ -54,7 +53,7 @@ class ChatFragment : Fragment(), Injectable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        chatViewModel = ViewModelProviders.of(this, viewModelFactory).get(ChatViewModel::class.java)
+        chatViewModel = ViewModelProvider(this, viewModelFactory).get(ChatViewModel::class.java)
         binding.lifecycleOwner = viewLifecycleOwner
 
         val rvAdapter = ChatMessageListAdapter(
@@ -69,7 +68,7 @@ class ChatFragment : Fragment(), Injectable {
 
     private fun initChat() {
 
-        chatViewModel.chatMessages.observe(viewLifecycleOwner, Observer { chatMessages ->
+        chatViewModel.chatMessages.observe(viewLifecycleOwner, { chatMessages ->
             if (chatMessages?.data != null) {
                 adapter.submitList(chatMessages.data.takeLast(MAX_CHAT_ITEMS))
                 chat_list.smoothScrollToPosition(adapter.itemCount)

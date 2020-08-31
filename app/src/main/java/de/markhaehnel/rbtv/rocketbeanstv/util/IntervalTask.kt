@@ -1,6 +1,7 @@
 package de.markhaehnel.rbtv.rocketbeanstv.util
 
 import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
@@ -11,7 +12,7 @@ class IntervalTask(
     task: Runnable
 ) : LifecycleObserver {
 
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     private lateinit var intervalRunnable : Runnable
 
     init {

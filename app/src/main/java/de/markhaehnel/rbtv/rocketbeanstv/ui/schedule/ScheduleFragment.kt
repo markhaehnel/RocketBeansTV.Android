@@ -11,7 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import de.markhaehnel.rbtv.rocketbeanstv.AppExecutors
 import de.markhaehnel.rbtv.rocketbeanstv.R
 import de.markhaehnel.rbtv.rocketbeanstv.binding.FragmentDataBindingComponent
@@ -65,13 +64,13 @@ class ScheduleFragment : DialogFragment(), Injectable {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        scheduleViewModel = ViewModelProviders.of(this, viewModelFactory).get(ScheduleViewModel::class.java)
+        scheduleViewModel = ViewModelProvider(this, viewModelFactory).get(ScheduleViewModel::class.java)
         binding.lifecycleOwner = viewLifecycleOwner
 
         val rvAdapter = ScheduleItemListAdapter(
             dataBindingComponent = dataBindingComponent,
             appExecutors = appExecutors
-        ) { clickedShow ->
+        ) { _ ->
             //TODO: Show details
         }
         binding.showList.adapter = rvAdapter
