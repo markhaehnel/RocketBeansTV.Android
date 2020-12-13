@@ -87,6 +87,10 @@ class StreamRepository @Inject constructor(
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
                     val responseString = response.body()?.string()
+
+                    // Hotfix for playlist parser not understanding video-range attribute
+                    //responseString.replace() ,VIDEO-RANGE=SDR
+
                     if (responseString != null) {
                         val playlist = MasterPlaylistParser().readPlaylist(responseString)
                         data.value = Resource.success(playlist)
