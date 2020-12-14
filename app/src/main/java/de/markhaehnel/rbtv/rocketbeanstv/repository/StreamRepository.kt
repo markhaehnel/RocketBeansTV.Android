@@ -86,13 +86,12 @@ class StreamRepository @Inject constructor(
         youTubeService.getPlaylist(playlistUrl).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
-                    val responseString = response.body()?.string()
+                    var responseBody = response.body()?.string()
 
-                    // Hotfix for playlist parser not understanding video-range attribute
-                    //responseString.replace() ,VIDEO-RANGE=SDR
-
-                    if (responseString != null) {
-                        val playlist = MasterPlaylistParser().readPlaylist(responseString)
+                    if (!responseBody.isNullOrBlank()) {
+                        // Hotfix for playlist parser not understanding video-range attribute
+                        responseBody = responseBody.replace(",VIDEO-RANGE=SDR", "")
+                        val playlist = MasterPlaylistParser().readPlaylist(responseBody)
                         data.value = Resource.success(playlist)
                     } else {
                         data.value = Resource.error("Error: Playlist is empty")
