@@ -7,7 +7,7 @@ import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface YouTubeService {
-    @GET("get_video_info")
+    @GET("get_video_info?html5=1")
     fun getVideoInfo(@Query("video_id") videoId: String): Call<ResponseBody>
 
     @GET("")
