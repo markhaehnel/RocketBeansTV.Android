@@ -48,7 +48,7 @@ dependencies {
     implementation platform("com.google.firebase:firebase-bom:$firebase_version")
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
-    def dagger_version = "2.28.3"
+    def dagger_version = "2.35.1"
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.google.dagger:dagger-android:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
@@ -63,13 +63,13 @@ dependencies {
     def timber_version = "4.7.1"
     implementation "com.jakewharton.timber:timber:$timber_version"
 
-    def support_version = "1.2.0"
+    def support_version = "1.3.0"
     implementation "androidx.appcompat:appcompat:$support_version"
 
-    def contstraint_version = "2.0.1"
+    def contstraint_version = "2.0.4"
     implementation "androidx.constraintlayout:constraintlayout:$contstraint_version"
 
-    def ktx_version = "1.5.0-alpha02"
+    def ktx_version = "1.6.0-rc01"
     implementation "androidx.core:core-ktx:$ktx_version"
 
     def lifecycle_version = "2.2.0"
@@ -82,7 +82,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    def fragment_version = "1.3.0-alpha08"
+    def fragment_version = "1.4.0-alpha03"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
@@ -94,7 +94,7 @@ dependencies {
     def m3u8parser_version = "0.6"
     implementation "io.lindstrom:m3u8-parser:$m3u8parser_version"
 
-    def recycler_version = "1.1.0"
+    def recycler_version = "1.2.1"
     implementation "androidx.recyclerview:recyclerview:$recycler_version"
 
     def socket_version = "1.0.0"
@@ -102,7 +102,7 @@ dependencies {
         exclude group: "org.json", module: "json"
     }
 
-    def gson_version = "2.8.5"
+    def gson_version = "2.8.6"
     implementation "com.google.code.gson:gson:$gson_version"
 
 

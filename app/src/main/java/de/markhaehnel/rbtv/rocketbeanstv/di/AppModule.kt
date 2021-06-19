@@ -4,8 +4,7 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import de.markhaehnel.rbtv.rocketbeanstv.BuildConfig
-import de.markhaehnel.rbtv.rocketbeanstv.api.RbtvService
-import de.markhaehnel.rbtv.rocketbeanstv.api.YouTubeService
+import de.markhaehnel.rbtv.rocketbeanstv.api.*
 import de.markhaehnel.rbtv.rocketbeanstv.repository.ChatRepository
 import de.markhaehnel.rbtv.rocketbeanstv.util.LiveDataCallAdapterFactory
 import de.markhaehnel.rbtv.rocketbeanstv.util.UserAgentInterceptor
@@ -39,13 +38,24 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideYouTubeService(): YouTubeService {
+    fun provideTwitchGraphQLService(): TwitchGraphQLService {
         return Retrofit.Builder()
-            .baseUrl("https://www.youtube.com/")
+            .baseUrl("https://gql.twitch.tv/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
+            .build()
+            .create(TwitchGraphQLService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTwitchUsherService(): TwitchUsherService {
+        return Retrofit.Builder()
+            .baseUrl("https://usher.ttvnw.net/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .build()
-            .create(YouTubeService::class.java)
+            .create(TwitchUsherService::class.java)
     }
 
    @Singleton
